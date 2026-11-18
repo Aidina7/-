@@ -29,10 +29,10 @@
     if (!box) return;
     const a = Auth.get();
     if (a) {
-      box.innerHTML = '<a class="who" href="cabinet.html">' + esc(a.user.name.split(" ").slice(0, 2).join(" ")) + ' · <b>' + esc(a.user.login) + '</b></a><button id="logout" title="Шығу">[шығу]</button>';
+      box.innerHTML = '<a class="who" href="cabinet.html">' + esc(a.user.name.split(" ").slice(0, 2).join(" ")) + ' · <b>' + esc(a.user.login) + '</b></a><button id="logout">Шығу</button>';
       $("#logout").onclick = () => { Auth.clear(); location.href = "index.html"; };
     } else {
-      box.innerHTML = '<a class="btn small ghost" href="' + loginLink() + '">кіру</a><a class="btn small" href="login.html#register">тіркелу</a>';
+      box.innerHTML = '<a class="btn small ghost" href="' + loginLink() + '">Кіру</a><a class="btn small" href="login.html#register">Тіркелу</a>';
     }
   }
 
@@ -74,9 +74,13 @@
     if (!box) return;
     const url = (S.VIDEOS || {})[box.dataset.topic] || "";
     const m = url.match(/(?:youtu\.be\/|v=|embed\/|shorts\/)([\w-]{11})/);
-    if (!url) box.innerHTML = '<div class="video-empty">// бейне жақында қосылады<br>әзірге theory.md бөлімін оқыңыз</div>';
+    if (!url) box.innerHTML = '<div class="video-empty">Бейне жақында қосылады</div>';
     else if (m) box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + m[1] + '" title="Бейнетүсіндірме" allowfullscreen loading="lazy"></iframe>';
-    else box.innerHTML = '<video controls preload="metadata" src="' + esc(url) + '"></video>';
+    else {
+      const base = url.replace(/\.mp4$/, "");
+      box.innerHTML = '<video controls preload="metadata" playsinline poster="' + esc(base) + '.jpg" src="' + esc(url) + '">' +
+        '<track kind="subtitles" srclang="kk" label="Қазақша" src="' + esc(base) + '.vtt"></track></video>';
+    }
   }
 
   /* ---------- тест (серверде тексеріледі) ---------- */
@@ -108,7 +112,7 @@
       const started = Date.now();
       root.innerHTML = qs.map((q, n) => '<div class="q" data-id="' + esc(q.id) + '"><div class="qt"><span>' + String(n + 1).padStart(2, "0") + '</span>' + esc(q.q) + '</div>' +
         shuffle(q.o.map((o, j) => [o, j])).map(([o, j]) => '<label><input type="radio" name="' + esc(q.id) + '" value="' + j + '"><span>' + esc(o) + '</span></label>').join("") +
-        '<div class="exp"></div></div>').join("") + '<button class="btn" id="quiz-send">жауаптарды жіберу</button>';
+        '<div class="exp"></div></div>').join("") + '<button class="btn" id="quiz-send">Жауаптарды жіберу</button>';
       head.innerHTML = info();
       $("#quiz-send").onclick = async function () {
         const answers = {};
@@ -198,8 +202,8 @@
     try {
       const r = await api("leaderboard", { game: sel ? sel.value : "" });
       if (!r.ok) throw new Error(r.error);
-      box.innerHTML = r.list.length ? '<table><tr><th>#</th><th>студент</th><th>топ</th><th>ұпай</th></tr>' + r.list.map((x, i) =>
-        '<tr><td class="mono">' + (i + 1) + '</td><td>' + esc(x.name) + '</td><td>' + esc(x.group) + '</td><td class="mono" style="color:var(--amber)">' + esc(x.score) + '</td></tr>').join("") + '</table>'
+      box.innerHTML = r.list.length ? '<table><tr><th>#</th><th>Студент</th><th>Топ</th><th>Ұпай</th></tr>' + r.list.map((x, i) =>
+        '<tr><td class="mono">' + (i + 1) + '</td><td>' + esc(x.name) + '</td><td>' + esc(x.group) + '</td><td class="mono" style="font-weight:600">' + esc(x.score) + '</td></tr>').join("") + '</table>'
         : '<p class="muted">Әзірге ешкім ойнаған жоқ. Бірінші болыңыз!</p>';
     } catch (e) { box.innerHTML = '<p class="muted">' + esc(e.message) + '</p>'; }
   }
@@ -252,15 +256,15 @@
         '<div class="stats"><div class="stat"><b>' + Object.keys(best).length + '/' + Object.keys(T).length + '</b><span>тест тапсырылды</span></div>' +
         '<div class="stat"><b>' + r.submissions.length + '</b><span>жұмыс тапсырылды</span></div>' +
         '<div class="stat"><b>' + (graded.length ? Math.round(graded.reduce((a, s) => a + Number(s.grade), 0) / graded.length) : "—") + '</b><span>орташа баға</span></div>' +
-        '<div class="stat"><b style="color:var(--amber)">' + points + '</b><span>ойын ұпайы</span></div></div>' +
-        '<div class="block"><h2>тесттер</h2><div class="table-wrap"><table><tr><th>тақырып</th><th>әрекет</th><th>ең жақсы</th><th></th></tr>' +
+        '<div class="stat"><b style="font-weight:600">' + points + '</b><span>ойын ұпайы</span></div></div>' +
+        '<div class="block"><h2>Тесттер</h2><div class="table-wrap"><table><tr><th>Тақырып</th><th>Әрекет</th><th>Ең жақсы</th><th></th></tr>' +
         Object.keys(T).map(k => { const b = best[k]; return '<tr><td><a href="' + k + '.html#test">' + esc(T[k]) + '</a></td><td class="mono">' + (b ? b.n : 0) + '/' + r.attemptsLimit + '</td><td class="mono">' + (b ? b.best + "%" : "—") +
           '</td><td><div class="bar-mini"><i style="width:' + (b ? b.best : 0) + '%"></i></div></td></tr>'; }).join("") + '</table></div></div>' +
-        '<div class="block"><h2>жұмыстар</h2>' + (r.submissions.length ? '<div class="table-wrap"><table><tr><th>уақыты</th><th>тақырып</th><th>күйі</th><th>баға</th><th>оқытушы түсініктемесі</th></tr>' +
-          r.submissions.slice().reverse().map(s => '<tr><td class="mono">' + fmt(s.time) + '</td><td>' + esc(s.topic) + '</td><td>' + statusTag(s.status) + '</td><td class="mono" style="color:var(--acc)">' + esc(s.grade) + '</td><td>' + esc(s.comment) + '</td></tr>').join("") + '</table></div>'
+        '<div class="block"><h2>Жұмыстар</h2>' + (r.submissions.length ? '<div class="table-wrap"><table><tr><th>Уақыты</th><th>Тақырып</th><th>Күйі</th><th>Баға</th><th>Оқытушы түсініктемесі</th></tr>' +
+          r.submissions.slice().reverse().map(s => '<tr><td class="mono">' + fmt(s.time) + '</td><td>' + esc(s.topic) + '</td><td>' + statusTag(s.status) + '</td><td class="mono" style="font-weight:600">' + esc(s.grade) + '</td><td>' + esc(s.comment) + '</td></tr>').join("") + '</table></div>'
           : '<p class="muted">Әзірге жұмыс тапсырылмаған.</p>') + '</div>' +
-        '<div class="block"><h2>ойындар мен челлендждер</h2>' + (Object.keys(gbest).length ? '<table><tr><th>ойын</th><th>ең жақсы ұпай</th></tr>' +
-          Object.keys(gbest).sort().map(g => '<tr><td class="mono">' + esc(gameName(g)) + '</td><td class="mono" style="color:var(--amber)">' + gbest[g] + '</td></tr>').join("") + '</table>'
+        '<div class="block"><h2>Ойындар мен челлендждер</h2>' + (Object.keys(gbest).length ? '<table><tr><th>Ойын</th><th>Ең жақсы ұпай</th></tr>' +
+          Object.keys(gbest).sort().map(g => '<tr><td class="mono">' + esc(gameName(g)) + '</td><td class="mono" style="font-weight:600">' + gbest[g] + '</td></tr>').join("") + '</table>'
           : '<p class="muted">Әлі ойнаған жоқсыз. <a href="games.html">Ойындар →</a></p>') + '</div>';
     } catch (e) { root.innerHTML = '<div class="msg show err">' + esc(e.message) + '</div>'; }
   }

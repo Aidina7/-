@@ -3,37 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Кіру · oqu-praktikasy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20a7cf29">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%234fd1a5'>&gt;_</text></svg>">
+<title>Кіру — Оқу практикасы, ИС 3-1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=7238bd65">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2324292f'/><text x='16' y='21' text-anchor='middle' font-family='Arial' font-weight='700' font-size='13' fill='white'>АЭК</text></svg>">
 
 </head>
 <body>
 <header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="p">~/</span>oqu-praktikasy<span class="c"></span></a>
-<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<a class="brand" href="index.html"><span class="logo">АЭК</span><span>Оқу практикасы<small>КМ 06 · ИС 3-1</small></span></a>
+<nav class="nav"><a href="index.html">Басты бет</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
 <div class="user" id="user"></div>
 </div></header>
 
 <div class="wrap"><div class="auth-box" id="auth">
-<div class="tabs"><button data-t="login" class="active">кіру</button><button data-t="register">тіркелу</button></div>
+<div class="tabs"><button data-t="login" class="active">Кіру</button><button data-t="register">Тіркелу</button></div>
 <form id="f-login" class="form">
-<label class="f">логин<input name="login" autocomplete="username" required></label>
-<label class="f">құпиясөз<input name="password" type="password" autocomplete="current-password" required></label>
-<div><button class="btn" type="submit">кіру →</button></div><div class="msg" id="m-login"></div>
-<p class="muted" style="font-size:14px">Құпиясөзді ұмытсаңыз — оқытушыға айтыңыз, ол жаңасын береді.</p>
+<label class="f">Логин<input name="login" autocomplete="username" required></label>
+<label class="f">Құпиясөз<input name="password" type="password" autocomplete="current-password" required></label>
+<div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="m-login"></div>
+<p class="muted" style="font-size:13px;margin:0">Құпиясөзді ұмытсаңыз, оқытушыға айтыңыз — ол жаңасын береді.</p>
 </form>
 <form id="f-reg" class="form" style="display:none">
-<label class="f">логин <small>латын әріптері, сан, _ . - (мысалы: asanov.ali)</small><input name="login" autocomplete="username" required></label>
-<label class="f">аты-жөні <small>тегі және аты, журналдағыдай</small><input name="name" autocomplete="name" required></label>
-<label class="f">топ<select name="group"></select></label>
-<div class="row"><label class="f">құпиясөз <small>кемінде 6 таңба</small><input name="password" type="password" autocomplete="new-password" minlength="6" required></label>
-<label class="f">қайталаңыз<input name="password2" type="password" autocomplete="new-password" minlength="6" required></label></div>
-<div><button class="btn" type="submit">тіркелу →</button></div><div class="msg" id="m-reg"></div>
+<label class="f">Логин <small>латын әріптері, сан, _ . - (мысалы: asanov.ali)</small><input name="login" autocomplete="username" required></label>
+<label class="f">Аты-жөні <small>тегі және аты, журналдағыдай</small><input name="name" autocomplete="name" required></label>
+<label class="f">Топ<select name="group"></select></label>
+<div class="row"><label class="f">Құпиясөз <small>кемінде 6 таңба</small><input name="password" type="password" autocomplete="new-password" minlength="6" required></label>
+<label class="f">Қайталаңыз<input name="password2" type="password" autocomplete="new-password" minlength="6" required></label></div>
+<div><button class="btn" type="submit">Тіркелу</button></div><div class="msg" id="m-reg"></div>
 </form>
 </div></div>
-<footer><div class="wrap"><span>// Алматы экономикалық колледжі · ИС 3-1 · КМ 06 · ОН 6.4 · оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> · <a href="admin.html">оқытушы</a></span></div></footer>
-<script src="assets/config.js?v=f1403585"></script><script src="assets/games.js?v=2e5e67ca"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=0e51008b"></script>
+<footer><div class="wrap"><span>Алматы экономикалық колледжі · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> · <a href="admin.html">Оқытушыға</a></span></div></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=e629a89a"></script>
 </body>
 </html>

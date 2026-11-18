@@ -118,9 +118,9 @@ window.mountSorter = function (root, deckId, onEnd) {
 
   function onKey(e) { if (/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return; const k = parseInt(e.key, 10); if (k >= 1 && k <= deck.cats.length && root.isConnected) answer(k - 1); }
   function hud() {
-    root.querySelector("[data-time]").textContent = "⏱ " + left + "с";
+    root.querySelector("[data-time]").textContent = left + " с";
     root.querySelector("[data-score]").textContent = "ұпай " + score;
-    root.querySelector("[data-streak]").textContent = streak >= 3 ? "🔥 ×" + streak : "қатар " + streak;
+    root.querySelector("[data-streak]").textContent = "серия " + streak;
   }
   function show() {
     if (i >= cards.length) { cards = cards.concat(shuffle(deck.cards)); }

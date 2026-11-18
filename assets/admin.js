@@ -56,7 +56,7 @@
   function render() {
     const unchecked = D.submissions.filter(s => (s.status || "Тексерілмеген") === "Тексерілмеген").length;
     const avg = D.tests.length ? Math.round(D.tests.reduce((a, t) => a + Number(t.percent), 0) / D.tests.length) : 0;
-    $("#stats").innerHTML = '<div class="stat"><b>' + D.students.length + '</b><span>студент тіркелді</span></div><div class="stat"><b style="color:var(--amber)">' + unchecked +
+    $("#stats").innerHTML = '<div class="stat"><b>' + D.students.length + '</b><span>студент тіркелді</span></div><div class="stat"><b style="font-weight:600">' + unchecked +
       '</b><span>тексерілмеген жұмыс</span></div><div class="stat"><b>' + D.tests.length + '</b><span>тест әрекеті</span></div><div class="stat"><b>' + avg + '%</b><span>тесттің орташа нәтижесі</span></div>';
     $("#f-status").style.display = TAB === "subs" ? "" : "none";
     const L = $("#list");
@@ -67,7 +67,7 @@
           const b = bestTests(s.login), subs = D.submissions.filter(x => x.login === s.login);
           return '<tr class="click" data-login="' + esc(s.login) + '"><td>' + esc(s.name) + (s.active ? "" : ' <span class="tag r">бұғатталған</span>') + '</td><td class="mono">' + esc(s.login) + '</td><td>' + esc(s.group) + '</td>' +
             Object.keys(T).map(k => '<td class="mono">' + (b[k] != null ? b[k] + "%" : "—") + "</td>").join("") +
-            '<td class="mono">' + subs.length + '</td><td class="mono" style="color:var(--amber)">' + gamePoints(s.login) + '</td><td class="mono">' + fmt(s.last) + "</td></tr>";
+            '<td class="mono">' + subs.length + '</td><td class="mono" style="font-weight:600">' + gamePoints(s.login) + '</td><td class="mono">' + fmt(s.last) + "</td></tr>";
         }).join("") + "</table></div>" : '<p class="muted">Студенттер әлі тіркелмеген.</p>';
       $$("tr.click", L).forEach(tr => tr.onclick = () => openStudent(tr.dataset.login));
     } else if (TAB === "subs") {
@@ -75,7 +75,7 @@
       const rows = D.submissions.filter(s => fGroup(s) && fQ(s) && fTopic(s, "topic") && (!st || (s.status || "Тексерілмеген") === st)).sort((a, b) => new Date(b.time) - new Date(a.time));
       L.innerHTML = rows.length ? '<div class="table-wrap"><table><tr><th>уақыты</th><th>студент</th><th>топ</th><th>тақырып</th><th>нұсқа</th><th>жұмыс</th><th>күйі</th><th>баға</th></tr>' +
         rows.map(s => '<tr class="click" data-id="' + esc(s.id) + '"><td class="mono">' + fmt(s.time) + "</td><td>" + esc(s.name) + "</td><td>" + esc(s.group) + "</td><td>" + esc(s.topic) +
-          '</td><td class="mono">' + esc(s.variant) + "</td><td>" + (s.file ? "файл " : "") + (s.link ? "сілтеме" : "") + "</td><td>" + statusTag(s.status) + '</td><td class="mono" style="color:var(--acc)">' + esc(s.grade) + "</td></tr>").join("") + "</table></div>"
+          '</td><td class="mono">' + esc(s.variant) + "</td><td>" + (s.file ? "файл " : "") + (s.link ? "сілтеме" : "") + "</td><td>" + statusTag(s.status) + '</td><td class="mono" style="font-weight:600">' + esc(s.grade) + "</td></tr>").join("") + "</table></div>"
         : '<p class="muted">Жұмыс жоқ.</p>';
       $$("tr.click", L).forEach(tr => tr.onclick = () => openSub(tr.dataset.id));
     } else if (TAB === "tests") {
@@ -87,7 +87,7 @@
     } else {
       const rows = D.games.filter(g => fGroup(g) && fQ(g)).sort((a, b) => new Date(b.time) - new Date(a.time));
       L.innerHTML = rows.length ? '<div class="table-wrap"><table><tr><th>уақыты</th><th>студент</th><th>топ</th><th>ойын</th><th>ұпай</th><th>дәлдік</th><th>мәлімет</th></tr>' +
-        rows.map(g => '<tr><td class="mono">' + fmt(g.time) + "</td><td>" + esc(g.name) + "</td><td>" + esc(g.group) + "</td><td>" + esc(gameName(g.game)) + '</td><td class="mono" style="color:var(--amber)">' + esc(g.score) +
+        rows.map(g => '<tr><td class="mono">' + fmt(g.time) + "</td><td>" + esc(g.name) + "</td><td>" + esc(g.group) + "</td><td>" + esc(gameName(g.game)) + '</td><td class="mono" style="font-weight:600">' + esc(g.score) +
           '</td><td class="mono">' + esc(g.accuracy) + '%</td><td class="ans">' + esc(g.detail) + "</td></tr>").join("") + "</table></div>"
         : '<p class="muted">Ойын нәтижелері жоқ.</p>';
     }
@@ -98,7 +98,7 @@
     if (!s) return;
     const tests = D.tests.filter(t => t.login === login), subs = D.submissions.filter(x => x.login === login), games = D.games.filter(g => g.login === login);
     $("#modal-body").innerHTML = '<h3>' + esc(s.name) + '</h3><div class="kv"><div>логин</div><div class="mono">' + esc(s.login) + '</div><div>топ</div><div>' + esc(s.group) +
-      '</div><div>тіркелген</div><div>' + fmt(s.created) + '</div><div>соңғы кіру</div><div>' + fmt(s.last) + '</div><div>ойын ұпайы</div><div class="mono" style="color:var(--amber)">' + gamePoints(login) + '</div></div>' +
+      '</div><div>тіркелген</div><div>' + fmt(s.created) + '</div><div>соңғы кіру</div><div>' + fmt(s.last) + '</div><div>ойын ұпайы</div><div class="mono" style="font-weight:600">' + gamePoints(login) + '</div></div>' +
       '<h4>тест әрекеттері</h4>' + (tests.length ? '<table><tr><th>уақыты</th><th>тақырып</th><th>№</th><th>нәтиже</th><th>жауаптар</th></tr>' + tests.map(t => '<tr><td class="mono">' + fmt(t.time) + "</td><td>" + esc(topicName(t.topic)) + '</td><td class="mono">' + esc(t.attempt) + '</td><td class="mono">' + esc(t.percent) + '%</td><td class="ans">' + esc(t.answers) + "</td></tr>").join("") + "</table>" : '<p class="muted">жоқ</p>') +
       '<h4>жұмыстар</h4>' + (subs.length ? '<table><tr><th>тақырып</th><th>күйі</th><th>баға</th></tr>' + subs.map(x => "<tr><td>" + esc(x.topic) + "</td><td>" + statusTag(x.status) + '</td><td class="mono">' + esc(x.grade) + "</td></tr>").join("") + "</table>" : '<p class="muted">жоқ</p>') +
       '<h4>ойындар</h4>' + (games.length ? '<table><tr><th>ойын</th><th>ұпай</th><th>дәлдік</th></tr>' + games.map(g => "<tr><td>" + esc(gameName(g.game)) + '</td><td class="mono">' + esc(g.score) + '</td><td class="mono">' + esc(g.accuracy) + "%</td></tr>").join("") + "</table>" : '<p class="muted">жоқ</p>') +

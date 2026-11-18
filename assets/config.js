@@ -15,5 +15,5 @@ window.SITE = {
   },
 
   // Тақырыптарға бейне: YouTube сілтемесі немесе files/ қалтасындағы mp4.
-  VIDEOS: { inventory: "", licenses: "", anomaly: "", sla: "" }
+  VIDEOS: { inventory: "files/video_inventory.mp4", licenses: "files/video_licenses.mp4", anomaly: "files/video_anomaly.mp4", sla: "files/video_sla.mp4" }
 };

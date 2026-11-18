@@ -3,29 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ойындар · oqu-praktikasy</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=20a7cf29">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%234fd1a5'>&gt;_</text></svg>">
+<title>Ойындар — Оқу практикасы, ИС 3-1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=7238bd65">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2324292f'/><text x='16' y='21' text-anchor='middle' font-family='Arial' font-weight='700' font-size='13' fill='white'>АЭК</text></svg>">
 
 </head>
 <body>
 <header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="p">~/</span>oqu-praktikasy<span class="c"></span></a>
-<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html" class="active">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<a class="brand" href="index.html"><span class="logo">АЭК</span><span>Оқу практикасы<small>КМ 06 · ИС 3-1</small></span></a>
+<nav class="nav"><a href="index.html">Басты бет</a><a href="games.html" class="active">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
 <div class="user" id="user"></div>
 </div></header>
 
-<div class="wrap" style="padding:30px 22px 70px">
-<div class="page-head"><div class="path">~/oqu-praktikasy/games $ ls</div><h1>Ойындар</h1>
-<p>Ойнап үйрен: ұпайлар кабинетке және көшбасшылар кестесіне жазылады (алдымен <a href="login.html">кіріңіз</a>).</p></div>
-<div class="block" id="sorter"><h2>сортировщик <span class="fname">sorter</span></h2><div class="deck-pick" data-pick></div><div data-sorter="all"></div></div>
-<div class="block" id="ctf"><h2>SOC-терминал <span class="fname">soc.sh</span></h2>
+<div class="wrap page">
+<div class="page-head"><div class="crumbs"><a href="index.html">Басты бет</a> / Ойындар</div><h1>Ойындар</h1>
+<p>Ұпайлар кабинетке және көшбасшылар кестесіне жазылады (алдымен <a href="login.html">кіріңіз</a>).</p></div>
+<div class="block" id="sorter"><h2>Сортировщик</h2><div class="deck-pick" data-pick></div><div data-sorter="all"></div></div>
+<div class="block" id="ctf"><h2>SOC-терминал</h2>
 <p>Әр челлендж — нақты инцидентке ұқсас тергеу. <code>help</code> — командалар, <code>hint</code> — кеңес (ұпай 30%-ға азаяды), <code>submit flag{...}</code> — жауап.</p><div data-ctf="all"></div></div>
-<div class="block" id="leaders"><h2>көшбасшылар <span class="fname">leaderboard</span></h2>
-<div class="bar"><select id="board-game"><option value="">жалпы рейтинг (барлық ойын)</option><option value="sort:devices">Сортировщик · Құрылғыны таны</option><option value="sort:licenses">Сортировщик · Лицензия аудиті</option><option value="sort:soc">Сортировщик · SOC кезекшісі</option><option value="sort:sre">Сортировщик · SRE шешімі</option><option value="ctf:rogue">SOC-терминал · Бөтен құрылғы</option><option value="ctf:brute">SOC-терминал · SSH брутфорс</option><option value="ctf:activator">SOC-терминал · Заңсыз белсендіргіш</option><option value="ctf:scanner">SOC-терминал · Кім сканерлейді?</option><option value="ctf:exfil">SOC-терминал · Түнгі жылыстау</option><option value="ctf:sla">SOC-терминал · Журнал API-дің SLI-і</option></select></div><div id="board"></div></div>
+<div class="block" id="leaders"><h2>Көшбасшылар</h2>
+<div class="bar"><select id="board-game"><option value="">Жалпы рейтинг (барлық ойын)</option><option value="sort:devices">Сортировщик: Құрылғыны таны</option><option value="sort:licenses">Сортировщик: Лицензия аудиті</option><option value="sort:soc">Сортировщик: SOC кезекшісі</option><option value="sort:sre">Сортировщик: SRE шешімі</option><option value="ctf:rogue">SOC-терминал: Бөтен құрылғы</option><option value="ctf:brute">SOC-терминал: SSH брутфорс</option><option value="ctf:activator">SOC-терминал: Заңсыз белсендіргіш</option><option value="ctf:scanner">SOC-терминал: Кім сканерлейді?</option><option value="ctf:exfil">SOC-терминал: Түнгі жылыстау</option><option value="ctf:sla">SOC-терминал: Журнал API-дің SLI-і</option></select></div><div id="board"></div></div>
 </div>
-<footer><div class="wrap"><span>// Алматы экономикалық колледжі · ИС 3-1 · КМ 06 · ОН 6.4 · оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> · <a href="admin.html">оқытушы</a></span></div></footer>
-<script src="assets/config.js?v=f1403585"></script><script src="assets/games.js?v=2e5e67ca"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=0e51008b"></script>
+<footer><div class="wrap"><span>Алматы экономикалық колледжі · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> · <a href="admin.html">Оқытушыға</a></span></div></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=e629a89a"></script>
 </body>
 </html>
