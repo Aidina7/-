@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Бағамды тексеру · Оқу практикасы</title>
+<title>Бағамды тексеру · oqu-praktikasy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%234fd1a5'>&gt;_</text></svg>">
 
 </head>
 <body>
 <header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="logo">ОП</span><span>Оқу практикасы<small>Алматы экономикалық колледжі · ИС 3-1</small></span></a>
-<nav class="nav"><a href="index.html">Тақырыптар</a><a href="grade.html" class="active">Бағамды тексеру</a></nav>
+<a class="brand" href="index.html"><span class="p">~/</span>oqu-praktikasy<span class="c"></span></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
 </div></header>
 
-<div class="hero"><div class="wrap"><div class="kicker">Студентке</div><h1>Бағамды тексеру</h1>
-<p>Жұмысты тапсырғанда берілген 6 таңбалы кодты енгізіңіз.</p></div></div>
-<main><div class="wrap"><div class="block">
-<form id="grade-form" class="form"><label>Тексеру коды<input name="code" maxlength="6" placeholder="Мысалы: K7M2QX" style="text-transform:uppercase;font-size:20px;letter-spacing:.1em"></label>
-<div><button class="btn" type="submit">Тексеру</button></div><div class="msg" id="grade-msg"></div></form>
-</div></div></main>
-<footer><div class="wrap"><span>© Каким А.Д. · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · ОН 6.4</span><a href="admin.html">Оқытушыға кіру</a></div></footer>
-<script src="assets/config.js"></script><script src="assets/app.js"></script>
+<div class="wrap"><div class="auth-box"><div class="page-head"><div class="path">$ check --code</div><h1>Бағаны кодпен тексеру</h1></div>
+<form id="grade-form" class="form"><label class="f">тексеру коды<input name="code" maxlength="6" placeholder="K7M2QX" style="text-transform:uppercase;font-family:var(--mono);font-size:20px;letter-spacing:.12em"></label>
+<div><button class="btn" type="submit">тексеру</button></div><div class="msg" id="grade-msg"></div></form>
+<p class="muted">Тіркелген болсаңыз, барлық бағалар <a href="cabinet.html">кабинетте</a>.</p></div></div>
+<footer><div class="wrap"><span>// Алматы экономикалық колледжі · ИС 3-1 · КМ 06 · ОН 6.4 · оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> · <a href="admin.html">оқытушы</a></span></div></footer>
+<script src="assets/config.js"></script><script src="assets/games.js"></script><script src="assets/ctf-data.js"></script><script src="assets/terminal.js"></script><script src="assets/app.js"></script>
 </body>
 </html>

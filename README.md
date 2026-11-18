@@ -13,9 +13,11 @@
 | 10 | Қызмет көрсету сапасын автоматты тексеру (SLA) | `sla.html` | `starter/10_sla_monitor` |
 
 ## Құрылымы
-- `content/<тақырып>/theory.html` — түсіндірме, `quiz.json` — тест
+- `content/<тақырып>/theory.html` — түсіндірме, `quiz.json` — тест сұрақтары (жауапсыз; жауаптар серверде)
 - `tools/tasks_content.py` — практикалық тапсырмалар (Word құжатымен бірдей мәтін)
 - `tools/build.py` — беттерді жасайды: `python tools/build.py`
 - `assets/config.js` — баптаулар: API мекенжайы, топтар, бейнелер
 - `backend/Code.gs` — Google Apps Script (жұмыстарды қабылдау, бағалау); орнату: `backend/ОРНАТУ.md`
-- `admin.html` — оқытушы панелі (құпиясөзбен)
+- `login.html`, `cabinet.html` — студенттің тіркелуі, кіруі және кабинеті
+- `games.html` — Сортировщик, SOC-терминал, көшбасшылар кестесі
+- `admin.html` — оқытушы панелі: студенттер, тест әрекеттері, жұмыстар, ойындар

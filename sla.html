@@ -3,29 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Қызмет көрсету сапасын автоматты тексеру (SLA) · Оқу практикасы</title>
+<title>Қызмет көрсету сапасын автоматты тексеру (SLA) · oqu-praktikasy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
-<script>window.QUIZ = [{"q": "SLI дегеніміз не?", "o": ["Клиентпен келісімшарт", "Нақты өлшенген сапа көрсеткіші (мысалы, сәтті сұраулар үлесі)", "Ішкі мақсат", "Серверлер тізімі"], "a": 1, "e": "SLI — индикатор, өлшенетін мән. SLO — мақсат, SLA — келісімшарт."}, {"q": "Неге SLA мақсаты әдетте SLO-дан төмен қойылады?", "o": ["Әдемі көріну үшін", "SLO бұзылса, команда SLA (айыппұл) бұзылғанша түзетуге үлгеруі үшін", "Заң солай талап етеді", "SLA мен SLO әрқашан тең"], "a": 1, "e": "SLO — ерте ескерту шегі, SLA — айыппұл шегі. Олардың арасы — қауіпсіздік қоры."}, {"q": "SLO 99,9% болса, 30 күнде шамамен қанша тоқтауға болады?", "o": ["7 сағат", "43 минут", "4 минут", "1 күн"], "a": 1, "e": "(1 − 0,999) × 30 × 24 × 60 = 43,2 минут."}, {"q": "Қай қателер қолжетімділік SLI-ін төмендетеді?", "o": ["404 Not Found", "401 Unauthorized", "503 Service Unavailable", "301 Redirect"], "a": 2, "e": "5xx — сервер қатесі, SLI-ге кіреді. 4xx — клиенттің қатесі, әдетте кірмейді."}, {"q": "Неге жауап уақытын бағалауда орташа мән емес, p95 қолданылады?", "o": ["Оны есептеу оңай", "Орташа мән баяу жауаптарды «жасырады», p95 баяу пайдаланушылардың тәжірибесін көрсетеді", "p95 әрқашан кіші", "Prometheus орташаны есептей алмайды"], "a": 1, "e": "95 сұрау 50 мс, 5 сұрау 4 с болса, орташа 250 мс — бірақ әр 20-шы пайдаланушы 4 секунд күтеді."}, {"q": "Қателер бюджеті қалай есептеледі?", "o": ["SLO × сұраулар", "(1 − SLO) × барлық сұраулар", "5xx × 100", "SLA − SLO"], "a": 1, "e": "Мысалы, (1 − 0,995) × 2 000 000 = 10 000 «жаман» сұрауға рұқсат."}, {"q": "Қателер бюджеті бітсе, SRE тәсілі бойынша команда не істейді?", "o": ["Жаңа функцияларды көбірек шығарады", "Жаңалықтарды тоқтатып, тұрақтылықты жақсартуға көшеді", "SLO-ны 100%-ға көтереді", "Ештеңе істемейді"], "a": 1, "e": "Бюджет — тәуекел «ақшасы». Бітсе — тәуекелді азайту керек."}, {"q": "Burn rate = 14,4 нені білдіреді?", "o": ["Қызмет 14,4% уақыт тоқтаған", "Бюджет қалыптыдан 14,4 есе жылдам жұмсалып жатыр — шамамен 2 күнде бітеді", "14,4 сұрау қате", "Қызмет 14,4 мс-та жауап береді"], "a": 1, "e": "Burn rate = қате үлесі / (1 − SLO). 1,0 — бюджет дәл терезе соңында бітеді."}, {"q": "30 күндік SLO орындалып тұр, бірақ соңғы 1 сағатта 20% қате. Не істеу керек?", "o": ["Ештеңе — айлық көрсеткіш жақсы", "Дереу ескерту (PAGE): burn rate жоғары, бюджет тез жұмсалып жатыр", "Келесі айда қарау", "SLO-ны төмендету"], "a": 1, "e": "30 күндік орташа «баяу». Burn rate дәл қазіргі жағдайды көрсетеді."}, {"q": "Синтетикалық мониторингтің басты артықшылығы?", "o": ["Барлық пайдаланушылардың тәжірибесін көрсетеді", "Пайдаланушылар болмаса да тоқтауды бірден көреді", "Ешқандай желі қажет емес", "Ақысыз SLA береді"], "a": 1, "e": "Скрипт үнемі тексереді, сондықтан түнде де тоқтауды табады. Бірақ ол тек бір жолды тексереді — сервер метрикаларымен бірге қолданылады."}];</script>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%234fd1a5'>&gt;_</text></svg>">
+<script>window.QUIZ = [{"id": "sla01", "q": "SLI дегеніміз не?", "o": ["Клиентпен келісімшарт", "Нақты өлшенген сапа көрсеткіші (мысалы, сәтті сұраулар үлесі)", "Ішкі мақсат", "Серверлер тізімі"]}, {"id": "sla02", "q": "Неге SLA мақсаты әдетте SLO-дан төмен қойылады?", "o": ["Әдемі көріну үшін", "SLO бұзылса, команда SLA (айыппұл) бұзылғанша түзетуге үлгеруі үшін", "Заң солай талап етеді", "SLA мен SLO әрқашан тең"]}, {"id": "sla03", "q": "SLO 99,9% болса, 30 күнде шамамен қанша тоқтауға болады?", "o": ["7 сағат", "43 минут", "4 минут", "1 күн"]}, {"id": "sla04", "q": "Қай қателер қолжетімділік SLI-ін төмендетеді?", "o": ["404 Not Found", "401 Unauthorized", "503 Service Unavailable", "301 Redirect"]}, {"id": "sla05", "q": "Неге жауап уақытын бағалауда орташа мән емес, p95 қолданылады?", "o": ["Оны есептеу оңай", "Орташа мән баяу жауаптарды «жасырады», p95 баяу пайдаланушылардың тәжірибесін көрсетеді", "p95 әрқашан кіші", "Prometheus орташаны есептей алмайды"]}, {"id": "sla06", "q": "Қателер бюджеті қалай есептеледі?", "o": ["SLO × сұраулар", "(1 − SLO) × барлық сұраулар", "5xx × 100", "SLA − SLO"]}, {"id": "sla07", "q": "Қателер бюджеті бітсе, SRE тәсілі бойынша команда не істейді?", "o": ["Жаңа функцияларды көбірек шығарады", "Жаңалықтарды тоқтатып, тұрақтылықты жақсартуға көшеді", "SLO-ны 100%-ға көтереді", "Ештеңе істемейді"]}, {"id": "sla08", "q": "Burn rate = 14,4 нені білдіреді?", "o": ["Қызмет 14,4% уақыт тоқтаған", "Бюджет қалыптыдан 14,4 есе жылдам жұмсалып жатыр — шамамен 2 күнде бітеді", "14,4 сұрау қате", "Қызмет 14,4 мс-та жауап береді"]}, {"id": "sla09", "q": "30 күндік SLO орындалып тұр, бірақ соңғы 1 сағатта 20% қате. Не істеу керек?", "o": ["Ештеңе — айлық көрсеткіш жақсы", "Дереу ескерту (PAGE): burn rate жоғары, бюджет тез жұмсалып жатыр", "Келесі айда қарау", "SLO-ны төмендету"]}, {"id": "sla10", "q": "Синтетикалық мониторингтің басты артықшылығы?", "o": ["Барлық пайдаланушылардың тәжірибесін көрсетеді", "Пайдаланушылар болмаса да тоқтауды бірден көреді", "Ешқандай желі қажет емес", "Ақысыз SLA береді"]}, {"id": "sla11", "q": "Тәулікте 200 000 сұрау, оның 300-і 5xx, 1 500-і 404. Қолжетімділік SLI қанша?", "o": ["99,10%", "99,85%", "99,25%", "98,50%"]}, {"id": "sla12", "q": "SLO 99,5%, 30 күнде 2 000 000 сұрау. Қателер бюджеті қанша?", "o": ["1 000", "10 000", "100 000", "99 500"]}, {"id": "sla13", "q": "SLO 99,9%. Соңғы 1 сағатта сұраулардың 5%-ы қате. Burn rate қанша?", "o": ["5", "50", "0,5", "500"]}, {"id": "sla14", "q": "Гистограмма: ≤100 мс — 600, ≤300 мс — 300, ≤1000 мс — 80, >1000 мс — 20. «300 мс-тан жылдам» SLI қанша және p95 қай бакетте?", "o": ["60%, ≤300 мс", "90%, ≤1000 мс", "98%, >1000 мс", "90%, ≤300 мс"]}, {"id": "sla15", "q": "SLO 99,5% (30 күнде 216 минут тоқтауға болады). Портал 90 минут толық тоқтады. Бюджеттің шамамен қанша бөлігі жұмсалды?", "o": ["9%", "42%", "90%", "100%"]}, {"id": "sla16", "q": "Health check үнемі 200 OK қайтарады, бірақ пайдаланушылар «бағалар бетін ашу мүмкін емес» дейді. Себебі?", "o": ["Пайдаланушылар қателеседі", "Синтетикалық тексеру тек бір жолды (/health) тексереді — нақты сценарийлер мен сервер метрикаларын да бақылау керек", "Желі баяу", "SLA дұрыс"]}];</script>
 </head>
 <body>
 <header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="logo">ОП</span><span>Оқу практикасы<small>Алматы экономикалық колледжі · ИС 3-1</small></span></a>
-<nav class="nav"><a href="index.html">Тақырыптар</a><a href="grade.html">Бағамды тексеру</a></nav>
+<a class="brand" href="index.html"><span class="p">~/</span>oqu-praktikasy<span class="c"></span></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
 </div></header>
 
-<div class="hero"><div class="wrap">
-<div class="kicker">Практикалық жұмыс №10</div>
-<h1>Қызмет көрсету сапасын автоматты тексеру (SLA)</h1>
-<p>SLA, SLO, SLI, жауап уақыты мен қателерді есептеу, қателер бюджеті, burn rate және қызметтерді үздіксіз тексеру.</p>
-<div class="meta"><span class="pill">⏱ 6 сағат · 3 сабақ</span><span class="pill">🐍 Python 3.10+ · VS Code</span><span class="pill">📝 10 сұрақтық тест</span></div>
-</div></div>
-<nav class="subnav"><div class="wrap">
-<a href="#theory">📖 Түсіндірме</a><a href="#video">🎬 Бейне</a><a href="#files">📦 Файлдар</a><a href="#tasks">🛠 Тапсырмалар</a><a href="#test">✅ Тест</a><a href="#submit">📤 Жұмысты тапсыру</a>
-</div></nav>
-<main><div class="wrap">
-<div class="block" id="outcomes"><h2><span class="ico">🎯</span>Оқыту нәтижелері</h2><ol><li>SLA/SLO/SLI метрикаларын сипаттайды</li><li>Сервис жауабы мен қателерді есептеуді түсіндіреді</li><li>SLA-ны үздіксіз тексеретін скрипт жазады</li></ol></div>
-<div class="block" id="theory"><h2><span class="ico">📖</span>Түсіндірме</h2><section>
+<div class="wrap"><div class="layout">
+<aside class="side"><div class="root">10_sla_monitor/</div><a href="#theory">theory.md</a><a href="#video">video.mp4</a><a href="#files">files.zip</a><a href="#tasks">tasks.md</a><a href="#test">test.json</a><a href="#ctf">soc.sh</a><a href="#submit">submit</a>
+<div class="meta">// №10 · 6 сағат · 3 сабақ<br>// python 3.10+ · vs code<br>// тест: банкте 16 сұрақ</div></aside>
+<main>
+<div class="page-head"><div class="path">~/oqu-praktikasy/10_sla_monitor $ cat README</div>
+<h1>Қызмет көрсету сапасын автоматты тексеру (SLA)</h1><p>SLA, SLO, SLI, жауап уақыты мен қателерді есептеу, қателер бюджеті, burn rate және қызметтерді үздіксіз тексеру.</p>
+<div class="tags" style="margin-top:12px"><span class="tag g">SLA/SLO/SLI метрикаларын сипаттайды</span><span class="tag g">Сервис жауабы мен қателерді есептеуді түсіндіреді</span><span class="tag g">SLA-ны үздіксіз тексеретін скрипт жазады</span></div></div>
+
+<div class="block" id="theory"><h2>түсіндірме <span class="fname">theory.md</span></h2><section>
 <h2>1. SLI, SLO, SLA</h2>
 <p>Қызмет «жақсы жұмыс істеді ме?» деген сұраққа сезіммен емес, <b>санмен</b> жауап беру керек. Ол үшін үш ұғым қолданылады:</p>
 <div class="cards">
@@ -115,16 +114,22 @@ python check_sla.py --interval 2 --count 40
 <p>Нақты құралдар: <b>Prometheus + Blackbox exporter</b>, <b>Grafana</b>, <b>Uptime Kuma</b>, <b>UptimeRobot</b>. Біздің скрипттер — олардың шағын, түсінікті үлгісі.</p>
 </section>
 </div>
-<div class="block" id="video"><h2><span class="ico">🎬</span>Бейнетүсіндірме</h2><div class="video" id="video-box" data-topic="sla"></div></div>
-<div class="block" id="files"><h2><span class="ico">📦</span>Файлдар</h2>
+
+<div class="block" id="video"><h2>бейнетүсіндірме <span class="fname">video.mp4</span></h2><div class="video" id="video-box" data-topic="sla"></div></div>
+
+<div class="block" id="files"><h2>файлдар <span class="fname">files/</span></h2>
 <div class="files">
-<a class="file" href="files/10_sla_monitor.zip" download><span class="fi">🗂</span><span><b>10_sla_monitor.zip</b><span>Бастапқы файлдар · 10 КБ</span></span></a>
-<a class="file" href="files/praktikalyk_10_sla.pdf" target="_blank"><span class="fi">📄</span><span><b>Практикалық тапсырмалар №10</b><span>PDF · басып шығаруға</span></span></a>
-<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/10_sla_monitor" target="_blank" rel="noopener"><span class="fi">💻</span><span><b>Кодты GitHub-та қарау</b><span>файлдарды онлайн оқу</span></span></a>
+<a class="file" href="files/10_sla_monitor.zip" download><span class="ext">ZIP</span><span><b>10_sla_monitor.zip</b><span>бастапқы код · 10 КБ</span></span></a>
+<a class="file" href="files/praktikalyk_10_sla.pdf" target="_blank"><span class="ext">PDF</span><span><b>тапсырмалар №10</b><span>басып шығаруға</span></span></a>
+<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/10_sla_monitor" target="_blank" rel="noopener"><span class="ext">GIT</span><span><b>кодты GitHub-та қарау</b><span>онлайн оқу</span></span></a>
 </div>
-<p><b>Қалай бастау:</b> zip-ті ашыңыз → VS Code-та <code>File → Open Folder</code> → <code>10_sla_monitor</code> қалтасын таңдаңыз → <code>Terminal → New Terminal</code> → README.txt бойынша командаларды іске қосыңыз.</p>
+<pre><code><span class="t-m"># бастау</span>
+unzip 10_sla_monitor.zip &amp;&amp; cd 10_sla_monitor
+code .                     <span class="t-m"># VS Code-та ашу</span>
+cat README.txt             <span class="t-m"># командалар тізімі</span></code></pre>
 </div>
-<div class="block tasks" id="tasks"><h2><span class="ico">🛠</span>Практикалық тапсырмалар №10</h2><table class="task-info">
+
+<div class="block tasks" id="tasks"><h2>практикалық тапсырмалар №10 <span class="fname">tasks.md</span></h2><table class="task-info">
 <tr><td>Мақсаты</td><td>SLA, SLO, SLI метрикаларын ажыратуды, сервис жауабы мен қателерден SLI, қателер бюджеті мен burn rate есептеуді және қызметтерді үздіксіз тексеретін скриптпен жұмыс істеуді үйрену.</td></tr>
 <tr><td>Оқыту нәтижелері</td><td>1. SLA/SLO/SLI метрикаларын сипаттайды.<br>2. Сервис жауабы мен қателерді есептеуді түсіндіреді.<br>3. SLA-ны үздіксіз тексеретін скрипт жазады.</td></tr>
 <tr><td>Уақыты</td><td>150 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
@@ -163,28 +168,23 @@ python check_sla.py --interval 2 --count 40
 <p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
 <h3>Бақылау сұрақтары</h3>
 <ol><li>SLA, SLO және SLI дегеніміз не? Олардың айырмашылығы неде?</li><li>Қолжетімділік SLI-і қалай есептеледі? Қандай қателер есепке алынады?</li><li>SLO 99,9% болса, 30 күнде қанша минут тоқтауға болады?</li><li>Неге жауап уақытын бағалауда орташа мән емес, перцентиль (p95, p99) қолданылады?</li><li>Гистограмма бакеттері дегеніміз не және олардан p95 қалай бағаланады?</li><li>Қателер бюджеті дегеніміз не? Ол бітсе команда не істеуі керек?</li><li>Burn rate қалай есептеледі? 14,4 мәні нені білдіреді?</li><li>Синтетикалық мониторинг пен нақты пайдаланушы метрикаларының (RUM) айырмашылығы қандай?</li><li>SLA бұзылса не болады? Мысал келтіріңіз.</li><li>SLA тексеруін қалай автоматтандыруға болады (кесте, шығу коды, ескерту)?</li></ol></div>
-<div class="block" id="test"><h2><span class="ico">✅</span>Өзіңізді тексеріңіз</h2>
-<form id="quiz-form" class="form" onsubmit="return false">
-<div class="row"><label>Аты-жөні<input name="name" autocomplete="name" placeholder="Мысалы: Асанов Әли"></label><label>Тобы<select name="group"></select></label></div>
-</form>
-<div id="quiz" data-topic="Қызмет көрсету сапасын автоматты тексеру (SLA)"></div>
-<button class="btn" id="quiz-check" type="button">Жауаптарды тексеру</button>
-<div class="msg" id="quiz-msg" style="margin-top:14px"></div>
-</div>
-<div class="block" id="submit"><h2><span class="ico">📤</span>Жұмысты тапсыру</h2>
-<p>Есепті (Word, PDF немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Тапсырған соң <b>код</b> беріледі — сол арқылы бағаңызды көресіз.</p>
-<form id="submit-form" class="form" data-topic="Қызмет көрсету сапасын автоматты тексеру (SLA)">
-<div class="row"><label>Аты-жөні<input name="name" required autocomplete="name"></label><label>Тобы<select name="group"></select></label></div>
-<div class="row"><label>Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label>Есеп файлы <small>(10 МБ-қа дейін)</small><input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
-<label>немесе сілтеме <small>(GitHub, Google Drive)</small><input name="link" type="url" placeholder="https://"></label>
-<label>Түсініктеме <small>(міндетті емес)</small><textarea name="comment"></textarea></label>
-<div><button class="btn" type="submit">Жіберу</button></div>
-<div class="msg" id="submit-msg"></div>
-</form>
-</div>
-</div></main>
 
-<footer><div class="wrap"><span>© Каким А.Д. · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · ОН 6.4</span><a href="admin.html">Оқытушыға кіру</a></div></footer>
-<script src="assets/config.js"></script><script src="assets/app.js"></script>
+<div class="block" id="test"><h2>тест <span class="fname">test.json</span></h2>
+<div id="quiz-head"></div><div id="quiz" data-topic="sla"></div><div class="msg" id="quiz-msg" style="margin-top:12px"></div></div>
+
+<div class="block" id="ctf"><h2>SOC-терминал: челлендждер <span class="fname">soc.sh</span></h2><p>Нақты журналдарға ұқсас файлдар берілген. Терминалда <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жалауды тауып <code>submit flag{...}</code> жазыңыз. Командалар: <code>help</code>.</p><div data-ctf="sla"></div></div>
+
+<div class="block" id="submit"><h2>жұмысты тапсыру <span class="fname">submit</span></h2>
+<p>Есепті (docx, pdf, zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушы түсініктемесі кабинетте шығады.</p>
+<form id="submit-form" class="form" data-topic="Қызмет көрсету сапасын автоматты тексеру (SLA)">
+<div class="row"><label class="f">нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">есеп файлы <small>10 МБ-қа дейін</small><input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">түсініктеме <small>міндетті емес</small><textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">жіберу →</button></div><div class="msg" id="submit-msg"></div>
+</form></div>
+</main></div></div>
+
+<footer><div class="wrap"><span>// Алматы экономикалық колледжі · ИС 3-1 · КМ 06 · ОН 6.4 · оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> · <a href="admin.html">оқытушы</a></span></div></footer>
+<script src="assets/config.js"></script><script src="assets/games.js"></script><script src="assets/ctf-data.js"></script><script src="assets/terminal.js"></script><script src="assets/app.js"></script>
 </body>
 </html>

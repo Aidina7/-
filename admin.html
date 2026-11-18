@@ -3,51 +3,37 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Әкімші панелі · Оқу практикасы</title>
+<title>Оқытушы панелі · oqu-praktikasy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%234fd1a5'>&gt;_</text></svg>">
 <meta name="robots" content="noindex">
 </head>
 <body>
 <header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="logo">ОП</span><span>Оқу практикасы<small>Алматы экономикалық колледжі · ИС 3-1</small></span></a>
-<nav class="nav"><a href="index.html">Тақырыптар</a><a href="grade.html">Бағамды тексеру</a></nav>
+<a class="brand" href="index.html"><span class="p">~/</span>oqu-praktikasy<span class="c"></span></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
 </div></header>
 
-<div class="hero"><div class="wrap"><div class="kicker">Оқытушыға</div><h1>Әкімші панелі</h1>
-<p>Студенттердің тапсырған жұмыстары, бағалар және тест нәтижелері.</p></div></div>
-<main><div class="wrap">
-<div class="block" id="login" style="display:none;max-width:460px">
-<h2><span class="ico">🔐</span>Кіру</h2>
-<form id="login-form" class="form"><label>Құпиясөз<input id="pw" type="password" autocomplete="current-password"></label>
-<div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="login-msg"></div></form>
-</div>
+<div class="wrap" style="padding:30px 22px 70px">
+<div class="page-head"><div class="path">~/oqu-praktikasy $ sudo admin</div><h1>Оқытушы панелі</h1></div>
+<div id="login" style="display:none" class="auth-box"><form id="login-form" class="form">
+<label class="f">оқытушы құпиясөзі<input id="pw" type="password" autocomplete="current-password"></label>
+<div><button class="btn" type="submit">кіру →</button></div><div class="msg" id="login-msg"></div></form></div>
 <div id="panel" style="display:none">
 <div class="stats" id="stats"></div>
-<div class="tabs"><button class="active" data-tab="subs">Жұмыстар</button><button data-tab="tests">Тест нәтижелері</button></div>
-<div class="admin-bar">
-<select id="f-topic" data-all="Барлық тақырыптар"></select>
-<select id="f-group" data-all="Барлық топтар"></select>
-<select id="f-status"><option value="">Барлық күйлер</option><option>Тексерілмеген</option><option>Тексерілді</option><option>Қайта тапсыру</option></select>
-<input id="f-q" placeholder="Аты бойынша іздеу">
-<button class="btn small secondary" id="reload" type="button">⟳ Жаңарту</button>
-<button class="btn small secondary" id="export" type="button">⬇ Excel (CSV)</button>
-<button class="btn small secondary" id="logout" type="button">Шығу</button>
+<div class="tabs"><button class="active" data-tab="students">студенттер</button><button data-tab="subs">жұмыстар</button><button data-tab="tests">тесттер</button><button data-tab="games">ойындар</button></div>
+<div class="bar">
+<select id="f-group"></select><select id="f-topic"><option value="">барлық тақырыптар</option></select>
+<select id="f-status"><option value="">барлық күйлер</option><option>Тексерілмеген</option><option>Тексерілді</option><option>Қайта тапсыру</option></select>
+<input id="f-q" placeholder="аты немесе логин">
+<button class="btn small ghost" id="reload">⟳ жаңарту</button><button class="btn small ghost" id="export">⬇ csv</button><button class="btn small ghost" id="logout-admin">шығу</button>
 </div>
-<div class="block" id="list" style="padding:16px"></div>
-</div>
-</div></main>
-<div class="modal-bg" id="modal"><div class="modal">
-<h3>Жұмысты бағалау</h3>
-<div class="kv" id="m-info"></div>
-<div class="form">
-<div class="row"><label>Баға (0–100 ұпай)<input id="m-grade" type="number" min="0" max="100"></label>
-<label>Күйі<select id="m-status"><option>Тексерілді</option><option>Қайта тапсыру</option><option>Тексерілмеген</option></select></label></div>
-<label>Түсініктеме (студент көреді)<textarea id="m-comment"></textarea></label>
-<div class="msg" id="m-msg"></div>
-<div style="display:flex;gap:10px"><button class="btn" id="m-save" type="button">Сақтау</button><button class="btn secondary" id="m-close" type="button">Жабу</button></div>
-</div></div></div>
-<footer><div class="wrap"><span>© Каким А.Д. · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · ОН 6.4</span><a href="admin.html">Оқытушыға кіру</a></div></footer>
-<script src="assets/config.js"></script><script src="assets/app.js"></script><script src="assets/admin.js"></script>
+<div class="block" id="list" style="padding:12px 16px;margin-top:0"></div>
+</div></div>
+<div class="modal-bg" id="modal"><div class="modal" id="modal-body"></div></div>
+<footer><div class="wrap"><span>// Алматы экономикалық колледжі · ИС 3-1 · КМ 06 · ОН 6.4 · оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> · <a href="admin.html">оқытушы</a></span></div></footer>
+<script src="assets/config.js"></script><script src="assets/games.js"></script><script src="assets/ctf-data.js"></script><script src="assets/terminal.js"></script><script src="assets/app.js"></script><script src="assets/admin.js"></script>
 </body>
 </html>
