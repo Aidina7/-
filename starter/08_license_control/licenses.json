@@ -1,0 +1,29 @@
+{
+  "_сипаттама": "Ұйымның сатып алған лицензиялары (entitlements). count — лицензия саны, metric — есептеу бірлігі.",
+  "organization": "Алматы экономикалық колледжі (оқу үлгісі)",
+  "licenses": [
+    {"product": "office2021", "name": "Microsoft Office 2021 Standard", "type": "perpetual", "metric": "device", "count": 15, "expires": null, "cost_per_unit": 180000, "restrictions": "Бір лицензия — бір құрылғы; басқа компьютерге тек ескісінен өшіргеннен кейін көшіруге болады"},
+    {"product": "m365", "name": "Microsoft 365 Business Standard", "type": "subscription", "metric": "user", "count": 10, "expires": "2026-12-05", "cost_per_unit": 72000, "restrictions": "Бір пайдаланушы 5 құрылғыға дейін орната алады"},
+    {"product": "windows11pro", "name": "Windows 11 Pro (OEM)", "type": "oem", "metric": "device", "count": 26, "expires": null, "cost_per_unit": 0, "restrictions": "OEM: компьютермен бірге сатылған, басқа құрылғыға көшіруге болмайды"},
+    {"product": "photoshop", "name": "Adobe Photoshop (Creative Cloud)", "type": "subscription", "metric": "user", "count": 3, "expires": "2027-03-01", "cost_per_unit": 160000, "restrictions": "Аталған пайдаланушыға (named user) беріледі"},
+    {"product": "autocad_lt", "name": "AutoCAD LT", "type": "subscription", "metric": "user", "count": 2, "expires": "2026-11-25", "cost_per_unit": 250000, "restrictions": "Аталған пайдаланушы"},
+    {"product": "kaspersky", "name": "Kaspersky Endpoint Security", "type": "subscription", "metric": "device", "count": 25, "expires": "2027-01-15", "cost_per_unit": 9000, "restrictions": "Барлық Windows компьютерлерде міндетті"},
+    {"product": "1c_buh", "name": "1С:Бухгалтерия для Казахстана", "type": "perpetual", "metric": "concurrent", "count": 3, "expires": null, "cost_per_unit": 95000, "restrictions": "Бір мезгілде 3 қосылымнан артық емес"},
+    {"product": "pycharm_edu", "name": "JetBrains PyCharm Professional (Educational)", "type": "subscription", "metric": "user", "count": 30, "expires": "2027-06-30", "cost_per_unit": 0, "restrictions": "Тек оқу мақсатында; коммерциялық жұмысқа тыйым салынған"},
+    {"product": "winrar", "name": "WinRAR", "type": "perpetual", "metric": "device", "count": 0, "expires": null, "cost_per_unit": 15000, "restrictions": "Shareware: 40 күндік сынақтан кейін сатып алу міндетті"}
+  ],
+  "free_software": [
+    {"product": "vscode", "name": "Visual Studio Code", "license": "MIT (бинарлық нұсқасы — Microsoft лицензиясы)", "note": "Тегін, коммерциялық қолдануға рұқсат"},
+    {"product": "python", "name": "Python", "license": "PSF", "note": "Тегін, рұқсат беруші лицензия"},
+    {"product": "git", "name": "Git", "license": "GPL-2.0", "note": "Тегін қолдану; өзгертіп таратсаңыз — бастапқы кодты ашу міндетті (copyleft)"},
+    {"product": "7zip", "name": "7-Zip", "license": "LGPL-2.1", "note": "Тегін, WinRAR-дың заңды баламасы"},
+    {"product": "libreoffice", "name": "LibreOffice", "license": "MPL-2.0", "note": "Тегін, Office-тың баламасы"},
+    {"product": "chrome", "name": "Google Chrome", "license": "Freeware", "note": "Тегін"},
+    {"product": "teamviewer_free", "name": "TeamViewer (Free)", "license": "Freeware — тек жеке мақсатта", "note": "ШЕКТЕУ: ұйымда (коммерциялық) қолдануға тыйым салынған", "commercial_use": false}
+  ],
+  "forbidden": [
+    {"pattern": "utorrent", "reason": "P2P клиент: зиянды бағдарлама және заңсыз контент тәуекелі"},
+    {"pattern": "kmsauto", "reason": "Заңсыз белсендіргіш (activator) — пиратство және зиянды код"},
+    {"pattern": "crack", "reason": "Бұзылған бағдарлама"}
+  ]
+}

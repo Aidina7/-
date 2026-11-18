@@ -1,0 +1,28 @@
+{
+  "_сипаттама": "Колледждің IT-активтерді түгендеу стандарты (ITIL SACM, ISO/IEC 19770-1, CIS Control 1-2 негізінде оқу үлгісі)",
+  "organization_code": "AEC",
+  "asset_tag_pattern": "^AEC-(SRV|PC|NB|NET|PRN|CAM|IOT|UNK)-\\d{4}$",
+  "required_fields": ["asset_tag", "type", "hostname", "ip", "mac", "vendor", "os", "role", "owner", "location", "status", "last_seen"],
+  "types": {
+    "SRV": "Сервер",
+    "PC": "Жұмыс станциясы",
+    "NB": "Ноутбук",
+    "NET": "Желілік жабдық (коммутатор, маршрутизатор, точка доступа)",
+    "PRN": "Принтер / МФУ",
+    "CAM": "IP-камера",
+    "IOT": "IoT құрылғы",
+    "UNK": "Белгісіз құрылғы (тексеру керек)"
+  },
+  "statuses": ["planned", "in_use", "in_repair", "in_stock", "retired"],
+  "criticality": {
+    "SRV": "high",
+    "NET": "high",
+    "PC": "medium",
+    "NB": "medium",
+    "PRN": "low",
+    "CAM": "medium",
+    "IOT": "low",
+    "UNK": "high"
+  },
+  "max_days_not_seen": 30
+}
