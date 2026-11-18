@@ -48,9 +48,16 @@ def inline(text):
     return t
 
 
+def ver(rel):
+    """Кэшті жаңарту үшін файлдың қысқа хэші (браузер ескі CSS/JS-ті қолданбауы үшін)."""
+    import hashlib
+    with open(os.path.join(ROOT, rel), "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:8]
+
+
 def page(title, body, active="", extra_head="", scripts=BASE_JS):
     nav = "".join('<a href="%s"%s>%s</a>' % (h, ' class="active"' if h == active else "", n) for h, n in NAV)
-    js = "".join('<script src="%s"></script>' % s for s in scripts)
+    js = "".join('<script src="%s?v=%s"></script>' % (s, ver(s)) for s in scripts)
     return """<!DOCTYPE html>
 <html lang="kk">
 <head>
@@ -58,7 +65,7 @@ def page(title, body, active="", extra_head="", scripts=BASE_JS):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>%s · oqu-praktikasy</title>
 %s
-<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/style.css?v=%s">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%%230b0f14'/><text x='5' y='22' font-family='monospace' font-size='16' fill='%%234fd1a5'>&gt;_</text></svg>">
 %s
 </head>
@@ -73,7 +80,7 @@ def page(title, body, active="", extra_head="", scripts=BASE_JS):
 %s
 </body>
 </html>
-""" % (html.escape(title), FONTS, extra_head, nav, body, js)
+""" % (html.escape(title), FONTS, ver("assets/style.css"), extra_head, nav, body, js)
 
 
 def tasks_html(spec):
