@@ -11,6 +11,14 @@
 // ↓↓↓ ӨЗ ҚҰПИЯСӨЗІҢІЗДІ ЖАЗЫҢЫЗ (кемінде 8 таңба) ↓↓↓
 const ADMIN_PASSWORD = 'ӨЗГЕРТІҢІЗ-2026';
 
+// Google кестесінің ID-і (кесте мекенжайындағы /d/ мен /edit арасындағы бөлік).
+// Скрипт кестенің ішінен (Кеңейтімдер → Apps Script) ашылса, бос қалдыруға болады.
+const SHEET_ID = '1O9CPuR3ijWFzybUpu_2nvapWnH_PXduXCsPbYhT37eo';
+
+function ss_() {
+  return SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActive();
+}
+
 const SUBMISSIONS = 'Тапсырылған жұмыстар';
 const TESTS = 'Тест нәтижелері';
 const FOLDER_NAME = 'Оқу практикасы — студенттер жұмыстары';
@@ -22,7 +30,7 @@ function setup() {
   if (!ADMIN_PASSWORD || ADMIN_PASSWORD.length < 8 || ADMIN_PASSWORD === 'ӨЗГЕРТІҢІЗ-2026') {
     throw new Error('Алдымен Code.gs файлының басындағы ADMIN_PASSWORD мәнін өз құпиясөзіңізге ауыстырыңыз (кемінде 8 таңба).');
   }
-  const ss = SpreadsheetApp.getActive();
+  const ss = ss_();
   ensureSheet_(ss, SUBMISSIONS, SUB_HEADERS);
   ensureSheet_(ss, TESTS, TEST_HEADERS);
   const props = PropertiesService.getScriptProperties();
@@ -116,7 +124,7 @@ function submit_(req) {
   const lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
-    SpreadsheetApp.getActive().getSheetByName(SUBMISSIONS).appendRow([
+    ss_().getSheetByName(SUBMISSIONS).appendRow([
       id, new Date(), name, group, topic, clean_(req.variant, 10), link, fileUrl,
       clean_(req.comment, 1000), 'Тексерілмеген', '', '', ''
     ]);
@@ -130,14 +138,14 @@ function saveTest_(req) {
   const name = clean_(req.name, 120), group = clean_(req.group, 40), topic = clean_(req.topic, 120);
   if (!name || !group) return { ok: false, error: 'Аты-жөні мен тобы міндетті' };
   const score = Number(req.score) || 0, total = Number(req.total) || 0;
-  SpreadsheetApp.getActive().getSheetByName(TESTS).appendRow([
+  ss_().getSheetByName(TESTS).appendRow([
     new Date(), name, group, topic, score, total, total ? Math.round(100 * score / total) : 0, clean_(req.answers, 500)
   ]);
   return { ok: true };
 }
 
 function rows_(sheetName) {
-  const sh = SpreadsheetApp.getActive().getSheetByName(sheetName);
+  const sh = ss_().getSheetByName(sheetName);
   const values = sh.getDataRange().getValues();
   return values.slice(1);
 }
@@ -163,7 +171,7 @@ function list_(req) {
 
 function grade_(req) {
   if (!isAdmin_(req.password)) return { ok: false, error: 'Құпиясөз қате' };
-  const sh = SpreadsheetApp.getActive().getSheetByName(SUBMISSIONS);
+  const sh = ss_().getSheetByName(SUBMISSIONS);
   const ids = sh.getRange(2, 1, Math.max(sh.getLastRow() - 1, 1), 1).getValues();
   for (let i = 0; i < ids.length; i++) {
     if (ids[i][0] === req.id) {
