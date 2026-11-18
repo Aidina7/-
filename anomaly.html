@@ -4,26 +4,28 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Желілік аномалияларды автоматты түрде анықтау — Оқу практикасы, ИС 3-1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=7238bd65">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2324292f'/><text x='16' y='21' text-anchor='middle' font-family='Arial' font-weight='700' font-size='13' fill='white'>АЭК</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=fc5832c8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Crect width='34' height='34' rx='11' fill='%235b45ff'/%3E%3Cpath d='M10 23 L17 11 L24 23 Z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round' opacity='.55'/%3E%3Ccircle cx='17' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='10' cy='23' r='3.4' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%23f2a516'/%3E%3C/svg%3E">
 <script>window.QUIZ = [{"id": "ano01", "q": "Трафик профилі (baseline) дегеніміз не?", "o": ["Брандмауэр ережелерінің тізімі", "Хосттың қалыпты мінез-құлқының статистикалық сипаттамасы", "Желі сызбасы", "Антивирус базасы"]}, {"id": "ano02", "q": "Неге профиль сағат бойынша бөлек есептеледі?", "o": ["Файл кішірек болу үшін", "Трафиктің тәуліктік маусымдылығы бар: күндізгі қалыпты мән түнде аномалия болуы мүмкін", "NetFlow солай талап етеді", "Сағат бойынша есептеу жылдамырақ"]}, {"id": "ano03", "q": "NetFlow / IPFIX деректерінде не жоқ?", "o": ["Көз және мақсат IP", "Порттар", "Байттар саны", "Пакеттің мазмұны (хат мәтіні, файл)"]}, {"id": "ano04", "q": "Бір хост 10 минутта 800 әртүрлі портқа қосылды. Бұл көбінесе не?", "o": ["DDoS", "Порттарды сканерлеу", "Резервтік көшіру", "Бағдарлама жаңарту"]}, {"id": "ano05", "q": "Түнде файлдық сервер интернетке 20 ГБ жіберді, ал профиль бойынша түнде сыртқа трафик жоқ. Ықтимал шабуыл?", "o": ["Порттарды сканерлеу", "Деректерді шығару (exfiltration)", "Beaconing", "Брутфорс"]}, {"id": "ano06", "q": "Beaconing неге тұрақты шекпен және z-score-мен табылмайды?", "o": ["Ол өте көп трафик жасайды", "Әр нүкте өте кішкентай, бірақ тұрақты аралықпен қайталанады — ұжымдық аномалия", "Ол тек күндіз болады", "Ол шифрланған"]}, {"id": "ano07", "q": "z-score қалай есептеледі?", "o": ["z = x × std", "z = (x − mean) / std", "z = mean / x", "z = x − p95"]}, {"id": "ano08", "q": "Түнгі backup кезінде тұрақты шек дабыл берді. Бұл не?", "o": ["True Positive", "False Positive (жалған дабыл)", "False Negative", "True Negative"]}, {"id": "ano09", "q": "Recall нені көрсетеді?", "o": ["Дабылдардың қаншасы шын", "Шын аномалиялардың қаншасы табылды", "Скрипт қаншалықты жылдам", "Профиль қаншалықты үлкен"]}, {"id": "ano10", "q": "Неге жалған дабылдың көп болуы қауіпті?", "o": ["Диск толады", "Аналитиктер «шаршап», шын дабылды елемей қалуы мүмкін (alert fatigue)", "Желі баяулайды", "Ешқандай қаупі жоқ"]}, {"id": "ano11", "q": "Сағат 14:00 үшін профиль: mean = 40, std = 5. Бүгінгі мән 75. z-score қанша?", "o": ["3", "7", "15", "35"]}, {"id": "ano12", "q": "TP = 135, FP = 18, FN = 10. Precision шамамен қанша?", "o": ["0,93", "0,88", "0,12", "0,98"]}, {"id": "ano13", "q": "Бір хост 250 түрлі хостқа тек 445 (SMB) портына қосылды. Бұл не?", "o": ["Вертикалды сканерлеу", "Горизонталды сканерлеу — желі бойынша тарайтын құрт (WannaCry сияқты) белгісі", "DDoS", "Қалыпты файл алмасу"]}, {"id": "ano14", "q": "srv-backup-01 әр түні 01:00-де 900 МБ қабылдайды, тұрақты шек дабыл береді. Ең дұрыс түзету?", "o": ["Шекті барлық хост үшін 1000 МБ-қа көтеру", "Профиль бойынша анықтау немесе осы хост пен сағатқа «ақ тізім» қосу", "Backup-ты өшіру", "Дабылдарды мүлдем өшіру"]}, {"id": "ano15", "q": "Beaconing-ті табу үшін ең пайдалы белгі қайсы?", "o": ["Үлкен трафик көлемі", "Бір сыртқы мекенжайға тұрақты аралықпен (мысалы, әр 5 минут) қайталанатын аз қосылымдар", "Көп порттар", "Күндізгі белсенділік"]}, {"id": "ano16", "q": "Дабылдың Recall-ы 1,0, бірақ Precision 0,05. Іс жүзінде бұл нені білдіреді?", "o": ["Жүйе тамаша", "Барлық шабуыл табылады, бірақ 20 дабылдың 19-ы жалған — аналитиктер шаршайды", "Шабуылдар табылмайды", "Деректер жоқ"]}];</script>
 </head>
-<body>
-<header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="logo">АЭК</span><span>Оқу практикасы<small>КМ 06 · ИС 3-1</small></span></a>
+<body class="t-anomaly">
+<header class="topbar " id="topbar"><div class="wrap">
+<a class="brand" href="index.html"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="11" fill="#5b45ff"/><path d="M10 23 L17 11 L24 23 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/><circle cx="17" cy="11" r="3.4" fill="#fff"/><circle cx="10" cy="23" r="3.4" fill="#fff"/><circle cx="24" cy="23" r="3.4" fill="#f2a516"/></svg><span>Оқу практикасы</span></a>
 <nav class="nav"><a href="index.html">Басты бет</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
 <div class="user" id="user"></div>
 </div></header>
 
-<div class="wrap"><div class="layout">
-<aside class="side"><div class="side-h">№9 тақырып</div><a href="#theory">Теория</a><a href="#video">Бейне</a><a href="#files">Файлдар</a><a href="#tasks">Тапсырмалар</a><a href="#test">Тест</a><a href="#ctf">Челлендж</a><a href="#submit">Жұмысты тапсыру</a>
-<div class="meta">6 сағат · 3 сабақ<br>Бейне: 1:39<br>Python 3.10+, VS Code<br>Тест: 16 сұрақ банкі</div></aside>
-<main>
-<div class="page-head"><div class="crumbs"><a href="index.html">Басты бет</a> / Практикалық жұмыс №9</div>
+<div class="thead"><div class="wrap">
+<div><div class="crumbs"><a href="index.html">Басты бет</a> / <span class="num">Практикалық жұмыс №9</span></div>
 <h1>Желілік аномалияларды автоматты түрде анықтау</h1><p>Желілік трафик профилі, аномалия түрлері (сканерлеу, DDoS, деректерді шығару, beaconing) және оларды автоматты табатын сценарий.</p>
-<div class="meta"><span>Оқыту нәтижелері:</span><span class="tag">Желілік трафик профильдерін сипаттайды</span><span class="tag">Трафиктегі аномалияларды сараптауды түсіндіреді</span><span class="tag">Аномалияларды табатын сценарий әзірлейді</span></div></div>
-
+<div class="chips"><span class="chip">Желілік трафик профильдерін сипаттайды</span><span class="chip">Трафиктегі аномалияларды сараптауды түсіндіреді</span><span class="chip">Аномалияларды табатын сценарий әзірлейді</span></div></div>
+<div class="bigpic"><svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 34h7l4-6 4 4 5-22 5 30 4-10h9"/><path d="M5 42h38" opacity=".4"/></svg></div>
+</div></div>
+<div class="wrap"><div class="layout">
+<aside class="side"><nav id="side-nav"><a href="#theory">Теория</a><a href="#video">Бейне</a><a href="#files">Файлдар</a><a href="#tasks">Тапсырмалар</a><a href="#test">Тест</a><a href="#ctf">Челлендж</a><a href="#submit">Жұмысты тапсыру</a></nav>
+<div class="meta"><div><span>Көлемі</span>6 сағат</div><div><span>Бейне</span>1:39</div><div><span>Тест</span>10 / 16 сұрақ</div><div><span>Тіл</span>Python 3.10+</div></div></aside>
+<main>
 <div class="block" id="theory"><h2>Теория</h2><section>
 <h2>1. Желілік аномалия дегеніміз не?</h2>
 <p><b>Аномалия</b> — желі трафигінің «қалыпты» мінез-құлықтан елеулі ауытқуы. Ол шабуыл (сканерлеу, DDoS, деректерді ұрлау), зиянды бағдарлама немесе жай ғана ақау (қате бапталған қызмет) болуы мүмкін. Аномалияны тез табу — қауіпсіздік инцидентіне уақытылы әрекет етудің кілті.</p>
@@ -131,18 +133,18 @@ schtasks /create /tn "AnomalyDetect" /tr "python C:\lab\09_network_anomaly\detec
 </div>
 
 <div class="block" id="video"><h2>Бейнетүсіндірме</h2><div class="video" id="video-box" data-topic="anomaly"></div>
-<div class="video-note">Субтитрлері бар қысқа шолу. Толық түсіндірме — жоғарыдағы «Теория» бөлімінде.</div></div>
+<div class="video-note">Қысқа шолу, субтитрлері бар (1:39). Толығырақ — «Теория» бөлімінде.</div></div>
 
 <div class="block" id="files"><h2>Файлдар</h2>
 <div class="files">
-<a class="file" href="files/09_network_anomaly.zip" download><span class="ext">ZIP</span><span><b>09_network_anomaly.zip</b><span>бастапқы код, 11 КБ</span></span></a>
+<a class="file" href="files/09_network_anomaly.zip" download><span class="ext">ZIP</span><span><b>Бастапқы код</b><span>09_network_anomaly.zip, 11 КБ</span></span></a>
 <a class="file" href="files/praktikalyk_9_anomaly.pdf" target="_blank"><span class="ext">PDF</span><span><b>Тапсырмалар №9</b><span>басып шығаруға</span></span></a>
-<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/09_network_anomaly" target="_blank" rel="noopener"><span class="ext">GIT</span><span><b>Кодты GitHub-та қарау</b><span>файлдарды онлайн оқу</span></span></a>
+<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/09_network_anomaly" target="_blank" rel="noopener"><span class="ext">GIT</span><span><b>GitHub-та қарау</b><span>кодты онлайн оқу</span></span></a>
 </div>
-<p>Архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>09_network_anomaly</code> қалтасын ашыңыз. Командалар тізімі <code>README.txt</code> файлында.</p>
+<p>Архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>09_network_anomaly</code> қалтасын ашыңыз. Іске қосу командалары <code>README.txt</code> файлында.</p>
 </div>
 
-<div class="block tasks" id="tasks"><h2>Практикалық тапсырмалар №9</h2><table class="task-info">
+<div class="block tasks" id="tasks"><h2>Практикалық тапсырмалар</h2><table class="task-info">
 <tr><td>Мақсаты</td><td>желілік трафик профилін құруды, профиль бойынша аномалияларды әртүрлі әдістермен табуды, нәтижелерді сараптап бағалауды және аномалияларды табатын сценарийді жетілдіруді үйрену.</td></tr>
 <tr><td>Оқыту нәтижелері</td><td>1. Желілік трафик профильдерін сипаттайды.<br>2. Трафиктегі аномалияларды сараптауды түсіндіреді.<br>3. Аномалияларды табатын сценарий әзірлейді.</td></tr>
 <tr><td>Уақыты</td><td>150 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
@@ -186,19 +188,19 @@ schtasks /create /tn "AnomalyDetect" /tr "python C:\lab\09_network_anomaly\detec
 <div class="block" id="test"><h2>Тест</h2>
 <div id="quiz-head"></div><div id="quiz" data-topic="anomaly"></div><div class="msg" id="quiz-msg" style="margin-top:12px"></div></div>
 
-<div class="block" id="ctf"><h2>Челлендж: SOC-терминал</h2><p>Журналдарға ұқсас файлдар берілген. Терминалда <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="anomaly"></div></div>
+<div class="block" id="ctf"><h2>Челлендж: SOC-терминал</h2><p>Журнал файлдары берілген. Терминалда <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="anomaly"></div></div>
 
 <div class="block" id="submit"><h2>Жұмысты тапсыру</h2>
-<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының түсініктемесі кабинетте шығады.</p>
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі кабинетте шығады.</p>
 <form id="submit-form" class="form" data-topic="Желілік аномалияларды автоматты түрде анықтау">
 <div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы <small>10 МБ-қа дейін</small><input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
 <label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
-<label class="f">Түсініктеме <small>міндетті емес</small><textarea name="comment"></textarea></label>
-<div><button class="btn" type="submit">Жіберу</button></div><div class="msg" id="submit-msg"></div>
+<label class="f">Пікір <small>міндетті емес</small><textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
 </form></div>
 </main></div></div>
 
-<footer><div class="wrap"><span>Алматы экономикалық колледжі · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> · <a href="admin.html">Оқытушыға</a></span></div></footer>
-<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=e629a89a"></script>
+<footer><div class="wrap"><span>Алматы экономикалық колледжі, КМ 06 «Ақпараттық жүйелерді автоматтандыру». Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="admin.html">Оқытушыға</a></span></div></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=20bfe216"></script>
 </body>
 </html>

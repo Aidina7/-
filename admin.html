@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Оқытушы панелі — Оқу практикасы, ИС 3-1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=7238bd65">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%2324292f'/><text x='16' y='21' text-anchor='middle' font-family='Arial' font-weight='700' font-size='13' fill='white'>АЭК</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=fc5832c8">
+<link rel="icon" href="data:image/svg+xml,%3Csvg width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Crect width='34' height='34' rx='11' fill='%235b45ff'/%3E%3Cpath d='M10 23 L17 11 L24 23 Z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round' opacity='.55'/%3E%3Ccircle cx='17' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='10' cy='23' r='3.4' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%23f2a516'/%3E%3C/svg%3E">
 <meta name="robots" content="noindex">
 </head>
-<body>
-<header class="topbar"><div class="wrap">
-<a class="brand" href="index.html"><span class="logo">АЭК</span><span>Оқу практикасы<small>КМ 06 · ИС 3-1</small></span></a>
+<body class="">
+<header class="topbar " id="topbar"><div class="wrap">
+<a class="brand" href="index.html"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="11" fill="#5b45ff"/><path d="M10 23 L17 11 L24 23 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/><circle cx="17" cy="11" r="3.4" fill="#fff"/><circle cx="10" cy="23" r="3.4" fill="#fff"/><circle cx="24" cy="23" r="3.4" fill="#f2a516"/></svg><span>Оқу практикасы</span></a>
 <nav class="nav"><a href="index.html">Басты бет</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
 <div class="user" id="user"></div>
 </div></header>
 
 <div class="wrap page">
 <div class="page-head"><h1>Оқытушы панелі</h1></div>
-<div id="login" style="display:none" class="auth-box"><form id="login-form" class="form">
+<div id="login" style="display:none" class="auth-box solo"><form id="login-form" class="form">
 <label class="f">Оқытушы құпиясөзі<input id="pw" type="password" autocomplete="current-password"></label>
 <div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="login-msg"></div></form></div>
 <div id="panel" style="display:none">
@@ -30,10 +30,10 @@
 <input id="f-q" placeholder="аты немесе логин">
 <button class="btn small ghost" id="reload">Жаңарту</button><button class="btn small ghost" id="export">Excel (CSV)</button><button class="btn small ghost" id="logout-admin">Шығу</button>
 </div>
-<div class="box" id="list" style="padding:4px 0;overflow-x:auto"></div>
+<div id="list"></div>
 </div></div>
 <div class="modal-bg" id="modal"><div class="modal" id="modal-body"></div></div>
-<footer><div class="wrap"><span>Алматы экономикалық колледжі · КМ 06 «Ақпараттық жүйелерді автоматтандыру» · Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> · <a href="admin.html">Оқытушыға</a></span></div></footer>
-<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=e629a89a"></script><script src="assets/admin.js?v=2962a6dc"></script>
+<footer><div class="wrap"><span>Алматы экономикалық колледжі, КМ 06 «Ақпараттық жүйелерді автоматтандыру». Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="admin.html">Оқытушыға</a></span></div></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=20bfe216"></script><script src="assets/admin.js?v=6aa54a04"></script>
 </body>
 </html>

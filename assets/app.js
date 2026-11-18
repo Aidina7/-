@@ -277,6 +277,26 @@
   }
   window.Site.statusTag = statusTag; window.Site.gameName = gameName;
 
+  /* ---------- шапка, бүйір мәзір, анимация ---------- */
+  function initChrome() {
+    const top = $("#topbar");
+    if (top && top.classList.contains("dark")) {
+      const f = () => top.classList.toggle("scrolled", window.scrollY > 40);
+      window.addEventListener("scroll", f, { passive: true }); f();
+    }
+    const map = $("#netmap");
+    if (map && window.matchMedia("(prefers-reduced-motion: reduce)").matches && map.pauseAnimations) map.pauseAnimations();
+    const nav = $("#side-nav");
+    if (nav && "IntersectionObserver" in window) {
+      const links = [...nav.querySelectorAll("a")];
+      const io = new IntersectionObserver(es => es.forEach(e => {
+        if (!e.isIntersecting) return;
+        links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
+      }), { rootMargin: "-30% 0px -60% 0px" });
+      links.forEach(a => { const el = document.querySelector(a.getAttribute("href")); if (el) io.observe(el); });
+    }
+  }
+
   /* ---------- басты беттегі «терминал» ---------- */
   function heroTyping() {
     const pre = $("#hero-term");
@@ -320,7 +340,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    renderUser(); initLogin(); renderVideo(); initQuiz(); initCtf(); initSorters(); initSubmit(); initCabinet(); initGrade(); heroTyping();
+    renderUser(); initLogin(); renderVideo(); initQuiz(); initCtf(); initSorters(); initSubmit(); initCabinet(); initGrade(); heroTyping(); initChrome();
     const bg = $("#board-game"); if (bg) { bg.onchange = loadBoard; loadBoard(); }
   });
 })();
