@@ -1,0 +1,33 @@
+{
+  "_сипаттама": "Колледж қызметтері және олардың сапа мақсаттары. SLO — ішкі мақсат, SLA — келісімшарттағы міндеттеме (әдетте SLO-дан төмен).",
+  "services": [
+    {
+      "id": "portal",
+      "name": "Колледж порталы",
+      "owner": "IT бөлімі",
+      "probe_url": "http://127.0.0.1:8085/health",
+      "slo": {"availability": 99.5, "latency_ms": 300, "latency_target": 95.0, "window_days": 30},
+      "sla": {"availability": 99.0, "penalty": "айлық төлемнің 10% қайтарылады"}
+    },
+    {
+      "id": "journal_api",
+      "name": "Электронды журнал API",
+      "owner": "Әзірлеушілер тобы",
+      "probe_url": "http://127.0.0.1:8085/api/grades",
+      "slo": {"availability": 99.9, "latency_ms": 300, "latency_target": 95.0, "window_days": 30},
+      "sla": {"availability": 99.5, "penalty": "айлық төлемнің 15% қайтарылады"}
+    },
+    {
+      "id": "lms",
+      "name": "Оқу платформасы (LMS)",
+      "owner": "Оқу бөлімі",
+      "probe_url": "http://127.0.0.1:8085/lms",
+      "slo": {"availability": 99.0, "latency_ms": 1000, "latency_target": 90.0, "window_days": 30},
+      "sla": {"availability": 98.5, "penalty": "келесі айға 5% жеңілдік"}
+    }
+  ],
+  "alerts": {
+    "fast_burn": {"window_hours": 1, "burn_rate": 14.4, "action": "PAGE — кезекші әкімшіге дереу хабарлау"},
+    "slow_burn": {"window_hours": 6, "burn_rate": 6.0, "action": "TICKET — жұмыс уақытында тексеру"}
+  }
+}
