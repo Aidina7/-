@@ -3,24 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Бағамды тексеру — Оқу практикасы, ИС 3-1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=fc5832c8">
-<link rel="icon" href="data:image/svg+xml,%3Csvg width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Crect width='34' height='34' rx='11' fill='%235b45ff'/%3E%3Cpath d='M10 23 L17 11 L24 23 Z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round' opacity='.55'/%3E%3Ccircle cx='17' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='10' cy='23' r='3.4' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%23f2a516'/%3E%3C/svg%3E">
+<title>Бағамды тексеру | Оқу практикасы ИС 3-1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=ac42446e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23213547'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2342b883'%3E&gt;_%3C/text%3E%3C/svg%3E">
 
 </head>
-<body class="">
-<header class="topbar " id="topbar"><div class="wrap">
-<a class="brand" href="index.html"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="11" fill="#5b45ff"/><path d="M10 23 L17 11 L24 23 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/><circle cx="17" cy="11" r="3.4" fill="#fff"/><circle cx="10" cy="23" r="3.4" fill="#fff"/><circle cx="24" cy="23" r="3.4" fill="#f2a516"/></svg><span>Оқу практикасы</span></a>
-<nav class="nav"><a href="index.html">Басты бет</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
+<body>
+<header class="top"><div class="top-in">
+<button class="sb-btn" id="sb-btn" aria-label="Мәзір"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html"><span class="prompt">&gt;_</span> oqu-praktika <span class="grp">ИС 3-1</span></a>
+<nav class="nav"><a href="index.html">Курс туралы</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a><a class="gh" href="https://github.com/Aidina7/-" target="_blank" rel="noopener" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></nav>
 <div class="user" id="user"></div>
 </div></header>
-
-<div class="wrap"><div class="auth-box solo"><h2 style="margin-bottom:16px">Бағаны кодпен тексеру</h2>
-<form id="grade-form" class="form"><label class="f">Тексеру коды<input name="code" maxlength="6" placeholder="K7M2QX" style="text-transform:uppercase;font-family:var(--mono);letter-spacing:.1em"></label>
-<div><button class="btn" type="submit">Тексеру</button></div><div class="msg" id="grade-msg"></div></form>
-<p class="muted" style="font-size:13px">Тіркелген болсаңыз, барлық бағалар <a href="cabinet.html">кабинетте</a>.</p></div></div>
-<footer><div class="wrap"><span>Алматы экономикалық колледжі, КМ 06 «Ақпараттық жүйелерді автоматтандыру». Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="admin.html">Оқытушыға</a></span></div></footer>
-<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=20bfe216"></script>
+<div class="docs"><aside class="sb" id="sb"><div class="sb-group"><p>Бастау</p><a href="index.html">Курс туралы</a><a href="index.html#how">Қалай жұмыс істеу керек</a><a href="login.html#register">Тіркелу</a></div><div class="sb-group"><p>Практикалық жұмыстар</p><a href="inventory.html"><span class="n">7</span>Активтер инвентаризациясы</a><a href="licenses.html"><span class="n">8</span>Лицензияларды бақылау</a><a href="anomaly.html"><span class="n">9</span>Желілік аномалиялар</a><a href="sla.html"><span class="n">10</span>SLA тексеру</a></div><div class="sb-group"><p>Ойындар</p><a href="games.html#sorter">Сортировщик</a><a href="games.html#ctf">SOC-терминал</a><a href="games.html#leaders">Көшбасшылар</a></div><div class="sb-group"><p>Менің нәтижелерім</p><a href="cabinet.html">Кабинет</a><a href="grade.html" class="on">Бағаны кодпен тексеру</a></div></aside><main class="doc">
+<h1>Бағаны кодпен тексеру</h1>
+<p class="lead">Жұмысты тіркелмей жіберген болсаңыз, алған кодыңызды енгізіңіз. Тіркелген болсаңыз, барлық бағалар <a href="cabinet.html">кабинетте</a>.</p>
+<form id="grade-form" class="form" style="max-width:360px"><label class="f">Тексеру коды<input name="code" maxlength="6" placeholder="K7M2QX" style="text-transform:uppercase;font-family:var(--mono);letter-spacing:.1em"></label>
+<div><button class="btn" type="submit">Тексеру</button></div><div class="msg" id="grade-msg"></div></form></main></div>
+<footer class="foot"><span>КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі, 2026</span><span>Оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">Оқытушыға кіру</a></span></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=78940079"></script>
 </body>
 </html>

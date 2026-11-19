@@ -279,20 +279,22 @@
 
   /* ---------- шапка, бүйір мәзір, анимация ---------- */
   function initChrome() {
-    const top = $("#topbar");
-    if (top && top.classList.contains("dark")) {
-      const f = () => top.classList.toggle("scrolled", window.scrollY > 40);
-      window.addEventListener("scroll", f, { passive: true }); f();
+    const btn = $("#sb-btn");
+    if (btn) {
+      if (!$("#sb")) btn.style.display = "none";
+      btn.addEventListener("click", () => document.body.classList.toggle("sb-open"));
+      document.addEventListener("click", e => {
+        if (document.body.classList.contains("sb-open") && !e.target.closest("#sb") && !e.target.closest("#sb-btn"))
+          document.body.classList.remove("sb-open");
+      });
     }
-    const map = $("#netmap");
-    if (map && window.matchMedia("(prefers-reduced-motion: reduce)").matches && map.pauseAnimations) map.pauseAnimations();
     const nav = $("#side-nav");
     if (nav && "IntersectionObserver" in window) {
       const links = [...nav.querySelectorAll("a")];
       const io = new IntersectionObserver(es => es.forEach(e => {
         if (!e.isIntersecting) return;
         links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
-      }), { rootMargin: "-30% 0px -60% 0px" });
+      }), { rootMargin: "-10% 0px -80% 0px" });
       links.forEach(a => { const el = document.querySelector(a.getAttribute("href")); if (el) io.observe(el); });
     }
   }

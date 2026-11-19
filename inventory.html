@@ -3,30 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Активтер мен қызметтердің инвентаризациясын жасау — Оқу практикасы, ИС 3-1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=fc5832c8">
-<link rel="icon" href="data:image/svg+xml,%3Csvg width='34' height='34' viewBox='0 0 34 34' aria-hidden='true'%3E%3Crect width='34' height='34' rx='11' fill='%235b45ff'/%3E%3Cpath d='M10 23 L17 11 L24 23 Z' fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round' opacity='.55'/%3E%3Ccircle cx='17' cy='11' r='3.4' fill='%23fff'/%3E%3Ccircle cx='10' cy='23' r='3.4' fill='%23fff'/%3E%3Ccircle cx='24' cy='23' r='3.4' fill='%23f2a516'/%3E%3C/svg%3E">
+<title>Активтер мен қызметтердің инвентаризациясын жасау | Оқу практикасы ИС 3-1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=ac42446e">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23213547'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2342b883'%3E&gt;_%3C/text%3E%3C/svg%3E">
 <script>window.QUIZ = [{"id": "inv01", "q": "CIS Controls тізіміндегі 1-бақылау неге арналған?", "o": ["Құпиясөз саясатына", "Кәсіпорын активтерін түгендеу және бақылауға", "Резервтік көшіруге", "Антивирус орнатуға"]}, {"id": "inv02", "q": "CMDB дегеніміз не?", "o": ["Желі сканері", "Конфигурациялық бірліктер мен олардың байланыстары сақталатын дерекқор", "Антивирустық база", "Бағдарламалау тілі"]}, {"id": "inv03", "q": "Қай asset tag біздің стандарттағы ^AEC-(SRV|PC|NB|NET|PRN|CAM|IOT|UNK)-\\d{4}$ үлгісіне сай?", "o": ["AEC-PC-12", "aec-pc-0012", "AEC-PC-0012", "AEC-LAPTOP-0012"]}, {"id": "inv04", "q": "Құрылғының IP-і мен атауы өзгерді. Оның asset tag-і не болады?", "o": ["Жаңа тег беріледі", "Өзгермейді", "Өшіріледі", "IP-ге сай өзгереді"]}, {"id": "inv05", "q": "ping жауабында TTL = 128. Бұл қай ОЖ-ге тән?", "o": ["Linux", "macOS", "Windows", "Cisco IOS"]}, {"id": "inv06", "q": "MAC мекенжайының алғашқы 3 байты (OUI) нені көрсетеді?", "o": ["Құрылғының IP-ін", "Өндірушіні", "Пайдаланушыны", "ОЖ нұсқасын"]}, {"id": "inv07", "q": "Құрылғыда 9100 және 631 порттары ашық. Бұл көбінесе не?", "o": ["IP-камера", "Принтер", "Дерекқор сервері", "Коммутатор"]}, {"id": "inv08", "q": "Агенттік түгендеудің агентсіз тәсілден басты артықшылығы?", "o": ["Ештеңе орнатудың қажеті жоқ", "Толық мәлімет: сериялық нөмір, RAM, бағдарламалар", "Принтерлерде де жұмыс істейді", "Бөтен құрылғыларды табады"]}, {"id": "inv09", "q": "Желіде тіркелмеген құрылғы табылды. CIS 1.2 бойынша не істеу керек?", "o": ["Елемеу", "Келесі жылғы түгендеуге дейін күту", "Иесін анықтап, тіркеу немесе желіден оқшаулау/алып тастау", "Барлық желіні өшіру"]}, {"id": "inv10", "q": "Бөтен ұйымның желісін рұқсатсыз сканерлеуге бола ма?", "o": ["Иә, егер тек порттарды қарасаң", "Иә, түнде болса", "Жоқ, тек иесінің жазбаша рұқсатымен", "Иә, nmap заңды құрал болғандықтан"]}, {"id": "inv11", "q": "Сканер бір MAC мекенжайын екі түрлі IP-де көрсетті (10.10.2.21 және 10.10.2.77). Ең дұрыс әрекет?", "o": ["Екі бөлек құрылғы ретінде тіркеу", "IP DHCP арқылы ауысқан немесе біреу MAC-ты жалғандаған (spoofing) — коммутатор порты мен иесін тексеру", "Сканердің қатесі, елемеу", "Екі жазбаны да CMDB-ден өшіру"]}, {"id": "inv12", "q": "ping жауабында TTL = 127. Бұл нені білдіреді?", "o": ["Linux, арада 1 маршрутизатор", "Windows, арада 1 маршрутизатор (128 − 1)", "Cisco коммутаторы", "TTL қате, құрылғы жоқ"]}, {"id": "inv13", "q": "validate.py 18 жазбаны тексерді, оның 4-інде мәселе бар. Сәйкестік пайызы қанша?", "o": ["22%", "78%", "82%", "96%"]}, {"id": "inv14", "q": "Неге discover.py --prev параметрінсіз қайта іске қосылса, кейбір asset tag-тер өзгереді?", "o": ["Скрипт кездейсоқ нөмір береді", "Нөмір ретпен беріледі: жаңа немесе жоғалған құрылғы кейінгілердің нөмірін ығыстырады", "MAC мекенжайлары өзгереді", "standard.json өзгереді"]}, {"id": "inv15", "q": "Компьютер есептен шығарылды. CMDB жазбасы не болуы керек?", "o": ["Бірден өшіріледі", "Статусы retired болады, жазба мен тарихы сақталады; диск қауіпсіз тазаланады", "Басқа компьютерге беріледі", "Тегі жаңа компьютерге ауысады"]}, {"id": "inv16", "q": "Ішкі желідегі IP-камерада 23 (telnet) порты ашық. Негізгі тәуекел?", "o": ["Камера баяу жұмыс істейді", "Логин мен құпиясөз шифрланбай беріледі; Mirai сияқты боттар осындай құрылғыларды басып алады", "Видео сапасы төмендейді", "Тәуекел жоқ"]}];</script>
 </head>
-<body class="t-inventory">
-<header class="topbar " id="topbar"><div class="wrap">
-<a class="brand" href="index.html"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="11" fill="#5b45ff"/><path d="M10 23 L17 11 L24 23 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/><circle cx="17" cy="11" r="3.4" fill="#fff"/><circle cx="10" cy="23" r="3.4" fill="#fff"/><circle cx="24" cy="23" r="3.4" fill="#f2a516"/></svg><span>Оқу практикасы</span></a>
-<nav class="nav"><a href="index.html">Басты бет</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a></nav>
+<body>
+<header class="top"><div class="top-in">
+<button class="sb-btn" id="sb-btn" aria-label="Мәзір"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html"><span class="prompt">&gt;_</span> oqu-praktika <span class="grp">ИС 3-1</span></a>
+<nav class="nav"><a href="index.html">Курс туралы</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a><a class="gh" href="https://github.com/Aidina7/-" target="_blank" rel="noopener" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></nav>
 <div class="user" id="user"></div>
 </div></header>
+<div class="docs has-toc"><aside class="sb" id="sb"><div class="sb-group"><p>Бастау</p><a href="index.html">Курс туралы</a><a href="index.html#how">Қалай жұмыс істеу керек</a><a href="login.html#register">Тіркелу</a></div><div class="sb-group"><p>Практикалық жұмыстар</p><a href="inventory.html" class="on"><span class="n">7</span>Активтер инвентаризациясы</a><a href="licenses.html"><span class="n">8</span>Лицензияларды бақылау</a><a href="anomaly.html"><span class="n">9</span>Желілік аномалиялар</a><a href="sla.html"><span class="n">10</span>SLA тексеру</a></div><div class="sb-group"><p>Ойындар</p><a href="games.html#sorter">Сортировщик</a><a href="games.html#ctf">SOC-терминал</a><a href="games.html#leaders">Көшбасшылар</a></div><div class="sb-group"><p>Менің нәтижелерім</p><a href="cabinet.html">Кабинет</a><a href="grade.html">Бағаны кодпен тексеру</a></div></aside><main class="doc">
+<p class="kicker">Практикалық жұмыс №7</p>
+<h1>Активтер мен қызметтердің инвентаризациясын жасау</h1>
+<p class="lead">IT-активтерді түгендеу стандарттары, желідегі жабдықтарды автоматты анықтау және инвентаризация скрипті.</p>
+<table class="facts"><tr><td>Көлемі</td><td>6 сағат, 3 сабақ</td></tr><tr><td>Не істейміз</td><td>теорияны оқу, бейне (2:27), Python скрипті, тест, есеп</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. IT-активтерді түгендеу стандарттарын сипаттайды<br>2. Жабдықтарды автоматты анықтауды түсіндіреді<br>3. Инвентаризация жасайтын скрипт жазады</td></tr></table>
 
-<div class="thead"><div class="wrap">
-<div><div class="crumbs"><a href="index.html">Басты бет</a> / <span class="num">Практикалық жұмыс №7</span></div>
-<h1>Активтер мен қызметтердің инвентаризациясын жасау</h1><p>IT-активтерді түгендеу стандарттары, желідегі жабдықтарды автоматты анықтау және инвентаризация скрипті.</p>
-<div class="chips"><span class="chip">IT-активтерді түгендеу стандарттарын сипаттайды</span><span class="chip">Жабдықтарды автоматты анықтауды түсіндіреді</span><span class="chip">Инвентаризация жасайтын скрипт жазады</span></div></div>
-<div class="bigpic"><svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="7" width="32" height="11" rx="3"/><rect x="8" y="22" width="32" height="11" rx="3"/><path d="M14 12.5h6M14 27.5h6"/><circle cx="33" cy="12.5" r="1.5" fill="currentColor"/><circle cx="33" cy="27.5" r="1.5" fill="currentColor"/><path d="M24 33v6M14 41h20"/></svg></div>
-</div></div>
-<div class="wrap"><div class="layout">
-<aside class="side"><nav id="side-nav"><a href="#theory">Теория</a><a href="#video">Бейне</a><a href="#files">Файлдар</a><a href="#tasks">Тапсырмалар</a><a href="#test">Тест</a><a href="#ctf">Челлендж</a><a href="#submit">Жұмысты тапсыру</a></nav>
-<div class="meta"><div><span>Көлемі</span>6 сағат</div><div><span>Бейне</span>2:27</div><div><span>Тест</span>10 / 16 сұрақ</div><div><span>Тіл</span>Python 3.10+</div></div></aside>
-<main>
-<div class="block" id="theory"><h2>Теория</h2><section>
+<h2 id="theory">Теория</h2>
+<div class="theory"><section>
 <h2>1. Неге түгендеу керек?</h2>
 <p>Ақпараттық қауіпсіздікте ең маңызды қағидалардың бірі: <b>білмейтін нәрсеңді қорғай алмайсың</b>. Егер әкімші желіде қанша компьютер, сервер, принтер мен камера барын, оларда қандай ОЖ мен бағдарламалар орнатылғанын, кім жауапты екенін білмесе, ол жаңарту орната алмайды, лицензияны есептей алмайды, ұрланған ноутбукты байқамайды және бөтен құрылғыны таба алмайды.</p>
 <p>Сондықтан CIS Controls қауіпсіздік шараларының тізімі дәл осыдан басталады: <b>1-бақылау — кәсіпорын активтерін түгендеу</b>, <b>2-бақылау — бағдарламаларды түгендеу</b>.</p>
@@ -137,19 +135,20 @@ schtasks /create /tn "AssetInventory" /tr "python C:\lab\07_asset_inventory\disc
 </section>
 </div>
 
-<div class="block" id="video"><h2>Бейнетүсіндірме</h2><div class="video" id="video-box" data-topic="inventory"></div>
-<div class="video-note">Қысқа шолу, субтитрлері бар (2:27). Толығырақ — «Теория» бөлімінде.</div></div>
+<h2 id="video">Бейнетүсіндірме</h2>
+<div class="video" id="video-box" data-topic="inventory"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар. Ұзақтығы 2:27.</p>
 
-<div class="block" id="files"><h2>Файлдар</h2>
-<div class="files">
-<a class="file" href="files/07_asset_inventory.zip" download><span class="ext">ZIP</span><span><b>Бастапқы код</b><span>07_asset_inventory.zip, 15 КБ</span></span></a>
-<a class="file" href="files/praktikalyk_7_inventory.pdf" target="_blank"><span class="ext">PDF</span><span><b>Тапсырмалар №7</b><span>басып шығаруға</span></span></a>
-<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/07_asset_inventory" target="_blank" rel="noopener"><span class="ext">GIT</span><span><b>GitHub-та қарау</b><span>кодты онлайн оқу</span></span></a>
-</div>
-<p>Архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>07_asset_inventory</code> қалтасын ашыңыз. Іске қосу командалары <code>README.txt</code> файлында.</p>
-</div>
+<h2 id="files">Файлдар</h2>
+<ul class="dl">
+<li><a href="files/07_asset_inventory.zip" download>07_asset_inventory.zip</a> бастапқы код, 15 КБ</li>
+<li><a href="files/praktikalyk_7_inventory.pdf" target="_blank">praktikalyk_7_inventory.pdf</a> тапсырмалар, басып шығаруға</li>
+<li><a href="https://github.com/Aidina7/-/tree/main/starter/07_asset_inventory" target="_blank" rel="noopener">starter/07_asset_inventory</a> кодты GitHub-та қарау</li>
+</ul>
+<div class="tip"><b>Қалай ашу керек:</b> архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>07_asset_inventory</code> қалтасын ашыңыз. Іске қосу командалары <code>README.txt</code> файлында.</div>
 
-<div class="block tasks" id="tasks"><h2>Практикалық тапсырмалар</h2><table class="task-info">
+<h2 id="tasks">Тапсырмалар</h2>
+<div class="tasks"><table class="task-info">
 <tr><td>Мақсаты</td><td>IT-активтерді түгендеу стандарты бойынша өз компьютерінің және ұйым желісінің түгендеуін жасауды, жабдықтарды «іздері» бойынша автоматты анықтауды және түгендеудегі өзгерістерді бақылайтын скриптпен жұмыс істеуді үйрену.</td></tr>
 <tr><td>Оқыту нәтижелері</td><td>1. IT-активтерді түгендеу стандарттарын сипаттайды.<br>2. Жабдықтарды автоматты анықтауды түсіндіреді.<br>3. Инвентаризация жасайтын скрипт жазады.</td></tr>
 <tr><td>Уақыты</td><td>150 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
@@ -190,22 +189,24 @@ schtasks /create /tn "AssetInventory" /tr "python C:\lab\07_asset_inventory\disc
 <h3>Бақылау сұрақтары</h3>
 <ol><li>IT-актив және конфигурациялық бірлік (CI) дегеніміз не? Айырмашылығы неде?</li><li>CMDB не үшін қажет? Онда қандай мәліметтер сақталады?</li><li>Түгендеуге қатысты қандай стандарттарды білесіз (ITIL 4, ISO/IEC 19770, CIS Controls, NIST CSF)?</li><li>Активтің өмірлік циклінің кезеңдерін атаңыз.</li><li>Asset tag қандай талаптарға сай болуы керек? Неге ол өзгермеуі тиіс?</li><li>Агентті және агентсіз түгендеудің артықшылықтары мен кемшіліктері қандай?</li><li>TTL мәні, MAC OUI және ашық порттар құрылғы туралы не айтады?</li><li>Желіні сканерлеудің құқықтық шектеулері қандай?</li><li>Тіркелмеген құрылғы табылса, әкімші не істеуі керек?</li><li>Түгендеуді неге үнемі және автоматты жүргізу керек?</li></ol></div>
 
-<div class="block" id="test"><h2>Тест</h2>
-<div id="quiz-head"></div><div id="quiz" data-topic="inventory"></div><div class="msg" id="quiz-msg" style="margin-top:12px"></div></div>
+<h2 id="test">Тест</h2>
+<div id="quiz-head"></div><div id="quiz" data-topic="inventory"></div><div class="msg" id="quiz-msg"></div>
 
-<div class="block" id="ctf"><h2>Челлендж: SOC-терминал</h2><p>Журнал файлдары берілген. Терминалда <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="inventory"></div></div>
+<h2 id="ctf">Челлендж: SOC-терминал</h2><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Барлық командалар: <code>help</code>.</p><div data-ctf="inventory"></div>
 
-<div class="block" id="submit"><h2>Жұмысты тапсыру</h2>
-<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі кабинетте шығады.</p>
+<h2 id="submit">Жұмысты тапсыру</h2>
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
 <form id="submit-form" class="form" data-topic="Активтер мен қызметтердің инвентаризациясын жасау">
-<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы <small>10 МБ-қа дейін</small><input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
 <label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
-<label class="f">Пікір <small>міндетті емес</small><textarea name="comment"></textarea></label>
-<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
-</form></div>
-</main></div></div>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form>
 
-<footer><div class="wrap"><span>Алматы экономикалық колледжі, КМ 06 «Ақпараттық жүйелерді автоматтандыру». Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="admin.html">Оқытушыға</a></span></div></footer>
-<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=20bfe216"></script>
+<div class="edit"><a href="https://github.com/Aidina7/-/blob/main/content/inventory/theory.html" target="_blank" rel="noopener">Қате таптыңыз ба? GitHub-та көрсетіңіз</a><span>Жаңартылды: 19.11.2026</span></div>
+<nav class="pager"><a class="pg prev" href="index.html"><small>Алдыңғы</small>Курс туралы</a><a class="pg next" href="licenses.html"><small>Келесі</small>№8 Лицензияларды бақылау</a></nav>
+</main><aside class="toc"><p>Бұл бетте</p><nav id="side-nav"><a href="#theory">Теория</a><a href="#video">Бейне</a><a href="#files">Файлдар</a><a href="#tasks">Тапсырмалар</a><a href="#test">Тест</a><a href="#ctf">Челлендж</a><a href="#submit">Жұмысты тапсыру</a></nav></aside></div>
+<footer class="foot"><span>КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі, 2026</span><span>Оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">Оқытушыға кіру</a></span></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=78940079"></script>
 </body>
 </html>

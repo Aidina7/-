@@ -36,9 +36,11 @@ TOPICS = [
      "outcomes": ["SLA/SLO/SLI метрикаларын сипаттайды", "Сервис жауабы мен қателерді есептеуді түсіндіреді", "SLA-ны үздіксіз тексеретін скрипт жазады"]},
 ]
 
-NAV = [("index.html", "Басты бет"), ("games.html", "Ойындар"), ("cabinet.html", "Кабинет")]
-FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Unbounded:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">'
+NAV = [("index.html", "Курс туралы"), ("games.html", "Ойындар"), ("cabinet.html", "Кабинет")]
+FONTS = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">'
 BASE_JS = ("assets/config.js", "assets/games.js", "assets/ctf-data.js", "assets/terminal.js", "assets/app.js")
+UPDATED = "19.11.2026"
+GH = '<svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>'
 
 
 def inline(text):
@@ -55,48 +57,63 @@ def ver(rel):
         return hashlib.sha1(f.read()).hexdigest()[:8]
 
 
-LOGO = ('<svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="11" fill="#5b45ff"/>'
-        '<path d="M10 23 L17 11 L24 23 Z" fill="none" stroke="#fff" stroke-width="2" stroke-linejoin="round" opacity=".55"/>'
-        '<circle cx="17" cy="11" r="3.4" fill="#fff"/><circle cx="10" cy="23" r="3.4" fill="#fff"/><circle cx="24" cy="23" r="3.4" fill="#f2a516"/></svg>')
-
-ICONS = {
-    "inventory": '<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="7" width="32" height="11" rx="3"/><rect x="8" y="22" width="32" height="11" rx="3"/><path d="M14 12.5h6M14 27.5h6"/><circle cx="33" cy="12.5" r="1.5" fill="currentColor"/><circle cx="33" cy="27.5" r="1.5" fill="currentColor"/><path d="M24 33v6M14 41h20"/></svg>',
-    "licenses": '<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6h17l9 9v27H12z"/><path d="M29 6v9h9"/><path d="M18 29l4 4 9-9"/></svg>',
-    "anomaly": '<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 34h7l4-6 4 4 5-22 5 30 4-10h9"/><path d="M5 42h38" opacity=".4"/></svg>',
-    "sla": '<svg width="44" height="44" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 34a16 16 0 1 1 32 0"/><path d="M24 34l8-10"/><circle cx="24" cy="34" r="3" fill="currentColor"/><path d="M12 20l2 2M24 14v3M36 20l-2 2"/></svg>',
-}
-COLORS = {"inventory": "#0fa58f", "licenses": "#e0479e", "anomaly": "#ff5a4e", "sla": "#f2a516"}
-SHORT = {"inventory": "Инвентаризация", "licenses": "Лицензиялар", "anomaly": "Аномалиялар", "sla": "SLA мониторинг"}
+SHORT = {"inventory": "Активтер инвентаризациясы", "licenses": "Лицензияларды бақылау",
+         "anomaly": "Желілік аномалиялар", "sla": "SLA тексеру"}
+SIDE = [("theory", "Теория"), ("video", "Бейне"), ("files", "Файлдар"), ("tasks", "Тапсырмалар"),
+        ("test", "Тест"), ("ctf", "Челлендж"), ("submit", "Жұмысты тапсыру")]
 
 
-def page(title, body, active="", extra_head="", scripts=BASE_JS, body_cls="", top_cls=""):
+def sidebar(cur):
+    def a(href, text, key):
+        return '<a href="%s"%s>%s</a>' % (href, ' class="on"' if key == cur else "", text)
+    out = ['<div class="sb-group"><p>Бастау</p>', a("index.html", "Курс туралы", "index"),
+           a("index.html#how", "Қалай жұмыс істеу керек", "-"), a("login.html#register", "Тіркелу", "login"), "</div>",
+           '<div class="sb-group"><p>Практикалық жұмыстар</p>']
+    for t in TOPICS:
+        out.append(a(t["slug"] + ".html", "<span class=\"n\">%s</span>%s" % (t["spec"]["number"], SHORT[t["slug"]]), t["slug"]))
+    out += ["</div>", '<div class="sb-group"><p>Ойындар</p>', a("games.html#sorter", "Сортировщик", "games"),
+            a("games.html#ctf", "SOC-терминал", "-"), a("games.html#leaders", "Көшбасшылар", "-"), "</div>",
+            '<div class="sb-group"><p>Менің нәтижелерім</p>', a("cabinet.html", "Кабинет", "cabinet"),
+            a("grade.html", "Бағаны кодпен тексеру", "grade"), "</div>"]
+    return "".join(out)
+
+
+def page(title, body, active="", extra_head="", scripts=BASE_JS, cur=None, toc=None, wide=False):
     nav = "".join('<a href="%s"%s>%s</a>' % (h, ' class="active"' if h == active else "", n) for h, n in NAV)
     js = "".join('<script src="%s?v=%s"></script>' % (s, ver(s)) for s in scripts)
+    if cur is not None:
+        tocs = ""
+        if toc:
+            tocs = '<aside class="toc"><p>Бұл бетте</p><nav id="side-nav">%s</nav></aside>' % "".join(
+                '<a href="#%s">%s</a>' % x for x in toc)
+        main = ('<div class="docs%s"><aside class="sb" id="sb">%s</aside><main class="doc">%s</main>%s</div>'
+                % (" has-toc" if toc else "", sidebar(cur), body, tocs))
+    else:
+        main = '<main class="plain%s">%s</main>' % (" wide" if wide else "", body)
     return """<!DOCTYPE html>
 <html lang="kk">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>%s — Оқу практикасы, ИС 3-1</title>
+<title>%s | Оқу практикасы ИС 3-1</title>
 %s
 <link rel="stylesheet" href="assets/style.css?v=%s">
-<link rel="icon" href="data:image/svg+xml,%s">
+<link rel="icon" href="data:image/svg+xml,%%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%%3E%%3Crect width='32' height='32' rx='6' fill='%%23213547'/%%3E%%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%%2342b883'%%3E&gt;_%%3C/text%%3E%%3C/svg%%3E">
 %s
 </head>
-<body class="%s">
-<header class="topbar %s" id="topbar"><div class="wrap">
-<a class="brand" href="index.html">%s<span>Оқу практикасы</span></a>
-<nav class="nav">%s</nav>
+<body>
+<header class="top"><div class="top-in">
+<button class="sb-btn" id="sb-btn" aria-label="Мәзір"><span></span><span></span><span></span></button>
+<a class="brand" href="index.html"><span class="prompt">&gt;_</span> oqu-praktika <span class="grp">ИС 3-1</span></a>
+<nav class="nav">%s<a class="gh" href="https://github.com/Aidina7/-" target="_blank" rel="noopener" title="GitHub">%s</a></nav>
 <div class="user" id="user"></div>
 </div></header>
 %s
-<footer><div class="wrap"><span>Алматы экономикалық колледжі, КМ 06 «Ақпараттық жүйелерді автоматтандыру». Оқытушы: Каким А.Д.</span><span><a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">GitHub</a> &nbsp; <a href="admin.html">Оқытушыға</a></span></div></footer>
+<footer class="foot"><span>КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі, 2026</span><span>Оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">Оқытушыға кіру</a></span></footer>
 %s
 </body>
 </html>
-""" % (html.escape(title), FONTS, ver("assets/style.css"), LOGO.replace('"', "'").replace("#", "%23").replace("<", "%3C").replace(">", "%3E"),
-       extra_head, body_cls, top_cls, LOGO, nav, body, js)
-
+""" % (html.escape(title), FONTS, ver("assets/style.css"), extra_head, nav, GH, main, js)
 
 
 def tasks_html(spec):
@@ -157,39 +174,19 @@ def strip_quiz(slug):
         return json.load(f)
 
 
-SIDE = [("theory", "Теория"), ("video", "Бейне"), ("files", "Файлдар"), ("tasks", "Тапсырмалар"),
-        ("test", "Тест"), ("ctf", "Челлендж"), ("submit", "Жұмысты тапсыру")]
-
 NEWS = [
-    ("18.11.2026", "№9 «Желілік аномалиялар» және №10 «SLA» тақырыптары қосылды. Әр тақырыпқа бейнетүсіндірме жүктелді."),
-    ("18.11.2026", "Сайтқа тіркелу ашық. Тест нәтижелері, тапсырылған жұмыстар мен бағалар жеке кабинетте сақталады."),
-    ("18.11.2026", "Тест: әр тақырыпта 16 сұрақтан кездейсоқ 10 сұрақ, 3 әрекет. Ең жақсы нәтиже есептеледі."),
+    ("19.11.2026", "№9 «Желілік аномалиялар» және №10 «SLA» тақырыптары қосылды. Әр тақырыпта бейнетүсіндірме бар."),
+    ("18.11.2026", "Сайтқа тіркелу ашық. Тест нәтижелері, жұмыстар мен бағалар кабинетте сақталады."),
+    ("18.11.2026", "Тест: 16 сұрақтың ішінен кездейсоқ 10 сұрақ, 3 әрекет. Ең жақсы нәтиже есептеледі."),
 ]
 
 
-def netmap():
-    pos = {"inventory": (118, 96), "licenses": (402, 96), "anomaly": (118, 330), "sla": (402, 330)}
-    hub = (260, 213)
-    devs = [(30, 210), (190, 30), (330, 30), (490, 210), (190, 410), (330, 410)]
-    links, packets, nodes = [], [], []
-    for i, (slug, (x, y)) in enumerate(pos.items()):
-        pid = "p" + slug
-        links.append('<path id="%s" class="lnk" d="M%d %d L%d %d"/>' % (pid, hub[0], hub[1], x, y))
-        packets.append('<circle r="5" fill="%s"><animateMotion dur="%.1fs" begin="-%.1fs" repeatCount="indefinite" keyPoints="1;0" keyTimes="0;1" calcMode="linear"><mpath href="#%s"/></animateMotion></circle>'
-                       % (COLORS[slug], 2.6 + i * .35, i * .6, pid))
-        t = next(t for t in TOPICS if t["slug"] == slug)
-        icon = ICONS[slug].replace('width="44" height="44"', 'x="%d" y="%d" width="34" height="34"' % (x - 17, y - 17)).replace("currentColor", "#fff")
-        nodes.append('<a href="%s.html" class="node" aria-label="%s"><circle class="ring" cx="%d" cy="%d" r="44" fill="none" stroke="%s" stroke-width="2" opacity=".5"/>'
-                     '<circle cx="%d" cy="%d" r="36" fill="%s"/>%s<text x="%d" y="%d" text-anchor="middle">%s</text><text class="sub" x="%d" y="%d" text-anchor="middle">№%s · %s</text></a>'
-                     % (slug, html.escape(t["spec"]["topic"]), x, y, COLORS[slug], x, y, COLORS[slug], icon, x, y + 66, SHORT[slug], x, y + 84, t["spec"]["number"], t["hours"].split(" · ")[0]))
-    for j, (dx, dy) in enumerate(devs):
-        near = min(pos.values(), key=lambda p: (p[0] - dx) ** 2 + (p[1] - dy) ** 2)
-        links.append('<path class="lnk" d="M%d %d L%d %d" stroke-dasharray="3 6"/>' % (dx, dy, near[0], near[1]))
-        nodes.append('<rect class="dev" x="%d" y="%d" width="18" height="14" rx="4"/>' % (dx - 9, dy - 7))
-    hubsvg = ('<circle cx="%d" cy="%d" r="30" fill="#5b45ff"/><circle cx="%d" cy="%d" r="40" fill="none" stroke="#5b45ff" stroke-width="2" opacity=".45"/>'
-              '<text x="%d" y="%d" text-anchor="middle" style="font:700 13px var(--disp);fill:#fff">ИС 3-1</text>' % (hub + hub + (hub[0], hub[1] + 5)))
-    return ('<svg class="netmap" id="netmap" viewBox="0 0 520 440" role="img" aria-label="Тақырыптар картасы">%s%s%s<g>%s</g></svg>'
-            % ("".join(links), "".join(packets), hubsvg, "".join(nodes)))
+def pager(prev, nxt):
+    def one(x, cls, lab):
+        if not x:
+            return "<span></span>"
+        return '<a class="pg %s" href="%s"><small>%s</small>%s</a>' % (cls, x[0], lab, x[1])
+    return '<nav class="pager">%s%s</nav>' % (one(prev, "prev", "Алдыңғы"), one(nxt, "next", "Келесі"))
 
 
 def topic_page(t):
@@ -199,128 +196,127 @@ def topic_page(t):
     quiz = strip_quiz(t["slug"])
     zsize = make_zip(t["starter"])
     ctfs = [c for c in CTF_IDS if c[1] == t["slug"]]
-    side = "".join('<a href="#%s">%s</a>' % (a, n) for a, n in SIDE if a != "ctf" or ctfs)
-    vfile = "files/video_%s.mp4" % t["slug"]
-    vlen = "—"
+    toc = [x for x in SIDE if x[0] != "ctf" or ctfs]
+    vlen = ""
     try:
         import subprocess
         secs = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
-                                     os.path.join(ROOT, vfile)], capture_output=True, text=True).stdout.strip())
+                                     os.path.join(ROOT, "files/video_%s.mp4" % t["slug"])], capture_output=True, text=True).stdout.strip())
         vlen = "%d:%02d" % divmod(round(secs), 60)
     except Exception:
         pass
+    i = TOPICS.index(t)
+    prev = (TOPICS[i - 1]["slug"] + ".html", "№%s %s" % (TOPICS[i - 1]["spec"]["number"], SHORT[TOPICS[i - 1]["slug"]])) if i else ("index.html", "Курс туралы")
+    nxt = (TOPICS[i + 1]["slug"] + ".html", "№%s %s" % (TOPICS[i + 1]["spec"]["number"], SHORT[TOPICS[i + 1]["slug"]])) if i + 1 < len(TOPICS) else ("games.html", "Ойындар")
     body = """
-<div class="thead"><div class="wrap">
-<div><div class="crumbs"><a href="index.html">Басты бет</a> / <span class="num">Практикалық жұмыс №{num}</span></div>
-<h1>{title}</h1><p>{lead}</p>
-<div class="chips">{outcomes}</div></div>
-<div class="bigpic">{icon}</div>
-</div></div>
-<div class="wrap"><div class="layout">
-<aside class="side"><nav id="side-nav">{side}</nav>
-<div class="meta"><div><span>Көлемі</span>{hours}</div><div><span>Бейне</span>{vlen}</div><div><span>Тест</span>10 / {nq} сұрақ</div><div><span>Тіл</span>Python 3.10+</div></div></aside>
-<main>
-<div class="block" id="theory"><h2>Теория</h2>{theory}</div>
+<p class="kicker">Практикалық жұмыс №{num}</p>
+<h1>{title}</h1>
+<p class="lead">{lead}</p>
+<table class="facts"><tr><td>Көлемі</td><td>{hours}</td></tr><tr><td>Не істейміз</td><td>теорияны оқу, бейне ({vlen}), Python скрипті, тест, есеп</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>{outcomes}</td></tr></table>
 
-<div class="block" id="video"><h2>Бейнетүсіндірме</h2><div class="video" id="video-box" data-topic="{slug}"></div>
-<div class="video-note">Қысқа шолу, субтитрлері бар ({vlen}). Толығырақ — «Теория» бөлімінде.</div></div>
+<h2 id="theory">Теория</h2>
+<div class="theory">{theory}</div>
 
-<div class="block" id="files"><h2>Файлдар</h2>
-<div class="files">
-<a class="file" href="files/{starter}.zip" download><span class="ext">ZIP</span><span><b>Бастапқы код</b><span>{starter}.zip, {zkb} КБ</span></span></a>
-<a class="file" href="files/{pdf}" target="_blank"><span class="ext">PDF</span><span><b>Тапсырмалар №{num}</b><span>басып шығаруға</span></span></a>
-<a class="file" href="https://github.com/Aidina7/-/tree/main/starter/{starter}" target="_blank" rel="noopener"><span class="ext">GIT</span><span><b>GitHub-та қарау</b><span>кодты онлайн оқу</span></span></a>
-</div>
-<p>Архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>{starter}</code> қалтасын ашыңыз. Іске қосу командалары <code>README.txt</code> файлында.</p>
-</div>
+<h2 id="video">Бейнетүсіндірме</h2>
+<div class="video" id="video-box" data-topic="{slug}"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар. Ұзақтығы {vlen}.</p>
 
-<div class="block tasks" id="tasks"><h2>Практикалық тапсырмалар</h2>{tasks}</div>
+<h2 id="files">Файлдар</h2>
+<ul class="dl">
+<li><a href="files/{starter}.zip" download>{starter}.zip</a> бастапқы код, {zkb} КБ</li>
+<li><a href="files/{pdf}" target="_blank">{pdf}</a> тапсырмалар, басып шығаруға</li>
+<li><a href="https://github.com/Aidina7/-/tree/main/starter/{starter}" target="_blank" rel="noopener">starter/{starter}</a> кодты GitHub-та қарау</li>
+</ul>
+<div class="tip"><b>Қалай ашу керек:</b> архивті ашып, VS Code-та <b>File → Open Folder</b> арқылы <code>{starter}</code> қалтасын ашыңыз. Іске қосу командалары <code>README.txt</code> файлында.</div>
 
-<div class="block" id="test"><h2>Тест</h2>
-<div id="quiz-head"></div><div id="quiz" data-topic="{slug}"></div><div class="msg" id="quiz-msg" style="margin-top:12px"></div></div>
+<h2 id="tasks">Тапсырмалар</h2>
+<div class="tasks">{tasks}</div>
+
+<h2 id="test">Тест</h2>
+<div id="quiz-head"></div><div id="quiz" data-topic="{slug}"></div><div class="msg" id="quiz-msg"></div>
 
 {ctf_block}
 
-<div class="block" id="submit"><h2>Жұмысты тапсыру</h2>
-<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі кабинетте шығады.</p>
+<h2 id="submit">Жұмысты тапсыру</h2>
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
 <form id="submit-form" class="form" data-topic="{title_attr}">
-<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы <small>10 МБ-қа дейін</small><input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
 <label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
-<label class="f">Пікір <small>міндетті емес</small><textarea name="comment"></textarea></label>
-<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
-</form></div>
-</main></div></div>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form>
+
+<div class="edit"><a href="https://github.com/Aidina7/-/blob/main/content/{slug}/theory.html" target="_blank" rel="noopener">Қате таптыңыз ба? GitHub-та көрсетіңіз</a><span>Жаңартылды: {upd}</span></div>
+{pager}
 """.format(num=spec["number"], title=html.escape(spec["topic"]), title_attr=html.escape(spec["topic"], quote=True),
-           lead=html.escape(t["lead"]), hours=t["hours"].split(" · ")[0], vlen=vlen, nq=len(quiz), slug=t["slug"], side=side,
-           icon=ICONS[t["slug"]], outcomes="".join('<span class="chip">%s</span>' % html.escape(o) for o in t["outcomes"]),
+           lead=html.escape(t["lead"]), hours=t["hours"].replace(" · ", ", "), vlen=vlen, slug=t["slug"],
+           outcomes="<br>".join("%d. %s" % (k + 1, html.escape(o)) for k, o in enumerate(t["outcomes"])),
            theory=theory, starter=t["starter"], zkb=max(1, zsize // 1024), pdf=t["pdf"], tasks=tasks_html(spec),
-           ctf_block=('<div class="block" id="ctf"><h2>Челлендж: SOC-терминал</h2>'
-                      '<p>Журнал файлдары берілген. Терминалда <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p>'
-                      '<div data-ctf="%s"></div></div>' % t["slug"]) if ctfs else "")
+           upd=UPDATED, pager=pager(prev, nxt),
+           ctf_block=('<h2 id="ctf">Челлендж: SOC-терминал</h2>'
+                      '<p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Барлық командалар: <code>help</code>.</p>'
+                      '<div data-ctf="%s"></div>' % t["slug"]) if ctfs else "")
     head = "<script>window.QUIZ = %s;</script>" % json.dumps(quiz, ensure_ascii=False)
-    return page(spec["topic"], body, extra_head=head, body_cls="t-" + t["slug"])
+    return page(spec["topic"], body, extra_head=head, cur=t["slug"], toc=toc)
 
 
 def index_page():
-    cards = "".join("""<a class="topic t-{slug}" href="{slug}.html"><div class="pic">{icon}</div><div>
-<div class="num">Практикалық жұмыс №{num}</div><h3>{title}</h3><p>{lead}</p>
-<div class="foot"><span class="chip tc">{hours}</span><span class="chip">теория</span><span class="chip">бейне</span><span class="chip">тест</span>{ctf}</div></div></a>""".format(
-        slug=t["slug"], num=t["spec"]["number"], hours=t["hours"], title=html.escape(t["spec"]["topic"]), icon=ICONS[t["slug"]],
-        lead=html.escape(t["lead"]), ctf='<span class="chip">челлендж</span>' if any(c[1] == t["slug"] for c in CTF_IDS) else "") for t in TOPICS)
-    news = "".join('<li><time>%s</time><span>%s</span></li>' % (d, html.escape(x)) for d, x in NEWS)
+    rows = "".join("""<tr><td>{num}</td><td><a href="{slug}.html">{title}</a></td><td>{hours}</td><td>{ctf}</td></tr>""".format(
+        slug=t["slug"], num=t["spec"]["number"], hours=t["hours"].split(" · ")[0], title=html.escape(t["spec"]["topic"]),
+        ctf="бар" if any(c[1] == t["slug"] for c in CTF_IDS) else "—") for t in TOPICS)
+    news = "".join('<li><b>%s</b> %s</li>' % (d, html.escape(x)) for d, x in NEWS)
     body = """
-<section class="hero"><div class="wrap">
-<div>
-<h1>Ақпараттық жүйелерді автоматтандыру: оқу практикасы</h1>
-<p class="lead">Құрылғыларды түгендеу, лицензияларды бақылау, желідегі шабуылдарды табу және сервис сапасын өлшеу. Әр тақырыпта теория, бейне, Python-дағы бастапқы код, тест және тергеу ойыны бар.</p>
-<div class="who-line">ИС 3-1 тобы, КМ 06 модулі. Оқытушы — Каким А.Д.</div>
-<div class="cta"><a class="btn light" href="login.html#register">Тіркелу</a><a class="btn line" href="#topics">Тақырыптарды көру</a></div>
-</div>
-<div>%s</div>
-</div></section>
+<p class="kicker">КМ 06, ОН 6.4</p>
+<h1>Оқу практикасы: ақпараттық жүйелерді автоматтандыру</h1>
+<p class="lead">ИС 3-1 тобына арналған материалдар. Әр практикалық жұмыста теория, бейне, Python-дағы бастапқы код, нұсқалы тапсырмалар, тест және жұмысты тапсыру формасы бар.</p>
+<table class="facts"><tr><td>Топ</td><td>ИС 3-1, 3 курс</td></tr><tr><td>Оқытушы</td><td>Каким А.Д.</td></tr><tr><td>Колледж</td><td>Алматы экономикалық колледжі</td></tr></table>
 
-<div class="wrap">
-<section class="sec" id="topics"><div class="sec-h"><div><h2>Тақырыптар</h2><p>Рет-ретімен орындаңыз: әр жұмыс алдыңғы тақырыптың скриптіне сүйенеді.</p></div></div>
-<div class="topics">%s</div></section>
+<h2 id="news">Хабарландырулар</h2>
+<ul class="news">%s</ul>
 
-<section class="sec" id="games"><div class="sec-h"><div><h2>Ойындар</h2><p>Ұпайлар кабинетке және топтың рейтингіне жазылады.</p></div><a class="btn ghost" href="games.html">Барлық ойындар</a></div>
-<div class="games-band">
-<a class="game" href="games.html#sorter"><div class="shot sort"><div class="pc b1">MAC 00:1A:2B…</div><div class="pc b2">port 9100 open</div><div class="pc">TTL=128, 3389 ашық</div>
-<div class="bins"><span>Принтер</span><span class="hit">Windows ДК</span><span>Linux сервер</span><span>Камера</span></div></div>
-<h3>Сортировщик</h3><p>75 секунд ішінде карточкаларды дұрыс санатқа жіберіңіз. Қатарынан дұрыс жауап бонус береді.</p></a>
-<a class="game" href="games.html#ctf"><div class="shot term-shot"><b>student@soc</b>:~$ grep "Failed" auth.log | cut -d' ' -f11 \\
-  | sort | uniq -c | sort -rn | head -3
-    412 <i>185.220.101.7</i>
-     38 10.10.2.14
-      3 10.10.2.31
-<b>student@soc</b>:~$ submit flag{...}</div>
-<h3>SOC-терминал</h3><p>Журналдарды grep, sort, uniq арқылы тергеп, инцидентті табыңыз: бөтен құрылғы, SSH брутфорс, деректердің жылыстауы.</p></a>
-</div></section>
+<h2 id="topics">Практикалық жұмыстар</h2>
+<div class="table-wrap"><table class="list"><tr><th>№</th><th>Тақырып</th><th>Сағат</th><th>Челлендж</th></tr>%s</table></div>
 
-<section class="sec"><div class="two">
-<div class="panel"><h2>Хабарландырулар</h2><ul class="news">%s</ul></div>
-<div class="panel"><h2>Қалай бастау керек</h2><ol class="steps">
-<li><span><a href="login.html#register">Тіркеліңіз</a>: логин, аты-жөні, топ.</span></li>
-<li>Тақырыпты ашып, теорияны оқып, бейнені қараңыз.</li>
-<li>Бастапқы кодты жүктеп, өз нұсқаңызды орындаңыз.</li>
-<li>Тест тапсырыңыз — 3 әрекет бар.</li>
-<li>Есепті жіберіңіз, баға кабинетте шығады.</li></ol>
-<div class="tools">Қажет: <a href="https://code.visualstudio.com/" target="_blank" rel="noopener">VS Code</a> және <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python 3.10+</a>. Қосымша пакеттер керек емес.</div></div>
-</div></section>
-</div>
-""" % (netmap(), cards, news)
-    return page("Басты бет", body, active="index.html", top_cls="dark")
+<h2 id="how">Қалай жұмыс істеу керек</h2>
+<ol class="steps">
+<li><a href="login.html#register">Тіркеліңіз</a>. Логинді латынша жазыңыз, аты-жөніңізді журналдағыдай көрсетіңіз.</li>
+<li>Тақырыпты ашып, алдымен «Теория» бөлімін оқыңыз, содан кейін бейнені қараңыз.</li>
+<li>«Файлдар» бөлімінен бастапқы кодты жүктеп, өз нұсқаңызды орындаңыз.</li>
+<li>Тест тапсырыңыз. 3 әрекет бар, ең жақсы нәтиже есептеледі.</li>
+<li>Есепті «Жұмысты тапсыру» формасы арқылы жіберіңіз. Баға кабинетте шығады.</li>
+</ol>
+
+<h2 id="grading">Бағалау</h2>
+<ul>
+<li><b>Практикалық жұмыс</b>: 100 баллдық шкала, критерийлері әр тапсырманың соңында.</li>
+<li><b>Тест</b>: 10 сұрақ, ең жақсы әрекет есептеледі.</li>
+<li><b>Ойындар мен челлендждер</b>: қосымша ұпай, топ рейтингіне шығады.</li>
+</ul>
+
+<h2 id="soft">Қажетті бағдарламалар</h2>
+<ul>
+<li><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python 3.10</a> немесе жоғары (орнатқанда <code>Add Python to PATH</code> белгісін қойыңыз)</li>
+<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> және Python кеңейтімі</li>
+</ul>
+<p>Тексеру үшін терминалда: <code>python --version</code> (Mac-та <code>python3 --version</code>).</p>
+%s
+""" % (news, rows, pager(None, (TOPICS[0]["slug"] + ".html", "№%s %s" % (TOPICS[0]["spec"]["number"], SHORT[TOPICS[0]["slug"]]))))
+    toc = [("news", "Хабарландырулар"), ("topics", "Практикалық жұмыстар"), ("how", "Қалай жұмыс істеу керек"),
+           ("grading", "Бағалау"), ("soft", "Бағдарламалар")]
+    return page("Курс туралы", body, active="index.html", cur="index", toc=toc)
 
 
 def login_page():
     body = """
-<div class="wrap"><div class="auth-wrap"><div class="auth-side"><h1>Кабинетке кіріңіз</h1><p>Тест нәтижелері, тапсырылған жұмыстар, бағалар мен ойын ұпайлары бір жерде сақталады.</p></div><div class="auth-box" id="auth">
+<div class="auth" id="auth">
+<h1>Кіру</h1>
 <div class="tabs"><button data-t="login" class="active">Кіру</button><button data-t="register">Тіркелу</button></div>
 <form id="f-login" class="form">
 <label class="f">Логин<input name="login" autocomplete="username" required></label>
 <label class="f">Құпиясөз<input name="password" type="password" autocomplete="current-password" required></label>
 <div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="m-login"></div>
-<p class="muted" style="font-size:13px;margin:0">Құпиясөзді ұмытсаңыз, оқытушыға айтыңыз — ол жаңасын береді.</p>
+<p class="note">Құпиясөзді ұмытсаңыз, оқытушыға айтыңыз, ол жаңасын береді.</p>
 </form>
 <form id="f-reg" class="form" style="display:none">
 <label class="f">Логин <small>латын әріптері, сан, _ . - (мысалы: asanov.ali)</small><input name="login" autocomplete="username" required></label>
@@ -330,49 +326,46 @@ def login_page():
 <label class="f">Қайталаңыз<input name="password2" type="password" autocomplete="new-password" minlength="6" required></label></div>
 <div><button class="btn" type="submit">Тіркелу</button></div><div class="msg" id="m-reg"></div>
 </form>
-</div></div></div>"""
+</div>"""
     return page("Кіру", body)
 
 
 def cabinet_page():
     body = """
-<div class="wrap page">
-<div class="page-head"><div class="crumbs"><a href="index.html">Басты бет</a> / Кабинет</div><h1>Жеке кабинет</h1><p id="hello"></p></div>
-<div id="cabinet"></div>
-</div>"""
-    return page("Кабинет", body, active="cabinet.html")
+<h1>Жеке кабинет</h1><p class="lead" id="hello"></p>
+<div id="cabinet"></div>"""
+    return page("Кабинет", body, active="cabinet.html", cur="cabinet")
 
 
 def games_page():
     opts = "".join('<option value="sort:%s">Сортировщик: %s</option>' % (k, v) for k, v in DECK_NAMES) + \
            "".join('<option value="ctf:%s">SOC-терминал: %s</option>' % (c[0], html.escape(c[2])) for c in CTF_IDS)
     body = """
-<div class="wrap page">
-<div class="page-head"><div class="crumbs"><a href="index.html">Басты бет</a> / Ойындар</div><h1>Ойындар</h1>
-<p>Ұпайлар кабинетке және көшбасшылар кестесіне жазылады (алдымен <a href="login.html">кіріңіз</a>).</p></div>
-<div class="block" id="sorter"><h2>Сортировщик</h2><div class="deck-pick" data-pick></div><div data-sorter="all"></div></div>
-<div class="block" id="ctf"><h2>SOC-терминал</h2>
-<p>Әр челлендж — нақты инцидентке ұқсас тергеу. <code>help</code> — командалар, <code>hint</code> — кеңес (ұпай 30%%-ға азаяды), <code>submit flag{...}</code> — жауап.</p><div data-ctf="all"></div></div>
-<div class="block" id="leaders"><h2>Көшбасшылар</h2>
-<div class="bar"><select id="board-game"><option value="">Жалпы рейтинг (барлық ойын)</option>%s</select></div><div id="board"></div></div>
-</div>""" % opts
-    return page("Ойындар", body, active="games.html")
+<h1>Ойындар</h1>
+<p class="lead">Ұпайлар кабинетке және көшбасшылар кестесіне жазылады. Алдымен <a href="login.html">кіріңіз</a>.</p>
+<h2 id="sorter">Сортировщик</h2>
+<p>75 секунд ішінде карточкаларды дұрыс санатқа жіберіңіз. Пернетақтадағы 1–4 сандарымен де ойнауға болады.</p>
+<div class="deck-pick" data-pick></div><div data-sorter="all"></div>
+<h2 id="ctf">SOC-терминал</h2>
+<p>Әр челлендж нақты инцидентке ұқсас тергеу. <code>help</code> командалар тізімі, <code>hint</code> кеңес (ұпай 30%%-ға азаяды), <code>submit flag{...}</code> жауап жіберу.</p><div data-ctf="all"></div>
+<h2 id="leaders">Көшбасшылар</h2>
+<div class="bar"><select id="board-game"><option value="">Жалпы рейтинг (барлық ойын)</option>%s</select></div><div id="board"></div>""" % opts
+    return page("Ойындар", body, active="games.html", cur="games")
 
 
 def grade_page():
     body = """
-<div class="wrap"><div class="auth-box solo"><h2 style="margin-bottom:16px">Бағаны кодпен тексеру</h2>
-<form id="grade-form" class="form"><label class="f">Тексеру коды<input name="code" maxlength="6" placeholder="K7M2QX" style="text-transform:uppercase;font-family:var(--mono);letter-spacing:.1em"></label>
-<div><button class="btn" type="submit">Тексеру</button></div><div class="msg" id="grade-msg"></div></form>
-<p class="muted" style="font-size:13px">Тіркелген болсаңыз, барлық бағалар <a href="cabinet.html">кабинетте</a>.</p></div></div>"""
-    return page("Бағамды тексеру", body)
+<h1>Бағаны кодпен тексеру</h1>
+<p class="lead">Жұмысты тіркелмей жіберген болсаңыз, алған кодыңызды енгізіңіз. Тіркелген болсаңыз, барлық бағалар <a href="cabinet.html">кабинетте</a>.</p>
+<form id="grade-form" class="form" style="max-width:360px"><label class="f">Тексеру коды<input name="code" maxlength="6" placeholder="K7M2QX" style="text-transform:uppercase;font-family:var(--mono);letter-spacing:.1em"></label>
+<div><button class="btn" type="submit">Тексеру</button></div><div class="msg" id="grade-msg"></div></form>"""
+    return page("Бағамды тексеру", body, cur="grade")
 
 
 def admin_page():
     body = """
-<div class="wrap page">
-<div class="page-head"><h1>Оқытушы панелі</h1></div>
-<div id="login" style="display:none" class="auth-box solo"><form id="login-form" class="form">
+<h1>Оқытушы панелі</h1>
+<div id="login" style="display:none" class="auth"><form id="login-form" class="form">
 <label class="f">Оқытушы құпиясөзі<input id="pw" type="password" autocomplete="current-password"></label>
 <div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="login-msg"></div></form></div>
 <div id="panel" style="display:none">
@@ -385,10 +378,10 @@ def admin_page():
 <button class="btn small ghost" id="reload">Жаңарту</button><button class="btn small ghost" id="export">Excel (CSV)</button><button class="btn small ghost" id="logout-admin">Шығу</button>
 </div>
 <div id="list"></div>
-</div></div>
+</div>
 <div class="modal-bg" id="modal"><div class="modal" id="modal-body"></div></div>"""
     return page("Оқытушы панелі", body, extra_head='<meta name="robots" content="noindex">',
-                scripts=BASE_JS + ("assets/admin.js",))
+                scripts=BASE_JS + ("assets/admin.js",), wide=True)
 
 
 def load_ctf_ids():
