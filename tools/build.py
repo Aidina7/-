@@ -70,7 +70,7 @@ def page(title, body, active="", extra_head="", scripts=BASE_JS, wide=False):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#0d1520">
+<meta name="theme-color" content="#ffffff">
 <title>%s | ИС 3-1 оқу практикасы</title>
 %s
 <link rel="stylesheet" href="assets/style.css?v=%s">
