@@ -107,6 +107,8 @@ def tasks_html(spec):
             out.append("<h4>%s</h4>" % inline(blk[1]))
         elif kind == "p" or kind == "scale":
             out.append("<p>%s</p>" % inline(blk[1]))
+        elif kind == "code":
+            out.append("<pre><code>%s</code></pre>" % html.escape(blk[1]))
         elif kind == "note":
             out.append('<div class="callout">%s</div>' % inline(blk[1]))
         elif kind == "report":
