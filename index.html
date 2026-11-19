@@ -3,56 +3,62 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Курс туралы | Оқу практикасы ИС 3-1</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/style.css?v=ac42446e">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23213547'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2342b883'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#0d1520">
+<title>Тақырыптар | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=c8293329">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
 
 </head>
 <body>
-<header class="top"><div class="top-in">
-<button class="sb-btn" id="sb-btn" aria-label="Мәзір"><span></span><span></span><span></span></button>
-<a class="brand" href="index.html"><span class="prompt">&gt;_</span> oqu-praktika <span class="grp">ИС 3-1</span></a>
-<nav class="nav"><a href="index.html" class="active">Курс туралы</a><a href="games.html">Ойындар</a><a href="cabinet.html">Кабинет</a><a class="gh" href="https://github.com/Aidina7/-" target="_blank" rel="noopener" title="GitHub"><svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></a></nav>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html" class="active">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
 <div class="user" id="user"></div>
 </div></header>
-<div class="docs has-toc"><aside class="sb" id="sb"><div class="sb-group"><p>Бастау</p><a href="index.html" class="on">Курс туралы</a><a href="index.html#how">Қалай жұмыс істеу керек</a><a href="login.html#register">Тіркелу</a></div><div class="sb-group"><p>Практикалық жұмыстар</p><a href="inventory.html"><span class="n">7</span>Активтер инвентаризациясы</a><a href="licenses.html"><span class="n">8</span>Лицензияларды бақылау</a><a href="anomaly.html"><span class="n">9</span>Желілік аномалиялар</a><a href="sla.html"><span class="n">10</span>SLA тексеру</a></div><div class="sb-group"><p>Ойындар</p><a href="games.html#sorter">Сортировщик</a><a href="games.html#ctf">SOC-терминал</a><a href="games.html#leaders">Көшбасшылар</a></div><div class="sb-group"><p>Менің нәтижелерім</p><a href="cabinet.html">Кабинет</a><a href="grade.html">Бағаны кодпен тексеру</a></div></aside><main class="doc">
-<p class="kicker">КМ 06, ОН 6.4</p>
-<h1>Оқу практикасы: ақпараттық жүйелерді автоматтандыру</h1>
-<p class="lead">ИС 3-1 тобына арналған материалдар. Әр практикалық жұмыста теория, бейне, Python-дағы бастапқы код, нұсқалы тапсырмалар, тест және жұмысты тапсыру формасы бар.</p>
-<table class="facts"><tr><td>Топ</td><td>ИС 3-1, 3 курс</td></tr><tr><td>Оқытушы</td><td>Каким А.Д.</td></tr><tr><td>Колледж</td><td>Алматы экономикалық колледжі</td></tr></table>
+<main class="wrap">
 
-<h2 id="news">Хабарландырулар</h2>
-<ul class="news"><li><b>19.11.2026</b> №9 «Желілік аномалиялар» және №10 «SLA» тақырыптары қосылды. Әр тақырыпта бейнетүсіндірме бар.</li><li><b>18.11.2026</b> Сайтқа тіркелу ашық. Тест нәтижелері, жұмыстар мен бағалар кабинетте сақталады.</li><li><b>18.11.2026</b> Тест: 16 сұрақтың ішінен кездейсоқ 10 сұрақ, 3 әрекет. Ең жақсы нәтиже есептеледі.</li></ul>
+<section class="hero">
+<pre class="banner" aria-hidden="true"> ███    ███   █   █       ████   ████    ███   █   █  █████  ███  █   █   ███
+█   █  █   █  █   █       █   █  █   █  █   █  █  █     █     █   █  █   █   █
+█   █  █   █  █   █  ███  ████   ████   █████  ███      █     █   ███    █████
+█   █  █  ██  █   █       █      █  █   █   █  █  █     █     █   █  █   █   █
+ ███    ████   ███        █      █   █  █   █  █   █    █    ███  █   █  █   █</pre>
+<h1>КМ 06 оқу практикасы: <span>ақпараттық жүйелерді автоматтандыру</span></h1>
+<p class="lead">ИС 3-1 тобы. Әр тақырыпта теория, бейне, Python коды, тест және журналдарды тергейтін CTF-челлендж бар.</p>
+<div class="cta"><a class="btn" href="login.html#register">Тіркелу</a><a class="btn ghost" href="#ls">Тақырыптарды ашу</a></div>
+</section>
 
-<h2 id="topics">Практикалық жұмыстар</h2>
-<div class="table-wrap"><table class="list"><tr><th>№</th><th>Тақырып</th><th>Сағат</th><th>Челлендж</th></tr><tr><td>7</td><td><a href="inventory.html">Активтер мен қызметтердің инвентаризациясын жасау</a></td><td>6 сағат</td><td>бар</td></tr><tr><td>8</td><td><a href="licenses.html">Лицензиялар мен бағдарламаларды бақылау жүйесі</a></td><td>2 сағат</td><td>бар</td></tr><tr><td>9</td><td><a href="anomaly.html">Желілік аномалияларды автоматты түрде анықтау</a></td><td>6 сағат</td><td>бар</td></tr><tr><td>10</td><td><a href="sla.html">Қызмет көрсету сапасын автоматты тексеру (SLA)</a></td><td>6 сағат</td><td>бар</td></tr></table></div>
+<section class="win" id="ls">
+<div class="win-bar"><i></i><i></i><i></i><span>student@is31: ~/practicum</span></div>
+<div class="win-body">
+<p class="cmd"><span class="ps">student@is31:~/practicum$</span> ls -l</p>
+<a class="ls" href="inventory.html"><span class="perm">drwxr-xr-x</span><span class="dir">07_inventory/</span><span class="nm">Активтер мен қызметтердің инвентаризациясын жасау</span><span class="hr">6 сағ</span><span class="go">ашу</span></a><a class="ls" href="licenses.html"><span class="perm">drwxr-xr-x</span><span class="dir">08_licenses/</span><span class="nm">Лицензиялар мен бағдарламаларды бақылау жүйесі</span><span class="hr">2 сағ</span><span class="go">ашу</span></a><a class="ls" href="anomaly.html"><span class="perm">drwxr-xr-x</span><span class="dir">09_anomaly/</span><span class="nm">Желілік аномалияларды автоматты түрде анықтау</span><span class="hr">6 сағ</span><span class="go">ашу</span></a><a class="ls" href="sla.html"><span class="perm">drwxr-xr-x</span><span class="dir">10_sla/</span><span class="nm">Қызмет көрсету сапасын автоматты тексеру (SLA)</span><span class="hr">6 сағ</span><span class="go">ашу</span></a>
+<p class="cmd"><span class="ps">student@is31:~/practicum$</span> <i class="cur"></i></p>
+</div></section>
 
-<h2 id="how">Қалай жұмыс істеу керек</h2>
-<ol class="steps">
-<li><a href="login.html#register">Тіркеліңіз</a>. Логинді латынша жазыңыз, аты-жөніңізді журналдағыдай көрсетіңіз.</li>
-<li>Тақырыпты ашып, алдымен «Теория» бөлімін оқыңыз, содан кейін бейнені қараңыз.</li>
-<li>«Файлдар» бөлімінен бастапқы кодты жүктеп, өз нұсқаңызды орындаңыз.</li>
-<li>Тест тапсырыңыз. 3 әрекет бар, ең жақсы нәтиже есептеледі.</li>
-<li>Есепті «Жұмысты тапсыру» формасы арқылы жіберіңіз. Баға кабинетте шығады.</li>
-</ol>
+<div class="grid3">
+<section class="box"><h2>Қалай бастау керек</h2>
+<ol class="todo">
+<li><a href="login.html#register">Тіркел</a>: логин латынша, аты-жөнің журналдағыдай.</li>
+<li>Тақырыпты аш. Қадамдар ретімен жүр: теория, бейне, файлдар, тапсырма.</li>
+<li>Тест тапсыр. 3 әрекет бар.</li>
+<li>CTF челленджін шеш, рейтингке ұпай жина.</li>
+<li>Есепті жібер. Баға кабинетте шығады.</li>
+</ol></section>
+<section class="box"><h2>cat news.log</h2><ul class="log"><li><span class="d">[19.11]</span> №9 «Желілік аномалиялар» және №10 «SLA» ашылды. Әр тақырыпта бейне бар.</li><li><span class="d">[18.11]</span> Тіркелу ашық. Тест, жұмыстар мен бағалар кабинетте сақталады.</li><li><span class="d">[18.11]</span> Тест: 16 сұрақтан кездейсоқ 10, 3 әрекет. Ең жақсы нәтиже есептеледі.</li></ul></section>
+<section class="box"><h2>Рейтинг</h2><div id="board" class="board-mini"></div><a class="more" href="games.html#leaders">толық рейтинг</a></section>
+</div>
 
-<h2 id="grading">Бағалау</h2>
-<ul>
-<li><b>Практикалық жұмыс</b>: 100 баллдық шкала, критерийлері әр тапсырманың соңында.</li>
-<li><b>Тест</b>: 10 сұрақ, ең жақсы әрекет есептеледі.</li>
-<li><b>Ойындар мен челлендждер</b>: қосымша ұпай, топ рейтингіне шығады.</li>
-</ul>
+<section class="box games-row">
+<h2>Ойындар</h2>
+<div class="g2">
+<a class="game" href="games.html#ctf"><b>SOC-терминал</b><span>Журналдардан шабуылдаушыны тап: бөтен құрылғы, SSH брутфорс, сканерлеу, деректердің жылыстауы. 6 челлендж.</span></a>
+<a class="game" href="games.html#sorter"><b>Сортировщик</b><span>75 секундта карточкаларды санатқа жібер. 4 колода: құрылғылар, лицензиялар, SOC, SRE.</span></a>
+</div></section>
 
-<h2 id="soft">Қажетті бағдарламалар</h2>
-<ul>
-<li><a href="https://www.python.org/downloads/" target="_blank" rel="noopener">Python 3.10</a> немесе жоғары (орнатқанда <code>Add Python to PATH</code> белгісін қойыңыз)</li>
-<li><a href="https://code.visualstudio.com/" target="_blank" rel="noopener">Visual Studio Code</a> және Python кеңейтімі</li>
-</ul>
-<p>Тексеру үшін терминалда: <code>python --version</code> (Mac-та <code>python3 --version</code>).</p>
-<nav class="pager"><span></span><a class="pg next" href="inventory.html"><small>Келесі</small>№7 Активтер инвентаризациясы</a></nav>
-</main><aside class="toc"><p>Бұл бетте</p><nav id="side-nav"><a href="#news">Хабарландырулар</a><a href="#topics">Практикалық жұмыстар</a><a href="#how">Қалай жұмыс істеу керек</a><a href="#grading">Бағалау</a><a href="#soft">Бағдарламалар</a></nav></aside></div>
-<footer class="foot"><span>КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі, 2026</span><span>Оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">Оқытушыға кіру</a></span></footer>
-<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=78940079"></script>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="https://github.com/Aidina7/-" target="_blank" rel="noopener">github</a> &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/config.js?v=24d63d07"></script><script src="assets/games.js?v=1b9aaa08"></script><script src="assets/ctf-data.js?v=7c6455b0"></script><script src="assets/terminal.js?v=8a41081a"></script><script src="assets/app.js?v=34b51475"></script>
 </body>
 </html>

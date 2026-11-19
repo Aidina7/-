@@ -279,24 +279,27 @@
 
   /* ---------- шапка, бүйір мәзір, анимация ---------- */
   function initChrome() {
-    const btn = $("#sb-btn");
-    if (btn) {
-      if (!$("#sb")) btn.style.display = "none";
-      btn.addEventListener("click", () => document.body.classList.toggle("sb-open"));
-      document.addEventListener("click", e => {
-        if (document.body.classList.contains("sb-open") && !e.target.closest("#sb") && !e.target.closest("#sb-btn"))
-          document.body.classList.remove("sb-open");
+    const bar = $("#tabs");
+    if (!bar) return;
+    document.documentElement.classList.add("js");
+    const panes = [...document.querySelectorAll(".pane")];
+    const links = [...bar.querySelectorAll("a")];
+    function show(scroll) {
+      const id = location.hash.slice(1);
+      const p = panes.find(x => x.id === id) || panes[0];
+      let before = true;
+      panes.forEach(x => x.classList.toggle("on", x === p));
+      links.forEach(a => {
+        const on = a.getAttribute("href") === "#" + p.id;
+        if (on) before = false;
+        a.classList.toggle("on", on);
+        a.classList.toggle("done", before && !on);
       });
+      panes.forEach(x => { if (x !== p) x.querySelectorAll("video").forEach(v => v.pause()); });
+      if (scroll) window.scrollTo({ top: p.getBoundingClientRect().top + window.scrollY - (window.innerWidth <= 640 ? 98 : 60) - bar.offsetHeight - 24, behavior: "auto" });
     }
-    const nav = $("#side-nav");
-    if (nav && "IntersectionObserver" in window) {
-      const links = [...nav.querySelectorAll("a")];
-      const io = new IntersectionObserver(es => es.forEach(e => {
-        if (!e.isIntersecting) return;
-        links.forEach(a => a.classList.toggle("on", a.getAttribute("href") === "#" + e.target.id));
-      }), { rootMargin: "-10% 0px -80% 0px" });
-      links.forEach(a => { const el = document.querySelector(a.getAttribute("href")); if (el) io.observe(el); });
-    }
+    window.addEventListener("hashchange", () => show(true));
+    show(!!location.hash);
   }
 
   /* ---------- басты беттегі «терминал» ---------- */
@@ -343,6 +346,6 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     renderUser(); initLogin(); renderVideo(); initQuiz(); initCtf(); initSorters(); initSubmit(); initCabinet(); initGrade(); heroTyping(); initChrome();
-    const bg = $("#board-game"); if (bg) { bg.onchange = loadBoard; loadBoard(); }
+    const bg = $("#board-game"); if (bg) bg.onchange = loadBoard; if ($("#board")) loadBoard();
   });
 })();
