@@ -114,7 +114,7 @@ def main():
             alerts.append("🔴 %s (1 сағ burn rate = %.1f)" % (cfg["alerts"]["fast_burn"]["action"], br1))
         elif br6 >= cfg["alerts"]["slow_burn"]["burn_rate"]:
             alerts.append("🟠 %s (6 сағ burn rate = %.1f)" % (cfg["alerts"]["slow_burn"]["action"], br6))
-        if not ok_av or alerts:
+        if not ok_av or not ok_lat or alerts:
             problems = True
 
         mark = lambda ok: "✅" if ok else "❌"
@@ -150,12 +150,29 @@ def main():
             for r in rows:
                 days[r["time"][:10]].append(r)
             bars = ""
-            for i, d in enumerate(sorted(days)):
+            for d in sorted(days):
                 ds = summarize(days[d], slo)
-                color = "#1e8a4c" if ds["availability"] >= slo["availability"] else ("#d9822b" if ds["availability"] >= svc["sla"]["availability"] else "#c0392b")
-                bars += '<div title="%s: %.3f%%" style="background:%s"></div>' % (d, ds["availability"], color)
-            html_blocks.append("<div class='svc'><h2>%s</h2><div class='bars'>%s</div><pre>%s</pre></div>" % (
-                html.escape(svc["name"]), bars, html.escape("\n".join(lines[2:]))))
+                if ds["availability"] < svc["sla"]["availability"]:
+                    color, state = "#c0392b", "SLA бұзылды"
+                elif ds["availability"] < slo["availability"] or ds["latency_sli"] < slo["latency_target"]:
+                    color, state = "#e0a020", "SLO бұзылды"
+                else:
+                    color, state = "#1e8a4c", "қалыпты"
+                bars += '<div title="%s: қолжетімділік %.3f%%, жылдам %.1f%% (%s)" style="background:%s"></div>' % (
+                    d, ds["availability"], ds["latency_sli"], state, color)
+            first, lastd = sorted(days)[0], sorted(days)[-1]
+            row = lambda name, fact, goal, ok: "<tr><td>%s</td><td>%s</td><td>%s</td><td class='%s'>%s</td></tr>" % (
+                name, fact, goal, "ok" if ok else "bad", "орындалды" if ok else "бұзылды")
+            table = ("<table><tr><th>Көрсеткіш</th><th>Нақты (SLI)</th><th>Мақсат</th><th>Күйі</th></tr>%s%s%s</table>" % (
+                row("Қолжетімділік, %d күн" % slo["window_days"], "%.3f%%" % s["availability"], "SLO ≥ %.1f%%" % slo["availability"], ok_av),
+                row("Жауаптар &lt; %d мс" % slo["latency_ms"], "%.2f%%" % s["latency_sli"], "≥ %.1f%%" % slo["latency_target"], ok_lat),
+                row("SLA (келісімшарт)", "%.3f%%" % s["availability"], "≥ %.1f%%" % svc["sla"]["availability"], ok_sla)))
+            facts = ("<ul><li>Сұраулар: %d, 5xx: %d (%.3f%%), 4xx (SLI-ге кірмейді): %d</li><li>p95 бағасы: %s</li>"
+                     "<li>Қателер бюджеті: %d сұрау, жұмсалды <b>%.0f%%</b></li><li>Burn rate: 1 сағ = %.2f, 6 сағ = %.2f</li></ul>") % (
+                s["requests"], s["bad"], s["error_rate"], s["errors_4xx"], html.escape(s["p95"]), budget, used, br1, br6)
+            al = "".join("<p class='alert'>%s</p>" % html.escape(a) for a in alerts) or "<p class='okmsg'>Ескертулер жоқ</p>"
+            html_blocks.append("<div class='svc'><h2>%s <small>%s</small></h2><div class='bars'>%s</div><div class='axis'><span>%s</span><span>%s</span></div>%s%s%s</div>" % (
+                html.escape(svc["name"]), svc["id"], bars, first, lastd, table, facts, al))
 
     text = "\n".join(md)
     print(text)
@@ -164,8 +181,10 @@ def main():
     if args.html:
         page = ("<!DOCTYPE html><html lang='kk'><head><meta charset='utf-8'><title>SLA есебі</title><style>"
                 "body{font-family:system-ui,Arial;margin:24px;color:#1d2733}.svc{border:1px solid #e3e7ec;border-radius:10px;padding:12px 16px;margin-bottom:16px}"
-                ".bars{display:flex;gap:3px;height:34px;margin:8px 0}.bars div{flex:1;border-radius:3px}pre{white-space:pre-wrap;font-size:13px}"
-                "</style></head><body><h1>Қызмет көрсету сапасы</h1><p>Әр жолақ — бір күн: жасыл — SLO орындалды, сары — SLO бұзылды бірақ SLA сақталды, қызыл — SLA бұзылды.</p>%s</body></html>") % "".join(html_blocks)
+                ".bars{display:flex;gap:3px;height:34px;margin:8px 0 2px}.bars div{flex:1;border-radius:3px}.axis{display:flex;justify-content:space-between;font-size:12px;color:#6b7785;margin-bottom:10px}"
+                "h2 small{font-weight:400;color:#6b7785;font-size:14px}table{border-collapse:collapse;margin:6px 0}td,th{border:1px solid #e3e7ec;padding:6px 12px;text-align:left}th{background:#f5f7f9}"
+                ".ok{color:#1e8a4c;font-weight:600}.bad{color:#c0392b;font-weight:600}.alert{background:#fdecea;color:#a12a1f;padding:8px 12px;border-radius:6px}.okmsg{color:#1e8a4c}"
+                "</style></head><body><h1>Қызмет көрсету сапасы</h1><p>Есеп уақыты: %s. Әр жолақ — бір күн: жасыл — қалыпты, сары — SLO бұзылды (қателер немесе баяулық), қызыл — SLA бұзылды. Тінтуірді жолаққа апарсаңыз, мәндер шығады.</p>%s</body></html>") % (args.now, "".join(html_blocks))
         with open(os.path.join(HERE, "sla_report.html"), "w", encoding="utf-8") as f:
             f.write(page)
         print("HTML: sla_report.html")
