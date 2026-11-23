@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>API құжаттамасын автоматты түрде генерациялау (OpenAPI/Swagger) | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "oa01", "q": "OpenAPI дегеніміз не?", "o": ["Бағдарламалау тілі", "REST API-ді сипаттайтын машина оқитын стандарт (JSON/YAML)", "Деректер базасы", "Веб-браузер"]}, {"id": "oa02", "q": "OpenAPI мен Swagger-дің айырмашылығы:", "o": ["Бірдей нәрсе", "OpenAPI — стандарт, Swagger — оны қолданатын құралдар (UI, Editor, Codegen)", "Swagger — жаңа нұсқа", "OpenAPI тек Java үшін"]}, {"id": "oa03", "q": "Спецификацияның қай бөлімінде endpoint-тер сипатталады?", "o": ["info", "servers", "paths", "tags"]}, {"id": "oa04", "q": "components/schemas бөлімі не үшін керек?", "o": ["Серверлер тізімі үшін", "Деректер модельдерін бір рет сипаттап, $ref арқылы қайта пайдалану үшін", "Құпиясөздер үшін", "Логотип үшін"]}, {"id": "oa05", "q": "\"$ref\": \"#/components/schemas/Student\" нені білдіреді?", "o": ["Сыртқы сайтқа сілтеме", "Осы файлдағы Student схемасына сілтеме", "Student кестесін жою", "Қате"]}, {"id": "oa06", "q": "/students/{student_id} жолындағы student_id параметрінің in мәні:", "o": ["query", "header", "path", "cookie"]}, {"id": "oa07", "q": "/students?group=ИС 3-1 сұрауындағы group параметрі:", "o": ["path", "query", "body", "header"]}, {"id": "oa08", "q": "Біздің генераторда функцияның docstring-інің бірінші жолы спецификацияда неге айналады?", "o": ["operationId", "summary", "tags", "servers"]}, {"id": "oa09", "q": "Python-дағы Optional[str] типі OpenAPI-де қалай көрінеді?", "o": ["type: string, nullable: true", "type: optional", "type: null", "type: array"]}, {"id": "oa10", "q": "POST /students үшін X-API-Key кілті керек. Ол спецификацияда қай жерде сипатталады?", "o": ["info.description", "components/securitySchemes және операциядағы security", "servers", "tags"]}, {"id": "oa11", "q": "Swagger UI-дағы «Try it out» батырмасы не істейді?", "o": ["Кодты жүктейді", "API-ге нақты сұрау жіберіп, жауабын көрсетеді", "Спецификацияны өшіреді", "Серверді қайта іске қосады"]}, {"id": "oa12", "q": "«Code-first» тәсілі дегеніміз:", "o": ["Алдымен YAML жазып, кейін код", "Алдымен код жазылады, құжаттама одан автоматты генерацияланады", "Құжаттама мүлдем жазылмайды", "Тек Word құжаты"]}, {"id": "oa13", "q": "Құжаттаманың «drift»-і (ескіруі) дегеніміз:", "o": ["Сервердің баяулауы", "Файлдағы құжаттама мен нақты код арасындағы алшақтық", "Нұсқаның көтерілуі", "Swagger UI-дың түсі"]}, {"id": "oa14", "q": "check_spec.py CI-де қате тапса, шығу коды 1 болады. Бұл не үшін керек?", "o": ["Әдемі көріну үшін", "CI құбыры тоқтап, сапасыз немесе ескірген құжаттама жарияланбайды", "Компьютер өшеді", "Ешнәрсе үшін"]}, {"id": "oa15", "q": "API-ге жаңа endpoint қосылды, ескі клиенттер бұзылмайды. Нұсқа 1.0.0-ден қалай өзгереді?", "o": ["2.0.0", "1.1.0", "1.0.1", "0.9.0"]}, {"id": "oa16", "q": "OpenAPI спецификациясынан тағы не генерациялауға болады?", "o": ["Тек PDF", "Клиент коды, mock-сервер, тесттер", "Деректер базасының дерекқоры", "Ештеңе"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>12_openapi</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html" class="on">12</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №12</p>
+<h1>API құжаттамасын автоматты түрде генерациялау (OpenAPI/Swagger)</h1>
+<p class="lead">OpenAPI спецификациясы, құжаттаманы кодтан генерациялау, Swagger UI, құжаттама сапасы мен ескіруін (drift) тексеру.</p></div>
+<ul class="meta"><li><span>уақыты</span>2 сағат</li><li><span>бейне</span>1:46</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>OpenAPI спецификациясын сипаттайды</b><b>Құжаттаманы кодтан генерациялауды түсіндіреді</b><b>Swagger арқылы API құжаттамасын жасайды</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Неге API құжаттамасы керек?</h2>
+<p>API-ді басқа адамдар қолданады: мобильді әзірлеуші, бот жазатын студент, сыртқы компания. Олар сіздің кодыңызды оқымайды — оларға <b>құжаттама</b> керек: қандай endpoint бар, қандай параметр жіберу керек, жауап қандай, қате болса не келеді.</p>
+<div class="callout warn">Word-та қолмен жазылған құжаттама бірнеше аптада <b>ескіреді</b>: код өзгереді, құжат өзгермейді. Шешімі — құжаттаманы <b>кодтан автоматты түрде</b> генерациялау.</div>
+</section>
+<section>
+<h2>2. OpenAPI және Swagger</h2>
+<div class="cards">
+<div class="card"><h4>OpenAPI</h4><p>REST API-ді сипаттайтын <b>стандарт</b> (JSON немесе YAML файл). Қазіргі нұсқасы — 3.0 / 3.1.</p></div>
+<div class="card"><h4>Swagger UI</h4><p>Спецификациядан <b>интерактивті бет</b> жасайтын құрал: «Try it out» батырмасымен сұрау жіберуге болады.</p></div>
+<div class="card"><h4>Swagger Editor</h4><p>YAML-ды браузерде жазып, бірден көру: editor.swagger.io.</p></div>
+<div class="card"><h4>Codegen</h4><p>Спецификациядан клиент кодын (Python, JS, Kotlin), тесттер мен mock-сервер жасау.</p></div>
+</div>
+<p>Тарих: бастапқыда барлығы «Swagger» деп аталған; 2016 жылы стандарт <b>OpenAPI</b> деп өзгертілді, ал Swagger — құралдардың атауы болып қалды.</p>
+</section>
+<section>
+<h2>3. Спецификацияның құрылымы</h2>
+<pre><code>openapi: "3.0.3"
+info:                                   <span class="c"># атауы, нұсқасы, сипаттамасы</span>
+  title: "Колледж API"
+  version: "1.0.0"
+servers:                                <span class="c"># API қай мекенжайда</span>
+  - url: "http://127.0.0.1:8000"
+paths:                                  <span class="c"># endpoint-тер</span>
+  "/students/{student_id}":
+    get:
+      summary: "Бір студент туралы мәлімет"
+      tags: ["Студенттер"]
+      parameters:
+        - name: "student_id"
+          in: "path"                    <span class="c"># path | query | header</span>
+          required: true
+          schema: {type: "integer"}
+      responses:
+        "200":
+          content:
+            application/json:
+              schema: {"$ref": "#/components/schemas/Student"}
+        "404": {description: "Табылмады"}
+components:
+  schemas:                              <span class="c"># деректер модельдері</span>
+    Student: {type: object, properties: {...}}
+  securitySchemes:                      <span class="c"># кілт, токен</span>
+    ApiKeyAuth: {type: apiKey, in: header, name: X-API-Key}</code></pre>
+<p><code>$ref</code> — сілтеме: Student схемасы бір рет сипатталады да, барлық жауапта қайта пайдаланылады. Схема өзгерсе — бір жерде өзгертеміз.</p>
+</section>
+<section>
+<h2>4. Құжаттаманы кодтан генерациялау</h2>
+<p>«Code-first» тәсілінде құжаттаманың барлық бөлігі кодта бар ақпараттан алынады:</p>
+<pre><code>@api.get("/students/{student_id}", tags=["Студенттер"], responses={404: Error})
+def get_student(student_id: int) -&gt; Student:
+    """Бір студент туралы мәлімет
+
+    student_id: студенттің нөмірі
+    """
+    return find_student(student_id)</code></pre>
+<table>
+<tr><th>Кодта</th><th>Спецификацияда</th></tr>
+<tr><td>декоратор <code>@api.get("/students/{student_id}")</code></td><td><code>paths → /students/{student_id} → get</code></td></tr>
+<tr><td>docstring-тің бірінші жолы</td><td><code>summary</code></td></tr>
+<tr><td><code>student_id: int</code></td><td>parameter, <code>in: path</code>, <code>type: integer</code></td></tr>
+<tr><td><code>Optional[str] = Query(None, "...")</code></td><td>parameter, <code>in: query</code>, <code>nullable: true</code>, description</td></tr>
+<tr><td><code>-&gt; Student</code> (dataclass)</td><td><code>responses → 200 → $ref Student</code></td></tr>
+<tr><td><code>responses={404: Error}</code></td><td><code>responses → 404</code></td></tr>
+<tr><td><code>Field("Тегі мен аты", example=...)</code></td><td>схема өрісінің description, example</td></tr>
+<tr><td><code>auth=True</code></td><td><code>security: ApiKeyAuth</code>, 🔒 белгісі</td></tr>
+</table>
+<p>Практикада сіз осындай декораторды өзіңіз жазасыз: <code>@route("get", "/students/{student_id}", "Бір студент", ["Студенттер"], {200: Student, 404: Error})</code> — ол функцияны ROUTES тізіміне тіркейді, ал <code>openapi()</code> функцияңыз осы тізімнен спецификация құрады.</p>
+<p>Нақты жобаларда: <b>FastAPI</b> (Python) — <code>/docs</code> беті өзі пайда болады; <b>springdoc</b> (Java), <b>Swashbuckle</b> (C#), <b>NestJS Swagger</b> (JS).</p>
+<div class="callout">«Design-first» тәсілі керісінше: алдымен YAML спецификация жазылып, келісіледі, сосын одан код жасалады. Бірнеше команда бір API-мен жұмыс істегенде ыңғайлы.</div>
+</section>
+<section>
+<h2>5. Сапа және «ескірген» құжаттама</h2>
+<p>Генерация бар болса да, нашар құжаттама болуы мүмкін: summary жоқ, параметрдің сипаттамасы жоқ, 404 сипатталмаған. Практикада сіз <code>check_spec.py</code> — құжаттаманың «линтерін» өзіңіз жазасыз. Нәтижесі шамамен былай:</p>
+<pre><code>python3 check_spec.py
+[ҚАТЕ   ] GET /schedule   summary жоқ (функцияға docstring жазыңыз)
+[ЕСКЕРТУ] GET /schedule   tags жоқ — Swagger UI-да «default» тобына түседі
+[ЕСКЕРТУ] GET /schedule   параметр «day» сипаттамасы жоқ
+openapi.json: endpoint 6 · қате 1 · ескерту 3 · құжаттама сапасы: 81/100</code></pre>
+<p><b>Drift</b> — файлдағы құжаттама мен код арасындағы алшақтық. Оны CI-де ұстаймыз:</p>
+<div class="flow">
+<div>Код өзгерді<small>git push</small></div><span>→</span>
+<div>gen_openapi.py<small>openapi.json</small></div><span>→</span>
+<div>check_spec.py --drift<small>шығу коды 0 / 1</small></div><span>→</span>
+<div>Жариялау<small>Swagger UI, docs.html</small></div>
+</div>
+<p>API нұсқасы: <code>1.0.0 → 1.1.0</code> — жаңа endpoint қосылды (ескі клиенттер бұзылмайды); <code>2.0.0</code> — үйлесімсіз өзгеріс (өріс жойылды, жол өзгерді).</p>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="openapi"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:46).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_12_openapi.pdf" target="_blank"><b>praktikalyk_12_openapi.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>12_openapi_docs</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 12_openapi_docs</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>OpenAPI спецификациясын қолмен жазуды (design-first), құжаттамасы кодтан автоматты түрде жасалатын API-ді нөлден жасауды (code-first) және Swagger UI арқылы интерактивті құжаттама жасауды үйрену.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. OpenAPI спецификациясын сипаттайды.<br>2. Құжаттаманы кодтан генерациялауды түсіндіреді.<br>3. Swagger арқылы API құжаттамасын жасайды.</td></tr>
+<tr><td>Уақыты</td><td>50 минут (2 сағаттық тақырыптың практикалық бөлігі)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген), іске қосып, тексересіз.</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), браузер, интернет (editor.swagger.io және Swagger UI)</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледж API-іне мобильді қосымша жасайтын сыртқы команда қосылды. Олар күнде: «Қандай endpoint бар, қандай параметр жіберу керек, жауап қандай?» деп сұрайды. Word-тағы құжаттама кодтан әлдеқашан артта қалған. Сіздің міндетіңіз — API-ді құжаттамасы кодтан өзі жасалатындай етіп жазу, ал тексеру скрипті ескірген құжаттаманы өткізбесін.</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз: 1) қандай файл; 2) толық коды; 3) іске қосу; 4) күтілетін нәтиже. Кодты түсініп жазыңыз — қорғауда түсіндіресіз. Mac-та <code>python3</code>, Windows-та <code>python</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жаңа қалта жасаңыз: <code>12_openapi_docs</code>. VS Code → File → Open Folder → <code>12_openapi_docs</code>.</li><li>Екі терминал ашыңыз (Terminal → New Terminal, содан кейін ⊞ Split).</li><li>Жұмыс соңында қалтада 5 файл болады: openapi.yaml, app.py, gen_openapi.py, check_spec.py, openapi.json (генерацияланады).</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Спецификацияны қолмен жазу — design-first (10 мин, 25 ұпай)</h4>
+<ol><li>Браузерде https://editor.swagger.io ашыңыз. Сол жақтағы мысал мәтінді толық өшіріңіз (Cmd+A / Ctrl+A → Delete).</li><li>Төмендегі спецификацияны сол жаққа жазыңыз. Шегініс (бос орындар) өте маңызды: әр деңгей — 2 бос орын.</li><li>Оң жақта құжаттама пайда болады: «Студенттер» тобында екі endpoint және төменде Schemas: Student, Error. Жоғарыда қызыл Errors болмауы керек.</li><li>VS Code-та <code>openapi.yaml</code> файлын жасап, сол мәтінді сақтаңыз.</li><li>Түсіндіріңіз: <code>$ref</code> нені білдіреді? <code>in: path</code> пен <code>in: query</code> айырмашылығы? Неге email-да <code>nullable: true</code>?</li></ol>
+<p><b>Файл: openapi.yaml</b></p>
+<pre><code>openapi: 3.0.3
+info:
+  title: Колледж API
+  version: 1.0.0
+  description: Оқу практикасы №12 — студенттер туралы API
+servers:
+  - url: http://127.0.0.1:8000
+paths:
+  /students:
+    get:
+      summary: Студенттер тізімі
+      tags: [Студенттер]
+      parameters:
+        - name: group
+          in: query
+          required: false
+          description: Топ бойынша сүзгі, мысалы ИС 3-1
+          schema:
+            type: string
+      responses:
+        &quot;200&quot;:
+          description: Сәтті
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: &quot;#/components/schemas/Student&quot;
+  /students/{student_id}:
+    get:
+      summary: Бір студент
+      tags: [Студенттер]
+      parameters:
+        - name: student_id
+          in: path
+          required: true
+          description: Студенттің нөмірі
+          schema:
+            type: integer
+      responses:
+        &quot;200&quot;:
+          description: Сәтті
+          content:
+            application/json:
+              schema:
+                $ref: &quot;#/components/schemas/Student&quot;
+        &quot;404&quot;:
+          description: Студент табылмады
+          content:
+            application/json:
+              schema:
+                $ref: &quot;#/components/schemas/Error&quot;
+components:
+  schemas:
+    Student:
+      type: object
+      required: [id, name, group]
+      properties:
+        id:
+          type: integer
+          description: Студенттің нөмірі
+          example: 3
+        name:
+          type: string
+          description: Тегі мен аты
+          example: Қасымов Дәулет
+        group:
+          type: string
+          description: Топ коды
+          example: ИС 3-1
+        email:
+          type: string
+          nullable: true
+          description: Электрондық пошта
+          example: d.kassymov@aec.kz
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Қатенің сипаттамасы
+          example: Студент табылмады</code></pre>
+<p class="report-note"><b>Есепке:</b> openapi.yaml, Swagger Editor скриншоты (қатесіз), сұрақтарға жауап.</p>
+<h4>2-тапсырма. Құжаттамасы кодтан жасалатын API — code-first (20 мин, 35 ұпай)</h4>
+<p>Енді спецификацияны қолмен жазбаймыз: app.py ішіндегі модельдер (dataclass), декоратор және функциялардан openapi() функциясы оны өзі жасайды. Сервер /docs бетінде Swagger UI көрсетеді.</p>
+<p><b>Файл: app.py</b></p>
+<pre><code>&quot;&quot;&quot;№12 эталон шешімі (студент жазатын нұсқа): Колледж API + кодтан OpenAPI генерациясы.&quot;&quot;&quot;
+import json
+import re
+from dataclasses import dataclass, field, fields, asdict, MISSING
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from typing import Optional, get_type_hints, get_origin, get_args
+from urllib.parse import urlsplit, parse_qs, unquote
+
+ROUTES = []          # барлық endpoint осы тізімге жиналады
+
+
+def route(method, path, summary, tags, responses, params=None):
+    &quot;&quot;&quot;Декоратор: функцияны және оның құжаттамасын ROUTES тізіміне тіркейді.&quot;&quot;&quot;
+    def deco(fn):
+        ROUTES.append({&quot;method&quot;: method, &quot;path&quot;: path, &quot;fn&quot;: fn, &quot;summary&quot;: summary,
+                       &quot;tags&quot;: tags, &quot;responses&quot;: responses, &quot;params&quot;: params or {}})
+        return fn
+    return deco
+
+
+def F(description, example=None, default=MISSING):
+    meta = {&quot;description&quot;: description, &quot;example&quot;: example}
+    return field(default=default, metadata=meta) if default is not MISSING else field(metadata=meta)
+
+
+@dataclass
+class Student:
+    id: int = F(&quot;Студенттің нөмірі&quot;, 3)
+    name: str = F(&quot;Тегі мен аты&quot;, &quot;Қасымов Дәулет&quot;)
+    group: str = F(&quot;Топ коды&quot;, &quot;ИС 3-1&quot;)
+    email: Optional[str] = F(&quot;Электрондық пошта&quot;, &quot;d.kassymov@aec.kz&quot;, default=None)
+
+
+@dataclass
+class Error:
+    error: str = F(&quot;Қатенің сипаттамасы&quot;, &quot;Студент табылмады&quot;)
+
+
+STUDENTS = [Student(1, &quot;Әлібек Нұрлан&quot;, &quot;ИС 3-1&quot;), Student(2, &quot;Сейітова Аружан&quot;, &quot;ИС 3-1&quot;),
+            Student(3, &quot;Қасымов Дәулет&quot;, &quot;ИС 3-1&quot;, &quot;d.kassymov@aec.kz&quot;), Student(4, &quot;Жұмабаев Ерасыл&quot;, &quot;ВТ 2-1&quot;)]
+
+
+@route(&quot;get&quot;, &quot;/students&quot;, &quot;Студенттер тізімі&quot;, [&quot;Студенттер&quot;], {200: [Student]},
+       params={&quot;group&quot;: &quot;Топ бойынша сүзгі, мысалы ИС 3-1&quot;})
+def list_students(q):
+    g = q.get(&quot;group&quot;)
+    return 200, [s for s in STUDENTS if g is None or s.group == g]
+
+
+@route(&quot;get&quot;, &quot;/students/{student_id}&quot;, &quot;Бір студент&quot;, [&quot;Студенттер&quot;], {200: Student, 404: Error},
+       params={&quot;student_id&quot;: &quot;Студенттің нөмірі&quot;})
+def get_student(q):
+    for s in STUDENTS:
+        if s.id == int(q[&quot;student_id&quot;]):
+            return 200, s
+    return 404, Error(&quot;Студент табылмады&quot;)
+
+
+# ---------------- OpenAPI генерациясы ----------------
+TYPES = {int: &quot;integer&quot;, str: &quot;string&quot;, float: &quot;number&quot;, bool: &quot;boolean&quot;}
+
+
+def schema_of(tp, schemas):
+    if isinstance(tp, list):                               # [Student] -&gt; массив
+        return {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: schema_of(tp[0], schemas)}
+    if get_origin(tp) is not None:                         # Optional[str]
+        inner = [a for a in get_args(tp) if a is not type(None)][0]
+        return dict(schema_of(inner, schemas), nullable=True)
+    if hasattr(tp, &quot;__dataclass_fields__&quot;):
+        name = tp.__name__
+        if name not in schemas:
+            hints = get_type_hints(tp)
+            props = {}
+            for f in fields(tp):
+                props[f.name] = dict(schema_of(hints[f.name], schemas), description=f.metadata[&quot;description&quot;])
+                if f.metadata.get(&quot;example&quot;) is not None:
+                    props[f.name][&quot;example&quot;] = f.metadata[&quot;example&quot;]
+            req = [f.name for f in fields(tp) if f.default is MISSING]
+            schemas[name] = {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: props, &quot;required&quot;: req}
+        return {&quot;$ref&quot;: &quot;#/components/schemas/&quot; + name}
+    return {&quot;type&quot;: TYPES.get(tp, &quot;string&quot;)}
+
+
+def openapi():
+    schemas, paths = {}, {}
+    for r in ROUTES:
+        params = []
+        for name, desc in r[&quot;params&quot;].items():
+            where = &quot;path&quot; if &quot;{%s}&quot; % name in r[&quot;path&quot;] else &quot;query&quot;
+            params.append({&quot;name&quot;: name, &quot;in&quot;: where, &quot;required&quot;: where == &quot;path&quot;,
+                           &quot;description&quot;: desc, &quot;schema&quot;: {&quot;type&quot;: &quot;integer&quot; if name.endswith(&quot;_id&quot;) else &quot;string&quot;}})
+        responses = {}
+        for code, model in r[&quot;responses&quot;].items():
+            responses[str(code)] = {&quot;description&quot;: &quot;Сәтті&quot; if code &lt; 300 else &quot;Қате&quot;,
+                                    &quot;content&quot;: {&quot;application/json&quot;: {&quot;schema&quot;: schema_of(model, schemas)}}}
+        paths.setdefault(r[&quot;path&quot;], {})[r[&quot;method&quot;]] = {
+            &quot;summary&quot;: r[&quot;summary&quot;], &quot;tags&quot;: r[&quot;tags&quot;], &quot;operationId&quot;: r[&quot;fn&quot;].__name__,
+            &quot;parameters&quot;: params, &quot;responses&quot;: responses}
+    return {&quot;openapi&quot;: &quot;3.0.3&quot;,
+            &quot;info&quot;: {&quot;title&quot;: &quot;Колледж API&quot;, &quot;version&quot;: &quot;1.0.0&quot;, &quot;description&quot;: &quot;Оқу практикасы №12&quot;},
+            &quot;servers&quot;: [{&quot;url&quot;: &quot;http://127.0.0.1:8000&quot;}],
+            &quot;paths&quot;: paths, &quot;components&quot;: {&quot;schemas&quot;: schemas}}
+
+
+SWAGGER = &quot;&quot;&quot;&lt;!DOCTYPE html&gt;&lt;html&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Swagger UI&lt;/title&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;https://unpkg.com/swagger-ui-dist@5/swagger-ui.css&quot;&gt;&lt;/head&gt;
+&lt;body&gt;&lt;div id=&quot;ui&quot;&gt;&lt;/div&gt;&lt;script src=&quot;https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;SwaggerUIBundle({url: &quot;/openapi.json&quot;, dom_id: &quot;#ui&quot;});&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;&quot;&quot;&quot;
+
+
+def to_json(x):
+    return [to_json(i) for i in x] if isinstance(x, list) else asdict(x) if hasattr(x, &quot;__dataclass_fields__&quot;) else x
+
+
+class H(BaseHTTPRequestHandler):
+    def send(self, code, body, ctype=&quot;application/json; charset=utf-8&quot;):
+        data = body.encode() if isinstance(body, str) else json.dumps(to_json(body), ensure_ascii=False).encode()
+        self.send_response(code)
+        self.send_header(&quot;Content-Type&quot;, ctype)
+        self.send_header(&quot;Content-Length&quot;, str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_GET(self):
+        u = urlsplit(self.path)
+        if u.path == &quot;/openapi.json&quot;:
+            return self.send(200, openapi())
+        if u.path == &quot;/docs&quot;:
+            return self.send(200, SWAGGER, &quot;text/html; charset=utf-8&quot;)
+        q = {k: v[0] for k, v in parse_qs(u.query).items()}
+        for r in ROUTES:
+            rx = &quot;^&quot; + re.sub(r&quot;{(\w+)}&quot;, r&quot;(?P&lt;\1&gt;[^/]+)&quot;, r[&quot;path&quot;]) + &quot;$&quot;
+            m = re.match(rx, u.path)
+            if r[&quot;method&quot;] == &quot;get&quot; and m:
+                q.update({k: unquote(v) for k, v in m.groupdict().items()})
+                return self.send(*r[&quot;fn&quot;](q))
+        self.send(404, {&quot;error&quot;: &quot;endpoint жоқ&quot;})
+
+
+if __name__ == &quot;__main__&quot;:
+    print(&quot;http://127.0.0.1:8000/docs&quot;)
+    ThreadingHTTPServer((&quot;127.0.0.1&quot;, 8000), H).serve_forever()</code></pre>
+<ol><li><code>app.py</code> файлын жасап, кодты жазыңыз, сақтаңыз.</li><li>1-терминалда: <code>python3 app.py</code> → «http://127.0.0.1:8000/docs».</li><li>Браузерде http://127.0.0.1:8000/docs ашыңыз. GET /students → «Try it out» → group: ИС 3-1 → Execute → 200 және үш студент. GET /students/{student_id}: 3 → 200; 99 → 404.</li><li>http://127.0.0.1:8000/openapi.json ашып, 1-тапсырмадағы openapi.yaml-мен салыстырыңыз: не бірдей, не өзгеше?</li><li>Кодты түсіндіріңіз: @route декораторы не істейді? schema_of() Python типтерін OpenAPI типтеріне қалай айналдырады? Optional[str] неге nullable болады?</li></ol>
+<p class="report-note"><b>Есепке:</b> app.py, Swagger UI скриншоттары (endpoint-тер, Schemas, Try it out: 200 және 404), салыстыру, сұрақтарға жауап.</p>
+<h4>3-тапсырма. Генерация, сапаны тексеру және жеке нұсқа (20 мин, 30 ұпай)</h4>
+<p><b>Файл: gen_openapi.py</b></p>
+<pre><code>import json
+from app import openapi
+
+spec = openapi()
+with open(&quot;openapi.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    json.dump(spec, f, ensure_ascii=False, indent=2)
+print(&quot;openapi.json жасалды, endpoint:&quot;, sum(len(v) for v in spec[&quot;paths&quot;].values()))</code></pre>
+<p><b>Файл: check_spec.py</b></p>
+<pre><code>import json
+import sys
+
+spec = json.load(open(&quot;openapi.json&quot;, encoding=&quot;utf-8&quot;))
+errors = 0
+for path, ops in spec[&quot;paths&quot;].items():
+    for method, op in ops.items():
+        where = method.upper() + &quot; &quot; + path
+        if not op.get(&quot;summary&quot;):
+            print(&quot;ҚАТЕ:&quot;, where, &quot;— summary жоқ&quot;); errors += 1
+        if not op.get(&quot;tags&quot;):
+            print(&quot;ҚАТЕ:&quot;, where, &quot;— tags жоқ&quot;); errors += 1
+        if not any(c.startswith(&quot;2&quot;) for c in op[&quot;responses&quot;]):
+            print(&quot;ҚАТЕ:&quot;, where, &quot;— 2xx жауабы жоқ&quot;); errors += 1
+        for p in op.get(&quot;parameters&quot;, []):
+            if not p.get(&quot;description&quot;):
+                print(&quot;ҚАТЕ:&quot;, where, &quot;— параметр&quot;, p[&quot;name&quot;], &quot;сипаттамасыз&quot;); errors += 1
+        if &quot;{&quot; in path and &quot;404&quot; not in op[&quot;responses&quot;]:
+            print(&quot;ҚАТЕ:&quot;, where, &quot;— 404 сипатталмаған&quot;); errors += 1
+# drift: файл мен код бірдей ме?
+from app import openapi
+if openapi()[&quot;paths&quot;].keys() != spec[&quot;paths&quot;].keys():
+    print(&quot;ҚАТЕ: openapi.json кодтан артта қалды — gen_openapi.py іске қосыңыз&quot;); errors += 1
+print(&quot;Қате саны:&quot;, errors)
+sys.exit(1 if errors else 0)</code></pre>
+<ol><li>Екі файлды жасаңыз. 2-терминалда: <code>python3 gen_openapi.py</code> → «openapi.json жасалды, endpoint: 2»; <code>python3 check_spec.py</code> → «Қате саны: 0». Шығу коды: <code>echo $?</code> → 0.</li><li>Нұсқаңыз бойынша app.py-ге жаңа endpoint қосыңыз (бұл бөлім — өз жұмысыңыз). Үлгі ретінде get_student функциясын қараңыз: декоратор (жол, summary, tags, responses, params) + функция <code>(статус, нәтиже)</code> қайтарады. Жаңа модель керек болса — @dataclass. info.version-ды 1.1.0-ге өзгертіңіз.</li><li>Drift: gen_openapi.py-ді іске қоспай <code>python3 check_spec.py</code> → «ҚАТЕ: openapi.json кодтан артта қалды», шығу коды 1. Енді <code>python3 gen_openapi.py &amp;&amp; python3 check_spec.py</code> → «Қате саны: 0».</li><li>app.py-ді қайта іске қосып (Ctrl+C → <code>python3 app.py</code>), жаңа endpoint-ті Swagger UI-да «Try it out» арқылы тексеріңіз.</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Жаңа endpoint</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>GET /groups/{code}/students — топтың студенттері; топ жоқ болса 404 + Error.</td><td>«ИС 3-1» → 200, «ЖОҚ 1-1» → 404</td></tr><tr><td>2</td><td>GET /students/{student_id}/grades — Grade (subject, value) dataclass-ы; бағалар тізімі.</td><td>/students/3/grades → 200, /students/99/grades → 404</td></tr><tr><td>3</td><td>GET /students-ке limit және offset query параметрлері (params-та сипаттамасымен).</td><td>limit=2&amp;offset=1 → 2 студент</td></tr><tr><td>4</td><td>GET /groups — Group (code, students) dataclass-ы, топтар тізімі.</td><td>Schemas-та Group</td></tr><tr><td>5</td><td>GET /stats — топ бойынша студенттер саны: GroupStats (group, count) тізімі.</td><td>Schemas-та GroupStats</td></tr><tr><td>6</td><td>GET /students/search — name query параметрі бойынша іздеу (атының бөлігі, регистрге тәуелсіз).</td><td>name=ов → бірнеше студент</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> gen_openapi.py, check_spec.py, жаңа endpoint коды, drift нәтижесі (дейін / кейін), Swagger UI скриншоты.</p>
+<h3>Тапсыру</h3>
+<ul><li>12_openapi_docs қалтасын (openapi.yaml, app.py, gen_openapi.py, check_spec.py, openapi.json) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–3-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: design-first пен code-first айырмашылығы.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>openapi.yaml жазылған, Swagger Editor-де қатесіз; сұрақтарға жауап</td><td>25</td></tr><tr><td>2</td><td>app.py жұмыс істейді: /docs, Try it out (200, 404), /openapi.json; кодтың түсіндірмесі</td><td>35</td></tr><tr><td>3</td><td>gen_openapi.py, check_spec.py, drift көрсетілген; жеке нұсқа бойынша endpoint құжатталған</td><td>30</td></tr><tr><td>4</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>OpenAPI дегеніміз не? Swagger-мен айырмашылығы қандай?</li><li>OpenAPI спецификациясының негізгі бөлімдерін атаңыз.</li><li>paths, parameters, responses бөлімдері нені сипаттайды?</li><li>components/schemas және $ref не үшін керек?</li><li>Design-first және code-first тәсілдерінің айырмашылығы неде?</li><li>Сіздің schema_of() функцияңыз Python типтерін қалай түрлендіреді?</li><li>Құжаттама кодтан қалай «артта қалады» және check_spec.py оны қалай ұстайды?</li><li>Swagger UI-дың «Try it out» мүмкіндігі не үшін керек?</li><li>OpenAPI спецификациясынан тағы не генерациялауға болады?</li><li>API нұсқасын (1.0.0 → 1.1.0 → 2.0.0) қашан көтеру керек?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="openapi"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="openapi"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="API құжаттамасын автоматты түрде генерациялау (OpenAPI/Swagger)">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=009ae6a0"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=44b5bd1a"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Оқытушы панелі | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<meta name="robots" content="noindex">
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap wide">
+<div class="path"><a href="index.html">~</a>/<b>admin</b></div>
+<h1>Оқытушы панелі</h1>
+<div id="login" style="display:none" class="auth"><form id="login-form" class="form">
+<label class="f">Оқытушы құпиясөзі<input id="pw" type="password" autocomplete="current-password"></label>
+<div><button class="btn" type="submit">Кіру</button></div><div class="msg" id="login-msg"></div></form></div>
+<div id="panel" style="display:none">
+<div class="stats" id="stats"></div>
+<div class="tabs"><button class="active" data-tab="students">Студенттер</button><button data-tab="subs">Жұмыстар</button><button data-tab="tests">Тесттер</button><button data-tab="games">Ойындар</button></div>
+<div class="bar">
+<select id="f-group"></select><select id="f-topic"><option value="">барлық тақырыптар</option></select>
+<select id="f-status"><option value="">барлық күйлер</option><option>Тексерілмеген</option><option>Тексерілді</option><option>Қайта тапсыру</option></select>
+<input id="f-q" placeholder="аты немесе логин">
+<button class="btn small ghost" id="reload">Жаңарту</button><button class="btn small ghost" id="export">Excel (CSV)</button><button class="btn small ghost" id="logout-admin">Шығу</button>
+</div>
+<div id="list"></div>
+</div>
+<div class="modal-bg" id="modal"><div class="modal" id="modal-body"></div></div>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=009ae6a0"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=44b5bd1a"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script><script src="assets/admin.js?v=2eb0dfe1"></script>
+</body>
+</html>

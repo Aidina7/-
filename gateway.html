@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>API шлюздерін автоматты түрде баптау | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "gw01", "q": "API шлюзінің негізгі рөлі қандай?", "o": ["Деректер базасын сақтау", "Клиенттер мен қызметтер арасындағы бір кіру нүктесі: маршруттау, кілт, лимит", "Веб-беттерді әдемілеу", "Серверлерді салқындату"]}, {"id": "gw02", "q": "Маршруттар: /api, /api/students, /api/students/v2. /api/students/v2/7 сұрауы қай маршрутқа түседі?", "o": ["/api", "/api/students", "/api/students/v2", "Ешқайсысына"]}, {"id": "gw03", "q": "prefix = /api/students, upstream_path = /students. /api/students/3?full=1 қызметке қалай барады?", "o": ["/api/students/3?full=1", "/students/3?full=1", "/students?full=1", "/3?full=1"]}, {"id": "gw04", "q": "Клиент кілтсіз (X-API-Key жоқ) auth=key маршрутына сұрау жіберді. Шлюз не қайтарады?", "o": ["200", "401", "404", "500"]}, {"id": "gw05", "q": "Маршрутта тек GET, POST рұқсат етілген. DELETE сұрауына жауап:", "o": ["404", "405 және Allow: GET, POST", "429", "502"]}, {"id": "gw06", "q": "429 Too Many Requests жауабындағы Retry-After тақырыбы нені білдіреді?", "o": ["Сервердің нұсқасы", "Қанша секундтан кейін қайталауға болады", "Сұрау нөмірі", "Клиенттің IP-і"]}, {"id": "gw07", "q": "Token bucket: per_minute = 60, burst = 10. Шелек секундына неше жетонмен толады?", "o": ["10", "1", "60", "0,1"]}, {"id": "gw08", "q": "per_minute = 60, burst = 10. Клиент 20 секунд бойы секундына 2 сұрау жібереді (40 сұрау). Шамамен неше сұрау өтеді?", "o": ["10", "20", "30", "40"]}, {"id": "gw09", "q": "pro тарифінің коэффициенті 3. Маршрут лимиті минутына 30, burst 5. pro клиенттің лимиті:", "o": ["30/мин, burst 5", "90/мин, burst 15", "33/мин, burst 8", "10/мин, burst 2"]}, {"id": "gw10", "q": "Кілтсіз маршрутта лимит IP бойынша қойылған. Бір сыныптың 20 компьютері бір сыртқы IP арқылы шықса не болады?", "o": ["Әрқайсысына жеке лимит", "Барлығы бір лимитті бөліседі, тез 429 алады", "Лимит өшеді", "Шлюз тоқтайды"]}, {"id": "gw11", "q": "Round robin алгоритмі қалай жұмыс істейді?", "o": ["Ең жылдам серверге ғана жібереді", "Серверлерге кезекпен: 1, 2, 1, 2 ...", "Кездейсоқ бір серверге барлығын", "Ең бос серверді CPU бойынша таңдайды"]}, {"id": "gw12", "q": "students-1 қатарынан 2 рет жауап бермеді (max_fails = 2, fail_timeout_s = 15). Шлюз не істейді?", "o": ["Барлық сұрауға 502 қайтарады", "students-1-ді 15 секундқа тізімнен шығарып, сұрауларды students-2-ге жібереді", "Өзін қайта іске қосады", "Клиентті бұғаттайды"]}, {"id": "gw13", "q": "Қызмет 2,5 секунд жауап береді, ал timeout_ms = 1000. Клиент не алады?", "o": ["200, 2,5 с кейін", "504 Gateway Timeout, ≈1 с кейін", "502 Bad Gateway, бірден", "404"]}, {"id": "gw14", "q": "Неге шлюз GET сұрауын басқа серверге қайталай алады, ал POST-ты әрдайым қайталамау керек?", "o": ["POST баяу", "GET деректі өзгертпейді; POST-ты қайталау студентті екі рет қосуы мүмкін", "GET құпия", "Айырмашылығы жоқ"]}, {"id": "gw15", "q": "Шлюз hot reload кезінде жаңа gateway.json-да қате тапты. Дұрыс әрекет:", "o": ["Тоқтап, барлық клиентке 500 қайтару", "Жаңа конфигурацияны қабылдамай, ескісімен жұмысын жалғастыру", "Қатені елемей қолдану", "Файлды өшіру"]}, {"id": "gw16", "q": "Шлюз параметрлерін бір кестеден (services.csv) генерациялаудың басты пайдасы:", "o": ["Файлдар әдемі болады", "Бір дереккөз: gateway.json, nginx.conf, kong.yaml әрқашан бірдей, Git-те тексеріледі", "Шлюз жылдамырақ жұмыс істейді", "Интернет керек емес"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>11_gateway</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html" class="on">11</a><a href="openapi.html">12</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №11</p>
+<h1>API шлюздерін автоматты түрде баптау</h1>
+<p class="lead">API шлюзі: маршруттар, кілттер, token bucket лимиті, жүктемені бөлу, timeout және шлюз параметрлерін бір кестеден автоматты түрде жасау.</p></div>
+<ul class="meta"><li><span>уақыты</span>6 сағат</li><li><span>бейне</span>2:17</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>API Gateway конфигурациясын сипаттайды</b><b>Маршруттау мен лимит қоюды түсіндіреді</b><b>Шлюз параметрлерін баптайтын файл әзірлейді</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. API шлюзі деген не?</h2>
+<p>Колледжде бірнеше қызмет бар: студенттер, бағалар, кесте. Шлюзсіз әр клиент (мобильді қосымша, бот, сайт) әр қызметтің мекенжайын біледі, ал кілтті, лимитті, журналды әр қызмет <b>өзі</b> тексереді. Бір қызмет ұмытса — тесік пайда болады.</p>
+<p><b>API шлюзі (API Gateway)</b> — клиенттер мен қызметтердің арасындағы <b>бір кіру нүктесі</b>. Барлық сұрау алдымен шлюзге келеді, ол ортақ ережелерді бір жерде тексеріп, сұрауды керек қызметке жібереді.</p>
+<div class="flow">
+<div>Клиент<small>бот, қосымша</small></div><span>→</span>
+<div>Шлюз :8080<small>маршрут, кілт, лимит</small></div><span>→</span>
+<div>students-1 / students-2<small>:9001 / :9002</small></div><span>·</span>
+<div>grades-1<small>:9003</small></div><span>·</span>
+<div>schedule-1<small>:9004</small></div>
+</div>
+<div class="cards">
+<div class="card"><h4>Маршруттау</h4><p>URL басы бойынша қай қызметке жіберу керегін табады: <code>/api/students</code> → students.</p></div>
+<div class="card"><h4>Аутентификация</h4><p><code>X-API-Key</code> тақырыбын тексереді. Кілт жоқ — <b>401</b>.</p></div>
+<div class="card"><h4>Лимит</h4><p>Клиентке минутына N сұрау. Асса — <b>429 Too Many Requests</b>.</p></div>
+<div class="card"><h4>Жүктемені бөлу</h4><p>Бір қызметтің бірнеше данасы болса, сұрауларды кезекпен таратады.</p></div>
+<div class="card"><h4>Сенімділік</h4><p>Timeout, қайталау, ақаулы серверді уақытша тізімнен шығару.</p></div>
+<div class="card"><h4>Журнал</h4><p>Әр сұрау бір жолда: кім, қайда, қандай код, қанша мс. <code>X-Request-ID</code> арқылы бақылау.</p></div>
+</div>
+<p>Нақты шлюздер: <b>NGINX</b>, <b>Kong</b>, <b>Traefik</b>, <b>Envoy</b>, бұлтта — <b>AWS API Gateway</b>, <b>Azure API Management</b>. Практикалық жұмыста сіз олардың шағын үлгісін — <code>gateway.py</code> шлюзін таза Python-да өзіңіз жазасыз.</p>
+</section>
+<section>
+<h2>2. Конфигурация: gateway.json</h2>
+<p>Шлюз не істейтінін бағдарлама коды емес, <b>конфигурация файлы</b> анықтайды. Бір маршрут:</p>
+<pre><code>{
+  "name": "students",
+  "prefix": "/api/students",          <span class="c"># клиент көретін жол</span>
+  "upstream_path": "/students",       <span class="c"># қызметтегі жол</span>
+  "methods": ["GET", "POST"],
+  "targets": ["127.0.0.1:9001", "127.0.0.1:9002"],
+  "auth": "key",                      <span class="c"># X-API-Key міндетті</span>
+  "rate_limit": {"per_minute": 60, "burst": 10},
+  "timeout_ms": 2000
+}</code></pre>
+<table>
+<tr><th>Бөлім</th><th>Мағынасы</th></tr>
+<tr><td><code>routes</code></td><td>маршруттар: prefix → қызмет, әдістер, кілт, лимит, timeout</td></tr>
+<tr><td><code>consumers</code></td><td>API клиенттері: аты, кілті, тарифі</td></tr>
+<tr><td><code>plans</code></td><td>тарифтер: <code>basic: 1</code>, <code>pro: 3</code> — лимит осыған көбейтіледі</td></tr>
+<tr><td><code>health</code></td><td><code>max_fails</code> рет қатарынан қате → сервер <code>fail_timeout_s</code> секундқа тізімнен шығады</td></tr>
+<tr><td><code>retries</code></td><td>сервер жауап бермесе, басқа серверге неше рет қайталау</td></tr>
+</table>
+</section>
+<section>
+<h2>3. Маршруттау</h2>
+<p>Шлюз сұрау жолын барлық prefix-термен салыстырады. Бірнеше prefix сәйкес келсе — <b>ең ұзыны</b> жеңеді. Сосын prefix қызметтегі жолға ауыстырылады:</p>
+<pre><code>/api/students/3?full=1   →   http://127.0.0.1:9001/students/3?full=1
+/api/schedule?day=mon    →   http://127.0.0.1:9004/schedule?day=mon
+/api/teachers            →   404 «маршрут табылмады» (жауапты ШЛЮЗ берді)</code></pre>
+<table>
+<tr><th>Код</th><th>Кім қайтарады</th><th>Себебі</th></tr>
+<tr><td><span class="tag amber">401</span></td><td>шлюз</td><td>X-API-Key жоқ немесе қате</td></tr>
+<tr><td><span class="tag amber">404</span></td><td>шлюз <i>немесе</i> қызмет</td><td>маршрут жоқ / ресурс жоқ (X-Upstream тақырыбы бар ма — соған қараңыз)</td></tr>
+<tr><td><span class="tag amber">405</span></td><td>шлюз</td><td>әдіске рұқсат жоқ (Allow тақырыбында рұқсат етілгендер)</td></tr>
+<tr><td><span class="tag amber">429</span></td><td>шлюз</td><td>лимит асты (Retry-After — неше секунд күту)</td></tr>
+<tr><td><span class="tag red">502</span></td><td>шлюз</td><td>қызметке қосылу мүмкін емес (сервер тоқтаған)</td></tr>
+<tr><td><span class="tag red">504</span></td><td>шлюз</td><td>қызмет <code>timeout_ms</code> ішінде жауап бермеді</td></tr>
+</table>
+<div class="callout">Шлюз әр сұрауға <code>X-Request-ID</code> береді және оны қызметке де жібереді. Қате болса, осы ID арқылы сұрауды шлюз журналынан да, қызмет журналынан да табасыз (tracing).</div>
+</section>
+<section>
+<h2>4. Лимит: token bucket алгоритмі</h2>
+<p>Әр клиентке бір «шелек» беріледі. Шелекке секундына <code>per_minute / 60</code> жетон құйылады, шелектің сыйымдылығы — <code>burst</code>. Әр сұрау бір жетон алады. Жетон жоқ болса — <b>429</b>.</p>
+<pre><code>def take(self):
+    now = time.monotonic()
+    self.tokens = min(self.capacity, self.tokens + (now - self.last) * self.rate)
+    self.last = now
+    if self.tokens &gt;= 1:
+        self.tokens -= 1
+        return True          <span class="c"># өтеді</span>
+    return False             <span class="c"># 429</span></code></pre>
+<p>Нәтижені алдын ала есептеуге болады: <b>рұқсат ≈ burst + (per_minute / 60) × T</b>, мұнда T — жүктеме ұзақтығы (секунд).</p>
+<div class="callout">Мысал: per_minute = 60, burst = 10. Клиент 20 секунд бойы секундына 2 сұрау жібереді (барлығы 40). Өтеді ≈ 10 + 1 × 20 = 30, ал 10 сұрау 429 алады.</div>
+<p>Кілтсіз маршрутта лимит <b>IP бойынша</b> қойылады. Бір сыныптағы барлық компьютер бір сыртқы IP-ден шықса, олар бір шелекті бөліседі — сондықтан кілт бойынша лимит әділірек.</p>
+</section>
+<section>
+<h2>5. Жүктемені бөлу және сенімділік</h2>
+<div class="cards">
+<div class="card"><h4>Round robin</h4><p>Сұраулар кезекпен: 9001, 9002, 9001, 9002 ... Әр сервер жүктеменің жартысын алады.</p></div>
+<div class="card"><h4>Passive health check</h4><p>Сервер қатарынан 2 рет жауап бермесе, шлюз оны 15 секундқа тізімнен шығарады.</p></div>
+<div class="card"><h4>Retry</h4><p>GET сұрауын басқа серверге қайталау қауіпсіз. POST-ты қайталау — студентті екі рет қосу қаупі.</p></div>
+<div class="card"><h4>Timeout</h4><p>Баяу қызметті шексіз күтпейміз: <code>timeout_ms</code> өтсе — 504.</p></div>
+</div>
+<pre><code>curl http://127.0.0.1:9001/admin/break                  <span class="c"># students-1 «құлады»</span>
+python3 load_test.py /api/students -k bot-41d2be98a07c5f13 --n 20 --c 2
+<span class="c"># 2-терминал: [HEALTH] 127.0.0.1:9001 қатарынан 2 рет жауап бермеді -&gt; 15 с бойы тізімнен шығарылды</span>
+<span class="c"># клиент қате көрмеді: барлық 20 сұрау — 200 (students-2)</span></code></pre>
+</section>
+<section>
+<h2>6. Шлюзді автоматты түрде баптау</h2>
+<p>Маршрутты қолмен үш жерде (біздің шлюз, NGINX, Kong) жазсақ, ерте ме, кеш пе олар бір-бірінен алшақтайды. Сондықтан <b>Infrastructure as Code</b> тәсілі: бір кесте Git-те сақталады, ал конфигурациялар одан <b>генерацияланады</b> және <b>тексеріледі</b>.</p>
+<div class="flow">
+<div>services.csv<small>Git</small></div><span>→</span>
+<div>gen_config.py<small>json, nginx, kong</small></div><span>→</span>
+<div>validate_config.py<small>шығу коды 0 / 1</small></div><span>→</span>
+<div>Жеткізу<small>CI/CD</small></div><span>→</span>
+<div>Hot reload<small>2 секунд ішінде</small></div>
+</div>
+<pre><code>name,prefix,upstream_path,methods,targets,auth,rate_per_min,burst,timeout_ms
+students,/api/students,/students,GET|POST,127.0.0.1:9001;127.0.0.1:9002,key,60,10,2000
+
+python3 gen_config.py --format all          <span class="c"># gateway.json, nginx.conf, kong.yaml</span>
+python3 validate_config.py gateway.json     <span class="c"># қате болса — шығу коды 1, деплой тоқтайды</span></code></pre>
+<table>
+<tr><th>gateway.json</th><th>NGINX</th><th>Kong</th></tr>
+<tr><td><code>prefix</code></td><td><code>location /api/students</code></td><td><code>routes.paths</code></td></tr>
+<tr><td><code>targets</code></td><td><code>upstream { server ...; }</code></td><td><code>upstreams.targets</code></td></tr>
+<tr><td><code>rate_limit</code></td><td><code>limit_req_zone</code>, <code>limit_req burst=</code></td><td>плагин <code>rate-limiting</code></td></tr>
+<tr><td><code>auth: key</code></td><td><code>map $http_x_api_key</code></td><td>плагин <code>key-auth</code></td></tr>
+<tr><td><code>timeout_ms</code></td><td><code>proxy_read_timeout</code></td><td><code>read_timeout</code></td></tr>
+</table>
+<div class="callout warn">Жаңа конфигурацияда қате болса, шлюз оны <b>қабылдамайды</b> және ескісімен жұмысын жалғастырады. Қате конфигурация бүкіл API-ді тоқтатпауы керек.</div>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="gateway"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (2:17).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_11_gateway.pdf" target="_blank"><b>praktikalyk_11_gateway.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>11_api_gateway</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 11_api_gateway</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Оқу API шлюзін нөлден, өз қолыңызбен жасау: қызметтер, маршруттау, API кілттері, сұраулар лимиті, жүктемені бөлу, timeout; шлюз параметрлерін бір кестеден автоматты түрде жасап, тексеру.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. API Gateway конфигурациясын сипаттайды.<br>2. Маршруттау мен лимит қоюды түсіндіреді.<br>3. Шлюз параметрлерін баптайтын файл әзірлейді.</td></tr>
+<tr><td>Уақыты</td><td>150 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген), іске қосып, тексересіз.</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), curl, браузер</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледжде үш ішкі қызмет бар: студенттер тізімі (екі сервер), бағалар және сабақ кестесі. Мобильді қосымша мен Telegram-бот әр қызметке тікелей қосылады, ал бір күні бот бір минутта 5 000 сұрау жіберіп, бағалар қызметін «құлатты». IT бөлімінің басшысы барлық сұрау өтетін API шлюзін жасауды және оның параметрлерін бір кестеден автоматты түрде баптауды тапсырды.</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз. Әр тапсырмада: 1) қандай файл жасау керек; 2) оның толық коды; 3) қалай іске қосу; 4) қандай нәтиже шығуы керек. Кодты көшірмей, түсініп жазыңыз — қорғауда әр жолды түсіндіресіз. Mac-та <code>python3</code>, Windows-та <code>python</code> деп жазыңыз; Windows PowerShell-де <code>curl</code> орнына <code>curl.exe</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде жаңа қалта жасаңыз: <code>11_api_gateway</code>.</li><li>VS Code → File → Open Folder → <code>11_api_gateway</code>. Сол жақтағы Explorer-де «New File» батырмасымен файлдар жасайсыз.</li><li>Терминал ашыңыз: Terminal → New Terminal. Тағы екі терминал керек болады: терминал панеліндегі ⊞ (Split Terminal) батырмасын екі рет басыңыз. 1-терминал — қызметтер, 2-терминал — шлюз, 3-терминал — тексеру.</li><li>Python-ды тексеріңіз: <code>python3 --version</code> → 3.10 немесе жоғары.</li><li>Жұмыс соңында қалтада 9 файл болады: backends.py, gateway.json, gateway.py, load_test.py, services.csv, consumers.csv, gen_config.py, validate_config.py және logs/access.log.</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Шлюздің артындағы қызметтерді жасау (15 мин, 10 ұпай)</h4>
+<p>Шлюз сұрауларды жіберетін төрт «микросервис» керек. Бір файлда бір класс жазып, оның төрт данасын әртүрлі порттарда іске қосамыз.</p>
+<p><b>Файл: backends.py</b></p>
+<pre><code># backends.py — шлюздің артындағы 4 оқу қызметі
+import json
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+INSTANCES = [(&quot;students-1&quot;, 9001), (&quot;students-2&quot;, 9002), (&quot;grades-1&quot;, 9003), (&quot;schedule-1&quot;, 9004)]
+
+
+def make_handler(name):
+    state = {&quot;mode&quot;: &quot;ok&quot;}                      # ok | break | slow
+
+    class Handler(BaseHTTPRequestHandler):
+        def send_json(self, code, data):
+            body = json.dumps(data, ensure_ascii=False).encode(&quot;utf-8&quot;)
+            self.send_response(code)
+            self.send_header(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;)
+            self.send_header(&quot;Content-Length&quot;, str(len(body)))
+            self.send_header(&quot;X-Served-By&quot;, name)
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            print(name, self.command, self.path, &quot;request-id:&quot;, self.headers.get(&quot;X-Request-ID&quot;))
+            if self.path.startswith(&quot;/admin/&quot;):
+                cmd = self.path.split(&quot;/&quot;)[2]
+                state[&quot;mode&quot;] = &quot;ok&quot; if cmd == &quot;fix&quot; else cmd
+                return self.send_json(200, {&quot;instance&quot;: name, &quot;mode&quot;: state[&quot;mode&quot;]})
+            if state[&quot;mode&quot;] == &quot;slow&quot;:
+                time.sleep(2.5)
+            if state[&quot;mode&quot;] == &quot;break&quot;:
+                return self.send_json(503, {&quot;instance&quot;: name, &quot;error&quot;: &quot;service unavailable&quot;})
+            self.send_json(200, {&quot;instance&quot;: name, &quot;path&quot;: self.path})
+
+        do_POST = do_GET
+
+        def log_message(self, *args):
+            pass
+
+    return Handler
+
+
+for name, port in INSTANCES:
+    server = ThreadingHTTPServer((&quot;127.0.0.1&quot;, port), make_handler(name))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    print(&quot;іске қосылды:&quot;, name, &quot;http://127.0.0.1:%d&quot; % port)
+
+while True:
+    time.sleep(1)</code></pre>
+<ol><li><code>backends.py</code> файлын жасап, кодты жазыңыз, сақтаңыз (Cmd+S / Ctrl+S).</li><li>1-терминалда іске қосыңыз: <code>python3 backends.py</code>. Төрт жол шығуы керек: «іске қосылды: students-1 http://127.0.0.1:9001» ... Бұл терминалды жаппаңыз.</li><li>3-терминалда тексеріңіз: <code>curl -i http://127.0.0.1:9001/students</code> → <code>HTTP/1.0 200 OK</code>, <code>X-Served-By: students-1</code>, денесі <code>{"instance": "students-1", "path": "/students"}</code>.</li><li><code>curl -i http://127.0.0.1:9004/schedule</code> → X-Served-By: schedule-1.</li><li>Ақау режимін тексеріңіз: <code>curl http://127.0.0.1:9003/admin/break</code>, содан кейін <code>curl -i http://127.0.0.1:9003/grades</code> → 503. Қалпына келтіру: <code>curl http://127.0.0.1:9003/admin/fix</code>.</li><li>Кодты түсіндіріңіз: make_handler не үшін керек? state сөздігі не сақтайды? threading не үшін қолданылды?</li></ol>
+<p class="report-note"><b>Есепке:</b> backends.py коды, curl жауаптарының скриншоттары (200 және 503), 3 сұраққа жауап.</p>
+<h4>2-тапсырма. Маршруттауы бар шлюз (25 мин, 15 ұпай)</h4>
+<p>Алдымен шлюздің конфигурациясын, сосын шлюздің өзін жазамыз. Бұл тапсырмада шлюз тек маршруттайды; кілт, лимит, жүктемені бөлу, hot reload және журнал функциялары әзірге «бос» (заглушка) — оларды келесі тапсырмаларда толық кодпен ауыстырасыз.</p>
+<p><b>Файл: gateway.json</b></p>
+<pre><code>{
+  &quot;listen&quot;: &quot;127.0.0.1:8080&quot;,
+  &quot;routes&quot;: [
+    {
+      &quot;name&quot;: &quot;students&quot;,
+      &quot;prefix&quot;: &quot;/api/students&quot;,
+      &quot;upstream_path&quot;: &quot;/students&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;, &quot;POST&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9001&quot;, &quot;127.0.0.1:9002&quot;],
+      &quot;timeout_ms&quot;: 2000
+    },
+    {
+      &quot;name&quot;: &quot;grades&quot;,
+      &quot;prefix&quot;: &quot;/api/grades&quot;,
+      &quot;upstream_path&quot;: &quot;/grades&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9003&quot;],
+      &quot;timeout_ms&quot;: 1500
+    },
+    {
+      &quot;name&quot;: &quot;schedule&quot;,
+      &quot;prefix&quot;: &quot;/api/schedule&quot;,
+      &quot;upstream_path&quot;: &quot;/schedule&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9004&quot;],
+      &quot;timeout_ms&quot;: 1000
+    }
+  ]
+}</code></pre>
+<p><b>Файл: gateway.py</b></p>
+<pre><code># gateway.py — оқу API шлюзі (http://127.0.0.1:8080)
+import http.client
+import itertools
+import json
+import os
+import socket
+import time
+import uuid
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import urlsplit
+
+CONFIG_FILE = &quot;gateway.json&quot;
+CFG = {}
+
+
+def load_config():
+    global CFG
+    with open(CONFIG_FILE, encoding=&quot;utf-8&quot;) as f:
+        CFG = json.load(f)
+    print(&quot;конфигурация жүктелді, маршрут саны:&quot;, len(CFG[&quot;routes&quot;]))
+
+
+def match(path):
+    &quot;&quot;&quot;Ең ұзын сәйкестік: ұзын prefix бірінші тексеріледі.&quot;&quot;&quot;
+    for r in sorted(CFG[&quot;routes&quot;], key=lambda r: len(r[&quot;prefix&quot;]), reverse=True):
+        if path == r[&quot;prefix&quot;] or path.startswith(r[&quot;prefix&quot;] + &quot;/&quot;):
+            return r
+    return None
+
+
+# ===== Төмендегі 6 функция әзірге «бос» (заглушка). Келесі тапсырмаларда оларды толық кодпен АУЫСТЫРАСЫЗ =====
+def check_key(handler, route):          # 3-тапсырмада ауыстырасыз
+    return &quot;-&quot;, &quot;basic&quot;
+
+
+def check_limit(route, client, plan):   # 3-тапсырмада ауыстырасыз
+    return True, 0, 0
+
+
+def pick_targets(route):                # 4-тапсырмада ауыстырасыз
+    return route[&quot;targets&quot;][:1]
+
+
+def mark(target, ok):                   # 4-тапсырмада ауыстырасыз
+    pass
+
+
+def maybe_reload():                     # 5-тапсырмада ауыстырасыз
+    pass
+
+
+def write_log(rec):                     # 6-тапсырмада ауыстырасыз
+    pass
+
+
+class Gateway(BaseHTTPRequestHandler):
+    def reply(self, code, data, headers=None, ctype=&quot;application/json; charset=utf-8&quot;):
+        body = data if isinstance(data, bytes) else json.dumps(data, ensure_ascii=False).encode(&quot;utf-8&quot;)
+        self.send_response(code)
+        self.send_header(&quot;Content-Type&quot;, ctype)
+        self.send_header(&quot;Content-Length&quot;, str(len(body)))
+        self.send_header(&quot;X-Request-ID&quot;, self.rid)
+        for k, v in (headers or {}).items():
+            self.send_header(k, str(v))
+        self.end_headers()
+        self.wfile.write(body)
+        self.code = code
+
+    def handle_request(self):
+        self.rid = uuid.uuid4().hex[:12]
+        self.code, client, target, t0 = 0, &quot;-&quot;, &quot;-&quot;, time.time()
+        maybe_reload()
+        path = urlsplit(self.path).path
+        route = match(path)
+        try:
+            if route is None:
+                return self.reply(404, {&quot;error&quot;: &quot;маршрут табылмады&quot;, &quot;path&quot;: path})
+            if self.command not in route[&quot;methods&quot;]:
+                return self.reply(405, {&quot;error&quot;: &quot;әдіске рұқсат жоқ&quot;}, {&quot;Allow&quot;: &quot;, &quot;.join(route[&quot;methods&quot;])})
+            who = check_key(self, route)
+            if who is None:
+                return self.reply(401, {&quot;error&quot;: &quot;X-API-Key жоқ немесе қате&quot;})
+            client, plan = who
+            ok, left, retry = check_limit(route, client, plan)
+            rl = {&quot;X-RateLimit-Remaining&quot;: left}
+            if not ok:
+                return self.reply(429, {&quot;error&quot;: &quot;сұраулар лимиті асты&quot;}, dict(rl, **{&quot;Retry-After&quot;: retry}))
+            body = None
+            if self.command == &quot;POST&quot;:
+                body = self.rfile.read(int(self.headers.get(&quot;Content-Length&quot;) or 0))
+            up_path = route[&quot;upstream_path&quot;] + self.path[len(route[&quot;prefix&quot;]):]
+            for target in pick_targets(route):
+                host, port = target.rsplit(&quot;:&quot;, 1)
+                conn = http.client.HTTPConnection(host, int(port), timeout=route[&quot;timeout_ms&quot;] / 1000)
+                try:
+                    conn.request(self.command, up_path, body=body, headers={&quot;X-Request-ID&quot;: self.rid})
+                    resp = conn.getresponse()
+                    data = resp.read()
+                except (socket.timeout, TimeoutError):
+                    mark(target, False)
+                    return self.reply(504, {&quot;error&quot;: &quot;қызмет уақытында жауап бермеді&quot;, &quot;upstream&quot;: target}, rl)
+                except OSError:
+                    mark(target, False)
+                    continue                          # келесі серверді байқаймыз
+                finally:
+                    conn.close()
+                mark(target, resp.status &lt; 500)
+                if resp.status &gt;= 500 and self.command == &quot;GET&quot;:
+                    continue                          # GET-ті қайталау қауіпсіз
+                rl[&quot;X-Upstream&quot;] = resp.getheader(&quot;X-Served-By&quot;, target)
+                return self.reply(resp.status, data, rl, resp.getheader(&quot;Content-Type&quot;))
+            return self.reply(502, {&quot;error&quot;: &quot;қызметке қосылу мүмкін емес&quot;}, rl)
+        finally:
+            ms = int((time.time() - t0) * 1000)
+            print(self.code, self.command, self.path, &quot;-&gt;&quot;, target, ms, &quot;мс&quot;, client)
+            write_log({&quot;ts&quot;: time.strftime(&quot;%Y-%m-%dT%H:%M:%S&quot;), &quot;rid&quot;: self.rid, &quot;client&quot;: client,
+                       &quot;method&quot;: self.command, &quot;path&quot;: self.path, &quot;route&quot;: route[&quot;name&quot;] if route else &quot;-&quot;,
+                       &quot;upstream&quot;: target, &quot;status&quot;: self.code, &quot;ms&quot;: ms})
+
+    do_GET = do_POST = do_DELETE = do_PUT = handle_request
+
+    def log_message(self, *args):
+        pass
+
+
+load_config()
+host, port = CFG[&quot;listen&quot;].split(&quot;:&quot;)
+print(&quot;API шлюз: http://%s:%s&quot; % (host, port))
+ThreadingHTTPServer((host, int(port)), Gateway).serve_forever()</code></pre>
+<ol><li><code>gateway.json</code> және <code>gateway.py</code> файлдарын жасап, кодты жазыңыз.</li><li>2-терминалда шлюзді іске қосыңыз: <code>python3 gateway.py</code> → «конфигурация жүктелді, маршрут саны: 3» және «API шлюз: http://127.0.0.1:8080».</li><li>3-терминалда кестедегі сұрауларды жіберіп, нәтижені жазыңыз. 2-терминалда әр сұрау бір жол болып шығады.</li><li>X-Request-ID мәнін 1-терминалдағы қызмет журналынан табыңыз. Бұл не үшін керек (tracing)?</li><li>Кодты түсіндіріңіз: match() функциясында неге prefix-тер ұзындығы бойынша сұрыпталады? up_path қалай есептеледі?</li></ol>
+<div class="table-wrap"><table><tr><th>№</th><th>curl сұрауы</th><th>Күтілетін нәтиже</th></tr><tr><td>1</td><td><code>curl -i "http://127.0.0.1:8080/api/schedule?day=mon"</code></td><td>200, X-Upstream: schedule-1</td></tr><tr><td>2</td><td><code>curl -i http://127.0.0.1:8080/api/students/3</code></td><td>200, денесінде path: /students/3</td></tr><tr><td>3</td><td><code>curl -i -X DELETE http://127.0.0.1:8080/api/students</code></td><td>405, Allow: GET, POST</td></tr><tr><td>4</td><td><code>curl -i http://127.0.0.1:8080/api/teachers</code></td><td>404 «маршрут табылмады» (шлюз)</td></tr><tr><td>5</td><td><code>curl -i http://127.0.0.1:8080/api/grades</code></td><td>200, X-Upstream: grades-1</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> gateway.json, gateway.py, сұраулар кестесі скриншоттарымен, сұрақтарға жауап.</p>
+<h4>3-тапсырма. API кілттері және сұраулар лимиті (25 мин, 20 ұпай)</h4>
+<ol><li>gateway.json файлының мазмұнын толық төмендегі кодпен ауыстырыңыз: клиенттер (consumers), тарифтер (plans), маршруттарға auth және rate_limit қосылды.</li><li>gateway.py ішінде <code>check_key</code> және <code>check_limit</code> заглушкаларын (екі функцияны) өшіріп, олардың орнына төмендегі кодты толық жазыңыз.</li><li>load_test.py файлын жасаңыз.</li><li>Шлюзді қайта іске қосыңыз: 2-терминалда Ctrl+C, содан кейін <code>python3 gateway.py</code>.</li></ol>
+<p><b>Файл: gateway.json (жаңа нұсқа)</b></p>
+<pre><code>{
+  &quot;listen&quot;: &quot;127.0.0.1:8080&quot;,
+  &quot;plans&quot;: {
+    &quot;basic&quot;: 1,
+    &quot;pro&quot;: 3
+  },
+  &quot;consumers&quot;: [
+    {
+      &quot;name&quot;: &quot;mobile-app&quot;,
+      &quot;key&quot;: &quot;mob-7f3a9c21e5b84d06&quot;,
+      &quot;plan&quot;: &quot;basic&quot;
+    },
+    {
+      &quot;name&quot;: &quot;journal-bot&quot;,
+      &quot;key&quot;: &quot;bot-41d2be98a07c5f13&quot;,
+      &quot;plan&quot;: &quot;pro&quot;
+    }
+  ],
+  &quot;routes&quot;: [
+    {
+      &quot;name&quot;: &quot;students&quot;,
+      &quot;prefix&quot;: &quot;/api/students&quot;,
+      &quot;upstream_path&quot;: &quot;/students&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;, &quot;POST&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9001&quot;, &quot;127.0.0.1:9002&quot;],
+      &quot;auth&quot;: &quot;key&quot;,
+      &quot;rate_limit&quot;: {
+        &quot;per_minute&quot;: 60,
+        &quot;burst&quot;: 10
+      },
+      &quot;timeout_ms&quot;: 2000
+    },
+    {
+      &quot;name&quot;: &quot;grades&quot;,
+      &quot;prefix&quot;: &quot;/api/grades&quot;,
+      &quot;upstream_path&quot;: &quot;/grades&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9003&quot;],
+      &quot;auth&quot;: &quot;key&quot;,
+      &quot;rate_limit&quot;: {
+        &quot;per_minute&quot;: 30,
+        &quot;burst&quot;: 5
+      },
+      &quot;timeout_ms&quot;: 1500
+    },
+    {
+      &quot;name&quot;: &quot;schedule&quot;,
+      &quot;prefix&quot;: &quot;/api/schedule&quot;,
+      &quot;upstream_path&quot;: &quot;/schedule&quot;,
+      &quot;methods&quot;: [&quot;GET&quot;],
+      &quot;targets&quot;: [&quot;127.0.0.1:9004&quot;],
+      &quot;auth&quot;: &quot;none&quot;,
+      &quot;rate_limit&quot;: {
+        &quot;per_minute&quot;: 120,
+        &quot;burst&quot;: 20
+      },
+      &quot;timeout_ms&quot;: 1000
+    }
+  ]
+}</code></pre>
+<p><b>Файл: gateway.py — check_key және check_limit орнына</b></p>
+<pre><code>class TokenBucket:
+    def __init__(self, per_minute, burst):
+        self.rate = per_minute / 60          # секундына қанша жетон құйылады
+        self.capacity = burst                # шелектің сыйымдылығы
+        self.tokens = burst
+        self.last = time.monotonic()
+
+    def take(self):
+        now = time.monotonic()
+        self.tokens = min(self.capacity, self.tokens + (now - self.last) * self.rate)
+        self.last = now
+        if self.tokens &gt;= 1:
+            self.tokens -= 1
+            return True, int(self.tokens), 0
+        retry = int((1 - self.tokens) / self.rate) + 1
+        return False, 0, retry
+
+
+BUCKETS = {}
+
+
+def check_key(handler, route):
+    &quot;&quot;&quot;(клиент, тариф) қайтарады; кілт қате болса None.&quot;&quot;&quot;
+    if route.get(&quot;auth&quot;, &quot;none&quot;) == &quot;none&quot;:
+        return &quot;ip:&quot; + handler.client_address[0], &quot;basic&quot;
+    key = handler.headers.get(&quot;X-API-Key&quot;, &quot;&quot;)
+    for c in CFG.get(&quot;consumers&quot;, []):
+        if c[&quot;key&quot;] == key:
+            return c[&quot;name&quot;], c[&quot;plan&quot;]
+    return None
+
+
+def check_limit(route, client, plan):
+    k = CFG.get(&quot;plans&quot;, {}).get(plan, 1)
+    rl = route[&quot;rate_limit&quot;]
+    name = (route[&quot;name&quot;], client)
+    if name not in BUCKETS:
+        BUCKETS[name] = TokenBucket(rl[&quot;per_minute&quot;] * k, rl[&quot;burst&quot;] * k)
+    return BUCKETS[name].take()</code></pre>
+<p><b>Файл: load_test.py</b></p>
+<pre><code># load_test.py — шлюзге жүктеме беру
+# мысал: python3 load_test.py /api/students -k mob-7f3a9c21e5b84d06 --n 40 --rps 2
+import argparse
+import collections
+import time
+import urllib.error
+import urllib.request
+
+p = argparse.ArgumentParser()
+p.add_argument(&quot;path&quot;)
+p.add_argument(&quot;-k&quot;, &quot;--key&quot;)
+p.add_argument(&quot;--n&quot;, type=int, default=20)
+p.add_argument(&quot;--rps&quot;, type=float, default=10)
+a = p.parse_args()
+
+codes = collections.Counter()
+servers = collections.Counter()
+start = time.perf_counter()
+for i in range(a.n):
+    time.sleep(max(0, start + i / a.rps - time.perf_counter()))
+    req = urllib.request.Request(&quot;http://127.0.0.1:8080&quot; + a.path)
+    if a.key:
+        req.add_header(&quot;X-API-Key&quot;, a.key)
+    try:
+        r = urllib.request.urlopen(req, timeout=10)
+    except urllib.error.HTTPError as e:
+        r = e
+    r.read()
+    codes[r.status] += 1
+    if r.status == 200:
+        servers[r.headers.get(&quot;X-Upstream&quot;)] += 1
+
+print(&quot;Уақыт: %.1f с&quot; % (time.perf_counter() - start))
+print(&quot;Статус кодтары:&quot;, dict(codes))
+print(&quot;Серверлер:&quot;, dict(servers))</code></pre>
+<ol><li>Кілтсіз: <code>curl -i http://127.0.0.1:8080/api/students</code> → 401. Кілтпен: <code>curl -i -H "X-API-Key: mob-7f3a9c21e5b84d06" http://127.0.0.1:8080/api/students</code> → 200 және X-RateLimit-Remaining.</li><li>Нұсқаңыз бойынша болжам жасаңыз: T = n / rps; өтетін сұрау ≈ burst + (per_minute / 60) × T; қалғаны — 429.</li><li>Шлюзді қайта іске қосып (шелектер толады), нұсқаңыздағы тестті жүргізіп, болжаммен салыстырыңыз. Айырмашылық болса — неге?</li><li>Бір 429 жауабын <code>curl -i</code> арқылы көрсетіңіз: Retry-After нені білдіреді?</li><li>Кодты түсіндіріңіз: TokenBucket.take() не істейді? Неге шелек (маршрут, клиент) жұбы бойынша жасалады? pro тарифінде лимит неге 3 есе көп?</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Жүктеме тесті</th><th>Лимит (тарифпен)</th></tr><tr><td>1, 4</td><td><code>python3 load_test.py /api/students -k mob-7f3a9c21e5b84d06 --n 40 --rps 2</code></td><td>60/мин, burst 10 (basic) → ≈ 30 өтеді</td></tr><tr><td>2, 5</td><td><code>python3 load_test.py "/api/grades?student=2" -k bot-41d2be98a07c5f13 --n 60 --rps 4</code></td><td>90/мин, burst 15 (pro) → ≈ 37 өтеді</td></tr><tr><td>3, 6</td><td><code>python3 load_test.py /api/schedule --n 60 --rps 5</code></td><td>120/мин, burst 20 (IP) → ≈ 44 өтеді</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, 401 / 200 / 429 жауаптары, болжам мен нәтиже кестесі, сұрақтарға жауап.</p>
+<h4>4-тапсырма. Жүктемені бөлу, timeout және ақаулы сервер (20 мин, 15 ұпай)</h4>
+<p>gateway.py ішінде <code>pick_targets</code> және <code>mark</code> заглушкаларын өшіріп, орнына төмендегі кодты толық жазыңыз. Шлюзді қайта іске қосыңыз. (504 және 502 өңдеу gateway.py-дің handle_request функциясында 2-тапсырмадан бері бар — қараңыз.)</p>
+<p><b>Файл: gateway.py — pick_targets және mark орнына</b></p>
+<pre><code>RR = {}
+HEALTH = {}
+MAX_FAILS, FAIL_TIMEOUT = 2, 15
+
+
+def pick_targets(route):
+    t = route[&quot;targets&quot;]
+    counter = RR.setdefault(route[&quot;name&quot;], itertools.count())
+    start = next(counter)
+    ordered = [t[(start + i) % len(t)] for i in range(len(t))]
+    alive = [x for x in ordered if HEALTH.get(x, {}).get(&quot;down_until&quot;, 0) &lt;= time.time()]
+    return alive or ordered
+
+
+def mark(target, ok):
+    h = HEALTH.setdefault(target, {&quot;fails&quot;: 0, &quot;down_until&quot;: 0})
+    if ok:
+        h[&quot;fails&quot;] = 0
+        return
+    h[&quot;fails&quot;] += 1
+    if h[&quot;fails&quot;] &gt;= MAX_FAILS:
+        h[&quot;fails&quot;] = 0
+        h[&quot;down_until&quot;] = time.time() + FAIL_TIMEOUT
+        print(&quot;[HEALTH]&quot;, target, &quot;жауап бермеді -&gt;&quot;, FAIL_TIMEOUT, &quot;секундқа тізімнен шығарылды&quot;)</code></pre>
+<ol><li>Round robin: <code>python3 load_test.py /api/students -k bot-41d2be98a07c5f13 --n 20 --rps 5</code> → Серверлер: students-1 ≈ 10, students-2 ≈ 10.</li><li>students-1-ді «бұзыңыз»: <code>curl http://127.0.0.1:9001/admin/break</code>, тестті қайталаңыз → барлығы 200, тек students-2; 2-терминалда <code>[HEALTH] 127.0.0.1:9001 ... тізімнен шығарылды</code>. Содан кейін <code>/admin/fix</code>.</li><li>Баяу қызмет: <code>curl http://127.0.0.1:9004/admin/slow</code>, содан кейін <code>curl -i http://127.0.0.1:8080/api/schedule</code> → 504 шамамен 1 секундта. <code>/admin/fix</code>.</li><li>1-терминалда Ctrl+C (қызметтер тоқтайды), кез келген сұрау → 502. Қызметтерді қайта іске қосыңыз.</li><li>Кодты түсіндіріңіз: start санауышы не үшін? down_until қалай есептеледі? 502 мен 504 айырмашылығы?</li></ol>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, бөлініс, [HEALTH] хабары, 504 және 502 скриншоттары, сұрақтарға жауап.</p>
+<h4>5-тапсырма. Шлюз параметрлерін автоматты жасау және тексеру (20 мин, 15 ұпай)</h4>
+<p>Енді gateway.json-ды қолмен жазбаймыз: ол екі кестеден генерацияланады, жазылмас бұрын тексеріледі, ал шлюз өзгерісті тоқтамай-ақ қабылдайды.</p>
+<p><b>Файл: services.csv</b></p>
+<pre><code>name,prefix,upstream_path,methods,targets,auth,rate_per_min,burst,timeout_ms
+students,/api/students,/students,GET|POST,127.0.0.1:9001;127.0.0.1:9002,key,60,10,2000
+grades,/api/grades,/grades,GET,127.0.0.1:9003,key,30,5,1500
+schedule,/api/schedule,/schedule,GET,127.0.0.1:9004,none,120,20,1000</code></pre>
+<p><b>Файл: consumers.csv</b></p>
+<pre><code>name,key,plan
+mobile-app,mob-7f3a9c21e5b84d06,basic
+journal-bot,bot-41d2be98a07c5f13,pro</code></pre>
+<p><b>Файл: gen_config.py</b></p>
+<pre><code># gen_config.py — services.csv + consumers.csv -&gt; gateway.json (немесе nginx.conf)
+import csv
+import json
+import sys
+import time
+
+services = list(csv.DictReader(open(&quot;services.csv&quot;, encoding=&quot;utf-8&quot;)))
+consumers = list(csv.DictReader(open(&quot;consumers.csv&quot;, encoding=&quot;utf-8&quot;)))
+
+routes = []
+for r in services:
+    routes.append({
+        &quot;name&quot;: r[&quot;name&quot;],
+        &quot;prefix&quot;: r[&quot;prefix&quot;],
+        &quot;upstream_path&quot;: r[&quot;upstream_path&quot;],
+        &quot;methods&quot;: r[&quot;methods&quot;].split(&quot;|&quot;),
+        &quot;targets&quot;: r[&quot;targets&quot;].split(&quot;;&quot;),
+        &quot;auth&quot;: r[&quot;auth&quot;],
+        &quot;rate_limit&quot;: {&quot;per_minute&quot;: int(r[&quot;rate_per_min&quot;]), &quot;burst&quot;: int(r[&quot;burst&quot;])},
+        &quot;timeout_ms&quot;: int(r[&quot;timeout_ms&quot;]),
+    })
+
+cfg = {
+    &quot;version&quot;: time.strftime(&quot;%Y%m%d-%H%M%S&quot;),
+    &quot;listen&quot;: &quot;127.0.0.1:8080&quot;,
+    &quot;plans&quot;: {&quot;basic&quot;: 1, &quot;pro&quot;: 3},
+    &quot;consumers&quot;: [{&quot;name&quot;: c[&quot;name&quot;], &quot;key&quot;: c[&quot;key&quot;], &quot;plan&quot;: c[&quot;plan&quot;]} for c in consumers],
+    &quot;routes&quot;: routes,
+}
+
+if &quot;--format&quot; in sys.argv and &quot;nginx&quot; in sys.argv:
+    lines = []
+    for r in routes:
+        lines.append(&quot;limit_req_zone $binary_remote_addr zone=%s:10m rate=%dr/m;&quot; % (r[&quot;name&quot;], r[&quot;rate_limit&quot;][&quot;per_minute&quot;]))
+        lines.append(&quot;upstream %s_up {&quot; % r[&quot;name&quot;])
+        lines += [&quot;    server %s;&quot; % t for t in r[&quot;targets&quot;]]
+        lines.append(&quot;}&quot;)
+    lines.append(&quot;server {&quot;)
+    lines.append(&quot;    listen 8080;&quot;)
+    for r in routes:
+        lines.append(&quot;    location %s {&quot; % r[&quot;prefix&quot;])
+        lines.append(&quot;        limit_req zone=%s burst=%d nodelay;&quot; % (r[&quot;name&quot;], r[&quot;rate_limit&quot;][&quot;burst&quot;]))
+        lines.append(&quot;        proxy_read_timeout %.1fs;&quot; % (r[&quot;timeout_ms&quot;] / 1000))
+        lines.append(&quot;        proxy_pass http://%s_up%s;&quot; % (r[&quot;name&quot;], r[&quot;upstream_path&quot;]))
+        lines.append(&quot;    }&quot;)
+    lines.append(&quot;}&quot;)
+    open(&quot;nginx.conf&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;).write(&quot;\n&quot;.join(lines) + &quot;\n&quot;)
+    print(&quot;nginx.conf жасалды&quot;)
+else:
+    with open(&quot;gateway.json&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        json.dump(cfg, f, ensure_ascii=False, indent=2)
+    print(&quot;gateway.json жасалды: маршрут&quot;, len(routes), &quot;, клиент&quot;, len(consumers))</code></pre>
+<p><b>Файл: validate_config.py</b></p>
+<pre><code># validate_config.py — шлюз конфигурациясын тексеру
+import json
+import sys
+
+METHODS = {&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;PATCH&quot;, &quot;DELETE&quot;}
+
+
+def validate(cfg):
+    errors, warnings = [], []
+    names, prefixes = set(), set()
+    for r in cfg[&quot;routes&quot;]:
+        n = r[&quot;name&quot;]
+        if n in names:
+            errors.append(&quot;%s: атау қайталанады&quot; % n)
+        names.add(n)
+        if not r[&quot;prefix&quot;].startswith(&quot;/&quot;):
+            errors.append(&quot;%s: prefix / белгісінен басталуы керек&quot; % n)
+        if r[&quot;prefix&quot;] in prefixes:
+            errors.append(&quot;%s: prefix қайталанады&quot; % n)
+        prefixes.add(r[&quot;prefix&quot;])
+        for m in r[&quot;methods&quot;]:
+            if m not in METHODS:
+                errors.append(&quot;%s: белгісіз әдіс %s&quot; % (n, m))
+        for t in r[&quot;targets&quot;]:
+            host, _, port = t.rpartition(&quot;:&quot;)
+            if not host or not port.isdigit() or not 1 &lt;= int(port) &lt;= 65535:
+                errors.append(&quot;%s: target дұрыс емес: %s&quot; % (n, t))
+        if r.get(&quot;auth&quot;, &quot;none&quot;) not in (&quot;none&quot;, &quot;key&quot;):
+            errors.append(&quot;%s: auth тек none немесе key&quot; % n)
+        if r[&quot;rate_limit&quot;][&quot;burst&quot;] &gt; r[&quot;rate_limit&quot;][&quot;per_minute&quot;]:
+            warnings.append(&quot;%s: burst минуттық лимиттен үлкен&quot; % n)
+    for c in cfg.get(&quot;consumers&quot;, []):
+        if len(c[&quot;key&quot;]) &lt; 16:
+            errors.append(&quot;клиент %s: кілт тым қысқа (кемінде 16 таңба)&quot; % c[&quot;name&quot;])
+    return errors, warnings
+
+
+if __name__ == &quot;__main__&quot;:
+    path = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;gateway.json&quot;
+    with open(path, encoding=&quot;utf-8&quot;) as f:
+        cfg = json.load(f)
+    errors, warnings = validate(cfg)
+    for e in errors:
+        print(&quot;[ҚАТЕ]&quot;, e)
+    for w in warnings:
+        print(&quot;[ЕСКЕРТУ]&quot;, w)
+    print(&quot;Нәтиже:&quot;, &quot;ҚОЛДАНУҒА БОЛМАЙДЫ&quot; if errors else &quot;OK&quot;)
+    sys.exit(1 if errors else 0)</code></pre>
+<p><b>Файл: gateway.py — maybe_reload орнына</b></p>
+<pre><code>LAST = {&quot;mtime&quot;: 0, &quot;checked&quot;: 0}
+
+
+def maybe_reload():
+    if time.time() - LAST[&quot;checked&quot;] &lt; 2:
+        return
+    LAST[&quot;checked&quot;] = time.time()
+    mtime = os.path.getmtime(CONFIG_FILE)
+    if mtime == LAST[&quot;mtime&quot;]:
+        return
+    LAST[&quot;mtime&quot;] = mtime
+    from validate_config import validate
+    try:
+        with open(CONFIG_FILE, encoding=&quot;utf-8&quot;) as f:
+            new = json.load(f)
+        errors, warnings = validate(new)
+    except (ValueError, KeyError) as e:
+        errors = [str(e)]
+    if errors:
+        print(&quot;[RELOAD] жаңа конфигурацияда қате бар — ҚОЛДАНЫЛМАДЫ:&quot;, errors)
+        return
+    CFG.clear()
+    CFG.update(new)
+    BUCKETS.clear()
+    RR.clear()
+    print(&quot;[RELOAD] жаңа конфигурация қолданылды, маршрут саны:&quot;, len(CFG[&quot;routes&quot;]))</code></pre>
+<ol><li>Төрт файлды жасаңыз, gateway.py-де <code>maybe_reload</code> заглушкасын ауыстырыңыз, шлюзді қайта іске қосыңыз.</li><li>3-терминалда: <code>python3 gen_config.py</code> → «gateway.json жасалды: маршрут 3, клиент 2»; <code>python3 validate_config.py</code> → «Нәтиже: OK». Шығу кодын қараңыз: <code>echo $?</code> (Windows: <code>echo $LASTEXITCODE</code>) → 0.</li><li>services.csv соңына жол қосыңыз: <code>schedule-v2,/api/v2/schedule,/schedule,GET,127.0.0.1:9004,key,60,10,1000</code> → <code>python3 gen_config.py</code>. Шлюзді тоқтатпаңыз! 2 секундтан кейін 2-терминалда <code>[RELOAD] жаңа конфигурация қолданылды</code>. Тексеру: <code>curl -i -H "X-API-Key: mob-7f3a9c21e5b84d06" http://127.0.0.1:8080/api/v2/schedule</code> → 200.</li><li>Нұсқаңыздағы қатені services.csv-ге енгізіп, <code>python3 gen_config.py</code> → <code>python3 validate_config.py</code>. Не шықты? 2-терминалда «ҚОЛДАНЫЛМАДЫ» хабары бар ма? Шлюз әлі жұмыс істей ме (<code>curl</code> арқылы)? Содан кейін қатені түзетіңіз.</li><li><code>python3 gen_config.py --format nginx</code> → nginx.conf. gateway.json-мен салыстырып, сәйкестік кестесін жасаңыз (prefix → location, targets → upstream, rate_limit → limit_req).</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Әдейі енгізілетін қате (services.csv)</th><th>Күтілетін нәтиже</th></tr><tr><td>1</td><td>prefix: <code>api/test</code> (басында / жоқ)</td><td>[ҚАТЕ], шлюз ескі конфигурациямен жұмыс істейді</td></tr><tr><td>2</td><td>targets: <code>127.0.0.1:70000</code></td><td>[ҚАТЕ] target дұрыс емес</td></tr><tr><td>3</td><td>rate_per_min: <code>5</code>, burst: <code>50</code></td><td>тек [ЕСКЕРТУ] — неге қате емес?</td></tr><tr><td>4</td><td>auth: <code>token</code></td><td>[ҚАТЕ] auth тек none немесе key</td></tr><tr><td>5</td><td>methods: <code>GET|FETCH</code></td><td>[ҚАТЕ] белгісіз әдіс</td></tr><tr><td>6</td><td>name: <code>grades</code> (қайталау)</td><td>[ҚАТЕ] атау қайталанады</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> 4 файлдың коды, валидатор нәтижелері, [RELOAD] хабарлары, nginx.conf және сәйкестік кестесі.</p>
+<h4>6-тапсырма. Журнал және жеке нұсқа (30 мин, 15 ұпай)</h4>
+<p>Алдымен барлығына ортақ: gateway.py-де <code>write_log</code> заглушкасын төмендегі кодпен ауыстырыңыз, шлюзді қайта іске қосып, бірнеше сұрау жіберіңіз → logs/access.log файлында әр сұрау бір JSON жол. Содан кейін нұсқаңыздағы мүмкіндікті өзіңіз қосасыз (бұл бөлім — өз жұмысыңыз, кеңес берілген).</p>
+<p><b>Файл: gateway.py — write_log орнына</b></p>
+<pre><code>def write_log(rec):
+    os.makedirs(&quot;logs&quot;, exist_ok=True)
+    with open(&quot;logs/access.log&quot;, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + &quot;\n&quot;)</code></pre>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма және кеңес</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>CORS: маршрутқа <code>cors_origin</code>; reply() ішінде Access-Control-Allow-Origin қосу; do_OPTIONS → 204.</td><td><code>curl -i -X OPTIONS ...</code></td></tr><tr><td>2</td><td>IP рұқсат тізімі <code>allow_ips</code>: <code>ipaddress.ip_address(ip) in ipaddress.ip_network(net)</code>; тізімде жоқ → 403.</td><td>grades үшін 403, 127.0.0.1/32 қосқанда 200</td></tr><tr><td>3</td><td>Кэш: CACHE = {(маршрут, жол): (уақыт, жауап)}; <code>cache_ttl_s</code> ішінде қызметке бармай қайтару, <code>X-Cache: HIT / MISS</code>.</td><td>1-терминалда schedule-1-ге аз сұрау</td></tr><tr><td>4</td><td>Салмақты бөлу: <code>127.0.0.1:9001*3</code> жазбасы — pick_targets-те target-ті 3 рет қайталау; валидаторды жаңарту.</td><td>load_test: ≈ 75% / 25%</td></tr><tr><td>5</td><td>Сұрау денесінің шегі <code>max_body_kb</code>: Content-Length үлкен болса — 413.</td><td><code>curl -X POST -d @үлкен_файл ...</code> → 413</td></tr><tr><td>6</td><td>log_stats.py: access.log-ты оқып, маршрут, клиент, статус бойынша санау (collections.Counter) және ең баяу 5 сұрау.</td><td>3-тапсырмадағы 429-дар есепте</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> write_log коды, access.log үзіндісі, нұсқаңыздың коды (алдында / кейін) және нәтиже скриншоты.</p>
+<h3>Тапсыру</h3>
+<ul><li>11_api_gateway қалтасын zip етіп (барлық .py, .json, .csv файлдары) және есепті тапсырыңыз.</li><li>Есеп: титул (тақырып, аты-жөні, тобы, нұсқа, күні), 1–6-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: шлюз қандай мәселелерді шешеді және қандай жаңа тәуекел әкеледі.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>backends.py жасалып, төрт қызмет және ақау режимдері жұмыс істейді</td><td>10</td></tr><tr><td>2</td><td>gateway.json және gateway.py: маршруттау, 404, 405, X-Request-ID жұмыс істейді</td><td>15</td></tr><tr><td>3</td><td>API кілті, token bucket лимиті, load_test.py; болжам нәтижемен салыстырылған</td><td>20</td></tr><tr><td>4</td><td>Round robin, ақаулы серверді шығару, 502 және 504 көрсетілген</td><td>15</td></tr><tr><td>5</td><td>gen_config.py, validate_config.py, hot reload жұмыс істейді; нұсқадағы қате көрсетілген</td><td>15</td></tr><tr><td>6</td><td>access.log және жеке нұсқа</td><td>15</td></tr><tr><td>7</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>API шлюзі дегеніміз не? Ол қандай міндеттерді атқарады?</li><li>Сіздің match() функцияңыз маршрутты қалай табады? «Ең ұзын сәйкестік» не үшін керек?</li><li>401, 404, 405, 429, 502, 504 кодтарын сіздің шлюзіңіз қай жағдайда қайтарады?</li><li>TokenBucket қалай жұмыс істейді? per_minute мен burst айырмашылығы неде?</li><li>Лимитті IP бойынша және API кілті бойынша қоюдың айырмашылығы қандай?</li><li>pick_targets() және mark() қалай жұмыс істейді?</li><li>Неге GET-ті басқа серверге қайталауға болады, ал POST-ты әрдайым қайталауға болмайды?</li><li>Hot reload кезінде жаңа конфигурацияда қате болса, шлюз не істейді?</li><li>gateway.json-ды кестеден генерациялап, валидатормен тексерудің пайдасы қандай?</li><li>Сіздің шлюзіңіздің бөліктері NGINX-те қалай аталады?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="gateway"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="gateway"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="API шлюздерін автоматты түрде баптау">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form><div class="next"><a class="btn ghost" href="openapi.html">Келесі тақырып: №12</a></div></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=009ae6a0"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=44b5bd1a"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>
