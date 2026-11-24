@@ -312,7 +312,8 @@ def deploy():
         return 0
     log(&quot;FAIL&quot;, name + &quot; денсаулық тексеруінен өтпеді&quot;)
     if previous and rollback(previous):
-        log(&quot;DONE&quot;, &quot;кері қайтарылды: &quot; + previous)
+        shutil.rmtree(os.path.join(RELEASES, name))      # сәтсіз нұсқа сақталмайды
+        log(&quot;DONE&quot;, &quot;кері қайтарылды: %s (%s жойылды)&quot; % (previous, name))
     return 1
 
 
