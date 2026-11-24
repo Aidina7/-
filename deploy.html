@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Веб-қосымшаларды автоматты түрде орналастыру | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "dp01", "q": "Деплоймент (deployment) дегеніміз не?", "o": ["Кодты жазу", "Қосымшаның жаңа нұсқасын серверге жеткізіп, іске қосу", "Дерекқорды жою", "Тест жазу"]}, {"id": "dp02", "q": "Деплоймент кезеңдерінің дұрыс реті:", "o": ["іске қосу → құрастыру → жеткізу", "құрастыру → жеткізу → ауыстыру → қайта іске қосу → тексеру", "тексеру → жою → құрастыру", "жеткізу → құрастыру → тексеру"]}, {"id": "dp03", "q": "Артефакт дегеніміз не?", "o": ["Сервердің аты", "Жеткізуге дайын нұсқаның архиві (мысалы, app-1.0.0.zip)", "Қате туралы хабар", "Дерекқор кестесі"]}, {"id": "dp04", "q": "Манифесттегі sha256 не үшін керек?", "o": ["Архивті шифрлау үшін", "Жеткізілген архивтің бүлінбегенін тексеру үшін", "Құпиясөз ретінде", "Нұсқа нөмірі үшін"]}, {"id": "dp05", "q": "Неге әр нұсқа серверде жеке қалтаға ашылады?", "o": ["Орын үнемдеу үшін", "Ескі нұсқа сақталып, кері қайту (rollback) мүмкін болуы үшін", "Солай талап етілген", "Жылдамырақ болу үшін"]}, {"id": "dp06", "q": "current.txt (немесе current сілтемесі) нені көрсетеді?", "o": ["Сервердің IP-ін", "Қазір қай нұсқа жұмыс істеп тұрғанын", "Журнал файлын", "Порт нөмірін"]}, {"id": "dp07", "q": "app.pid файлы не үшін керек?", "o": ["Нұсқа нөмірін сақтау", "Жұмыс істеп тұрған процестің нөмірін сақтап, кейін оны тоқтату", "Құпиясөз сақтау", "Порт ашу"]}, {"id": "dp08", "q": "Health check дегеніміз не?", "o": ["Сервердің температурасын өлшеу", "Жаңа нұсқаның /health бетін тексеріп, жұмыс істейтінін растау", "Антивирус", "Код стилін тексеру"]}, {"id": "dp09", "q": "Health check неге бір рет емес, бірнеше рет жасалады?", "o": ["Уақыт өткізу үшін", "Қосымша іске қосылуға бірнеше секунд керек болуы мүмкін", "Сервер солай сұрайды", "Қате болмайды"]}, {"id": "dp10", "q": "Жаңа нұсқа health check-тен өтпесе, автоматты деплой не істейді?", "o": ["Ештеңе", "Алдыңғы нұсқаға қайтады (rollback) және шығу коды 1", "Серверді өшіреді", "Жаңа нұсқаны жояды да тоқтайды"]}, {"id": "dp11", "q": "Rollback қашан мүмкін емес?", "o": ["Алдыңғы нұсқа сақталмаса", "Нұсқа нөмірі жұп болса", "Health check 200 болса", "Порт 8081 болса"]}, {"id": "dp12", "q": "Серверде 7 нұсқа, тазалау соңғы 3-ін қалдырады. Нешеуі жойылады?", "o": ["3", "4", "7", "0"]}, {"id": "dp13", "q": "CI/CD құбырында бір қадам сәтсіз болса не болады?", "o": ["Келесі қадамдар бәрібір орындалады", "Құбыр тоқтайды, сайт ескі нұсқамен жұмыс істейді", "Сервер қайта жүктеледі", "Код өшіріледі"]}, {"id": "dp14", "q": "Smoke-тест дегеніміз не?", "o": ["Өрт дабылы", "Орналастырудан кейін негізгі беттің ашылатынын жылдам тексеру", "Жүктеме тесті", "Код рецензиясы"]}, {"id": "dp15", "q": "Blue-Green орналастыру қалай жұмыс істейді?", "o": ["Серверлерді кезекпен жаңарту", "Жаңа нұсқа екінші ортада қосылып, тексерілген соң трафик сол ортаға ауысады", "Тек пайдаланушылардың 5%-ына", "Ескісін тоқтатып, жаңасын қосу"]}, {"id": "dp16", "q": "Нақты серверге файл жеткізу және қашықтан команда орындау үшін не қолданылады?", "o": ["Word және Excel", "scp/rsync және ssh (кейде Ansible)", "Paint", "FTP-сыз ештеңе болмайды"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>13_deploy</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html">12</a><a href="deploy.html" class="on">13</a><a href="envconfig.html">14</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №13</p>
+<h1>Веб-қосымшаларды автоматты түрде орналастыру</h1>
+<p class="lead">Деплоймент кезеңдері: артефакт, жеткізу, ауыстыру, қайта іске қосу, health check, rollback және CI/CD құбыры — бір командамен.</p></div>
+<ul class="meta"><li><span>уақыты</span>6 сағат</li><li><span>бейне</span>1:42</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>Деплоймент жасау кезеңдерін сипаттайды</b><b>Ресурстарды серверге жеткізуді түсіндіреді</b><b>Веб-қосымшаны орналастыратын сценарий жазады</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Деплоймент деген не?</h2>
+<p><b>Деплоймент (deployment, орналастыру)</b> — қосымшаның жаңа нұсқасын серверге жеткізіп, іске қосу процесі. Қолмен жасалса, қадам ұмытылады, қате нұсқа жүктеледі, ал ескі нұсқа сақталмай қалады. Автоматты деплойда барлық қадам бір сценариймен, әр жолы бірдей орындалады.</p>
+<div class="flow">
+<div>Құрастыру<small>build, артефакт</small></div><span>→</span>
+<div>Жеткізу<small>upload, sha256</small></div><span>→</span>
+<div>Ауыстыру<small>current → жаңа</small></div><span>→</span>
+<div>Қайта іске қосу<small>stop / start</small></div><span>→</span>
+<div>Тексеру<small>health check</small></div><span>→</span>
+<div>Rollback<small>сәтсіз болса</small></div>
+</div>
+</section>
+<section>
+<h2>2. Артефакт және манифест</h2>
+<p>Серверге жеке файлдар емес, бір <b>артефакт</b> — нұсқаның архиві жеткізіледі. Оған <b>манифест</b> жасалады: нұсқа, файлдар тізімі және <b>sha256</b> бақылау қосындысы. Серверде қосынды қайта есептеледі: сәйкес келмесе, файл жолда бүлінген — орналастыру тоқтайды.</p>
+<pre><code>$ python3 build.py
+артефакт: dist/app-1.0.0.zip
+файлдар: 3 · VERSION, app.py, static/index.html
+sha256: defaea1fcddef742...</code></pre>
+<div class="callout">Бір артефакт барлық ортаға (test, prod) бірдей жеткізіледі — «тестте жұмыс істеді, prod-та жоқ» жағдайы азаяды.</div>
+</section>
+<section>
+<h2>3. Серверде: нұсқалар және current көрсеткіші</h2>
+<p>Әр нұсқа өз қалтасына ашылады, ескісінің үстіне жазылмайды. Қай нұсқа жұмыс істеп тұрғанын <code>current</code> көрсеткіші көрсетеді (Linux-та әдетте символдық сілтеме, біздің оқу моделінде <code>current.txt</code>).</p>
+<pre><code>server/
+├── releases/
+│   ├── 1.1.0-20261124-091500/
+│   ├── 1.2.0-20261124-100200/
+│   └── 2.0.0-20261124-113000/   ← current
+├── current.txt                  (2.0.0-20261124-113000)
+├── app.pid                      (жұмыс істеп тұрған процесс)
+└── deploy.log                   (әр қадам — бір JSON жол)</code></pre>
+<p>Ауыстыру — бір файлды өзгерту ғана, сондықтан ол бір сәтте орындалады. Ескі нұсқалар сақталады — кері қайту мүмкін. Дискті толтырмау үшін соңғы бірнеше нұсқа ғана қалдырылады.</p>
+</section>
+<section>
+<h2>4. Health check және rollback</h2>
+<p>Жаңа нұсқа іске қосылған соң сценарий оның <code>/health</code> бетін бірнеше рет тексереді. Жауап 200 болмаса — нұсқа «ауру»: сценарий <b>өзі</b> алдыңғы нұсқаға қайтады (rollback), ал шығу коды 1 болады.</p>
+<pre><code>[13:16:13] HEALTH   1-әрекет: HTTP Error 500
+...
+[13:16:18] FAIL     broken-20261124-131611 денсаулық тексеруінен өтпеді
+[13:16:18] ROLLBACK алдыңғы нұсқаға қайту: 1.1.0-20261124-131609
+[13:16:19] DONE     кері қайтарылды: 1.1.0-20261124-131609</code></pre>
+<table>
+<tr><th>Тәсіл</th><th>Қалай</th><th>Тоқтау</th></tr>
+<tr><td>Recreate</td><td>ескісін тоқтатып, жаңасын қосу (біздің deploy.py)</td><td>бірнеше секунд</td></tr>
+<tr><td>Blue-Green</td><td>жаңа нұсқа екінші ортада қосылады, тексерілген соң трафик ауысады</td><td>жоқ</td></tr>
+<tr><td>Rolling</td><td>серверлер кезекпен жаңартылады</td><td>жоқ</td></tr>
+<tr><td>Canary</td><td>алдымен пайдаланушылардың аз бөлігіне</td><td>жоқ, тәуекел аз</td></tr>
+</table>
+</section>
+<section>
+<h2>5. CI/CD құбыры</h2>
+<p><b>CI/CD</b> — код өзгерген сайын автоматты түрде тексеру, құрастыру және орналастыру. Әр қадамның шығу коды тексеріледі: біреуі сәтсіз болса, құбыр тоқтайды, ал сайт ескі нұсқамен жұмысын жалғастырады.</p>
+<div class="flow">
+<div>git push</div><span>→</span>
+<div>Тексеру<small>py_compile, тесттер</small></div><span>→</span>
+<div>Құрастыру<small>build.py</small></div><span>→</span>
+<div>Орналастыру<small>deploy.py</small></div><span>→</span>
+<div>Smoke-тест<small>басты бет</small></div>
+</div>
+<p>Нақты жобаларда: <b>GitHub Actions</b>, GitLab CI, Jenkins — құбыр; <b>scp/rsync</b> — жеткізу; <b>ssh</b> + <b>systemd</b> — қайта іске қосу; <b>Ansible</b>, Docker, Kubernetes — көп серверге орналастыру.</p>
+<pre><code><span class="c"># .github/workflows/deploy.yml (мысал)</span>
+- run: python build.py
+- run: scp dist/app-*.zip deploy@server:/srv/college/releases/
+- run: ssh deploy@server "python3 /srv/college/deploy.py"</code></pre>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="deploy"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:42).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_13_deploy.pdf" target="_blank"><b>praktikalyk_13_deploy.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>13_deploy</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 13_deploy</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Веб-қосымшаны серверге автоматты түрде орналастыру (deployment) кезеңдерін нөлден жүзеге асыру: құрастыру (артефакт), жеткізу, ауыстыру, қайта іске қосу, денсаулықты тексеру, кері қайтару (rollback) және CI/CD құбыры.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. Деплоймент жасау кезеңдерін сипаттайды.<br>2. Ресурстарды серверге жеткізуді түсіндіреді.<br>3. Веб-қосымшаны орналастыратын сценарий жазады.</td></tr>
+<tr><td>Уақыты</td><td>150 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген), іске қосып, тексересіз.</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), curl, браузер</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледж сайтының жаңа нұсқасын әкімші әр жолы қолмен жүктейді: файлдарды көшіреді, серверді қайта іске қосады, тексеруді ұмытады. Өткен аптада қате нұсқа жүктеліп, сайт 2 сағат жұмыс істемеді, ал ескі нұсқа сақталмаған еді. Сізге тапсырма: бір командамен орындалатын автоматты орналастыру сценарийін жазу — нұсқа тексеріледі, жаңа нұсқа сау болмаса, жүйе өзі алдыңғы нұсқаға қайтады.</p>
+<div class="callout"><b>Оқу моделі.</b> «Сервер» — компьютеріңіздегі <code>server/</code> қалтасы, ал қосымша 8081 портында жұмыс істейді. Нақты серверде дәл осы қадамдар SSH/scp, systemd немесе Ansible, GitHub Actions арқылы орындалады — кезеңдер бірдей. Барлық файлды нөлден жасайсыз, Mac-та <code>python3</code>, Windows-та <code>python</code>; PowerShell-де <code>curl.exe</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде <code>13_deploy</code> қалтасын жасап, VS Code-та ашыңыз (File → Open Folder).</li><li>Екі терминал ашыңыз (Terminal → New Terminal, содан кейін ⊞ Split).</li><li>Жұмыс соңындағы құрылым: app/ (app.py, VERSION, static/index.html), build.py, deploy.py, pipeline.py; автоматты жасалатындар: dist/, server/.</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Орналастырылатын қосымшаны жасау (15 мин, 10 ұпай)</h4>
+<p><code>app</code> қалтасын, оның ішінде <code>static</code> қалтасын жасап, үш файл жазыңыз.</p>
+<p><b>Файл: app/app.py</b></p>
+<pre><code># app/app.py — серверге орналастырылатын веб-қосымша (колледж сайты)
+import json
+import os
+import sys
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+VERSION = open(os.path.join(HERE, &quot;VERSION&quot;), encoding=&quot;utf-8&quot;).read().strip()
+PORT = int(sys.argv[1]) if len(sys.argv) &gt; 1 else 8081
+
+
+class Handler(BaseHTTPRequestHandler):
+    def send(self, code, body, ctype):
+        data = body.encode(&quot;utf-8&quot;)
+        self.send_response(code)
+        self.send_header(&quot;Content-Type&quot;, ctype)
+        self.send_header(&quot;Content-Length&quot;, str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_GET(self):
+        if self.path == &quot;/health&quot;:
+            ok = VERSION != &quot;broken&quot;
+            body = json.dumps({&quot;status&quot;: &quot;ok&quot; if ok else &quot;fail&quot;, &quot;version&quot;: VERSION})
+            return self.send(200 if ok else 500, body, &quot;application/json&quot;)
+        page = open(os.path.join(HERE, &quot;static&quot;, &quot;index.html&quot;), encoding=&quot;utf-8&quot;).read()
+        self.send(200, page.replace(&quot;{{VERSION}}&quot;, VERSION), &quot;text/html; charset=utf-8&quot;)
+
+    def log_message(self, *args):
+        pass
+
+
+print(&quot;қосымша іске қосылды: нұсқа&quot;, VERSION, &quot;порт&quot;, PORT, flush=True)
+HTTPServer((&quot;127.0.0.1&quot;, PORT), Handler).serve_forever()</code></pre>
+<p><b>Файл: app/static/index.html</b></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;kk&quot;&gt;
+&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;title&gt;Колледж сайты&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Алматы экономикалық колледжі&lt;/h1&gt;
+  &lt;p&gt;Оқу практикасы · ИС 3-1&lt;/p&gt;
+  &lt;p&gt;Нұсқа: &lt;b&gt;{{VERSION}}&lt;/b&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p><b>Файл: app/VERSION</b></p>
+<pre><code>1.0.0</code></pre>
+<ol><li>1-терминалда тікелей іске қосыңыз: <code>cd app</code> → <code>python3 app.py</code> → «қосымша іске қосылды: нұсқа 1.0.0 порт 8081».</li><li>2-терминалда: <code>curl http://127.0.0.1:8081/health</code> → <code>{"status": "ok", "version": "1.0.0"}</code>. Браузерде http://127.0.0.1:8081 — колледж беті, «Нұсқа: 1.0.0».</li><li>1-терминалда Ctrl+C, содан кейін <code>cd ..</code> (қалта түбіріне қайту).</li><li>Түсіндіріңіз: /health беті не үшін керек? VERSION файлы неге кодтан бөлек?</li></ol>
+<p class="report-note"><b>Есепке:</b> үш файл, /health жауабы, беттің скриншоты.</p>
+<h4>2-тапсырма. Құрастыру: артефакт және манифест (25 мин, 15 ұпай)</h4>
+<p>Серверге жеке файлдар емес, бір архив (артефакт) жеткізіледі. Манифест — архивтің «төлқұжаты»: нұсқа, файлдар тізімі және sha256 бақылау қосындысы.</p>
+<p><b>Файл: build.py</b></p>
+<pre><code># build.py — қосымшаны жеткізуге дайын архивке (артефактқа) жинау
+import hashlib
+import json
+import os
+import zipfile
+
+SRC = &quot;app&quot;
+VERSION = open(os.path.join(SRC, &quot;VERSION&quot;), encoding=&quot;utf-8&quot;).read().strip()
+os.makedirs(&quot;dist&quot;, exist_ok=True)
+archive = os.path.join(&quot;dist&quot;, &quot;app-%s.zip&quot; % VERSION)
+
+files = []
+with zipfile.ZipFile(archive, &quot;w&quot;, zipfile.ZIP_DEFLATED) as z:
+    for folder, _, names in os.walk(SRC):
+        for name in sorted(names):
+            if name.endswith(&quot;.pyc&quot;):
+                continue
+            path = os.path.join(folder, name)
+            rel = os.path.relpath(path, SRC).replace(&quot;\\&quot;, &quot;/&quot;)
+            z.write(path, rel)
+            files.append(rel)
+
+sha = hashlib.sha256(open(archive, &quot;rb&quot;).read()).hexdigest()
+manifest = {&quot;version&quot;: VERSION, &quot;archive&quot;: archive, &quot;sha256&quot;: sha, &quot;files&quot;: files}
+with open(os.path.join(&quot;dist&quot;, &quot;manifest.json&quot;), &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    json.dump(manifest, f, indent=2)
+print(&quot;артефакт:&quot;, archive)
+print(&quot;файлдар:&quot;, len(files), &quot;·&quot;, &quot;, &quot;.join(files))
+print(&quot;sha256:&quot;, sha[:16] + &quot;...&quot;)</code></pre>
+<ol><li><code>python3 build.py</code> → «артефакт: dist/app-1.0.0.zip», «файлдар: 3 · VERSION, app.py, static/index.html», «sha256: ...».</li><li><code>dist/manifest.json</code> файлын ашып, өрістерін түсіндіріңіз.</li><li>app/VERSION-ды 1.0.1-ге өзгертіп, қайта құрастырыңыз: dist/ ішінде екі архив, sha256 өзгерді ме? Неге?</li><li>VERSION-ды 1.0.0-ге қайтарыңыз. Неге архивті тексеру (sha256) жеткізу кезінде маңызды?</li></ol>
+<p class="report-note"><b>Есепке:</b> build.py, manifest.json мазмұны, екі нұсқаның sha256 салыстыруы.</p>
+<h4>3-тапсырма. Жеткізу және ауыстыру: deploy.py (25 мин, 20 ұпай)</h4>
+<p>deploy.py барлық кезеңді ретімен орындайды: артефактты тексеру → server/releases/&lt;нұсқа&gt;-&lt;уақыт&gt;/ қалтасына ашу → ескі процесті тоқтату → current.txt-ті ауыстыру → жаңа нұсқаны іске қосу. Төрт функция әзірге «бос» (заглушка) — оларды 4–5-тапсырмаларда толық кодпен ауыстырасыз.</p>
+<p><b>Файл: deploy.py</b></p>
+<pre><code># deploy.py — веб-қосымшаны «серверге» автоматты түрде орналастыру
+#   python3 deploy.py             -&gt; dist/ ішіндегі артефактты орналастыру
+#   python3 deploy.py --status    -&gt; қазір қай нұсқа жұмыс істеп тұр
+#   python3 deploy.py --rollback  -&gt; алдыңғы нұсқаға қайту
+import hashlib
+import json
+import os
+import shutil
+import signal
+import subprocess
+import sys
+import time
+import urllib.request
+import zipfile
+
+SERVER = &quot;server&quot;                                   # «сервер» — жергілікті қалта
+RELEASES = os.path.join(SERVER, &quot;releases&quot;)         # барлық нұсқалар осында
+CURRENT = os.path.join(SERVER, &quot;current.txt&quot;)       # қазіргі нұсқаның аты
+PID_FILE = os.path.join(SERVER, &quot;app.pid&quot;)          # жұмыс істеп тұрған процестің нөмірі
+PORT = 8081
+
+
+def log(step, message):                     # 5-тапсырмада ауыстырасыз (журнал файлға)
+    print(&quot;%-8s %s&quot; % (step, message))
+
+
+def releases():
+    &quot;&quot;&quot;Нұсқалар уақыт бойынша (атауындағы күн-уақыт белгісі бойынша) сұрыпталады.&quot;&quot;&quot;
+    return sorted(os.listdir(RELEASES), key=lambda n: n.split(&quot;-&quot;, 1)[1])
+
+
+def current_release():
+    if os.path.exists(CURRENT):
+        return open(CURRENT, encoding=&quot;utf-8&quot;).read().strip()
+    return None
+
+
+def upload(manifest):
+    &quot;&quot;&quot;Артефактты тексеріп, server/releases/&lt;нұсқа&gt;-&lt;уақыт&gt;/ қалтасына ашу.&quot;&quot;&quot;
+    data = open(manifest[&quot;archive&quot;], &quot;rb&quot;).read()
+    if hashlib.sha256(data).hexdigest() != manifest[&quot;sha256&quot;]:
+        raise SystemExit(&quot;ҚАТЕ: архивтің sha256 сәйкес емес — файл бүлінген&quot;)
+    name = &quot;%s-%s&quot; % (manifest[&quot;version&quot;], time.strftime(&quot;%Y%m%d-%H%M%S&quot;))
+    path = os.path.join(RELEASES, name)
+    os.makedirs(path)
+    with zipfile.ZipFile(manifest[&quot;archive&quot;]) as z:
+        z.extractall(path)
+    log(&quot;UPLOAD&quot;, &quot;%s -&gt; %s (%d файл)&quot; % (manifest[&quot;archive&quot;], path, len(manifest[&quot;files&quot;])))
+    return name
+
+
+def switch(name):
+    with open(CURRENT, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(name)
+    log(&quot;SWITCH&quot;, &quot;current -&gt; &quot; + name)
+
+
+def stop_app():
+    if not os.path.exists(PID_FILE):
+        return
+    pid = int(open(PID_FILE).read())
+    try:
+        os.kill(pid, signal.SIGTERM)
+        log(&quot;STOP&quot;, &quot;ескі процесс тоқтатылды (pid %d)&quot; % pid)
+    except OSError:
+        pass
+    os.remove(PID_FILE)
+    time.sleep(0.5)
+
+
+def start_app(name):
+    folder = os.path.join(RELEASES, name)
+    out = open(os.path.join(folder, &quot;app.log&quot;), &quot;w&quot;)
+    proc = subprocess.Popen([sys.executable, &quot;app.py&quot;, str(PORT)], cwd=folder, stdout=out, stderr=out)
+    with open(PID_FILE, &quot;w&quot;) as f:
+        f.write(str(proc.pid))
+    log(&quot;START&quot;, &quot;%s іске қосылды (pid %d, порт %d)&quot; % (name, proc.pid, PORT))
+    time.sleep(1)
+
+
+def health_check(tries=5):                  # 4-тапсырмада ауыстырасыз
+    return True
+
+
+def rollback(previous):                     # 4-тапсырмада ауыстырасыз
+    return False
+
+
+def cleanup(keep=3):                        # 5-тапсырмада ауыстырасыз
+    pass
+
+
+def deploy():
+    manifest = json.load(open(os.path.join(&quot;dist&quot;, &quot;manifest.json&quot;), encoding=&quot;utf-8&quot;))
+    log(&quot;BEGIN&quot;, &quot;орналастыру басталды: нұсқа &quot; + manifest[&quot;version&quot;])
+    previous = current_release()
+    name = upload(manifest)
+    stop_app()
+    switch(name)
+    start_app(name)
+    if health_check():
+        log(&quot;DONE&quot;, &quot;сәтті: %s жұмыс істеп тұр — http://127.0.0.1:%d&quot; % (name, PORT))
+        cleanup()
+        return 0
+    log(&quot;FAIL&quot;, name + &quot; денсаулық тексеруінен өтпеді&quot;)
+    if previous and rollback(previous):
+        log(&quot;DONE&quot;, &quot;кері қайтарылды: &quot; + previous)
+    return 1
+
+
+if __name__ == &quot;__main__&quot;:
+    os.makedirs(RELEASES, exist_ok=True)
+    if &quot;--status&quot; in sys.argv:
+        print(&quot;қазіргі нұсқа:&quot;, current_release())
+        print(&quot;барлық нұсқалар:&quot;, &quot;, &quot;.join(releases()) or &quot;жоқ&quot;)
+    elif &quot;--rollback&quot; in sys.argv:
+        names = releases()
+        cur = current_release()
+        older = names[:names.index(cur)] if cur in names else []
+        if not older:
+            sys.exit(&quot;кері қайтатын нұсқа жоқ&quot;)
+        sys.exit(0 if rollback(older[-1]) else 1)
+    else:
+        sys.exit(deploy())</code></pre>
+<ol><li><code>python3 build.py</code> → <code>python3 deploy.py</code>. Шығуы керек: BEGIN → UPLOAD (3 файл) → SWITCH → START (pid, порт 8081) → DONE.</li><li>Тексеру: <code>curl http://127.0.0.1:8081/health</code> → нұсқа 1.0.0. <code>python3 deploy.py --status</code> → қазіргі нұсқа және барлық нұсқалар.</li><li>app/VERSION → 1.1.0, <code>python3 build.py &amp;&amp; python3 deploy.py</code>. Енді STOP жолы да шығады (ескі процесс тоқтатылды). Браузерде нұсқа 1.1.0.</li><li>server/ қалтасын VS Code-та ашып, құрылымын сипаттаңыз: releases/ ішінде неше нұсқа? current.txt ішінде не жазылған? app.pid не үшін керек?</li><li>Түсіндіріңіз: неге жаңа нұсқа ескісінің үстіне жазылмай, жеке қалтаға ашылады?</li></ol>
+<p class="report-note"><b>Есепке:</b> deploy.py, екі орналастырудың шығысы, server/ құрылымы, сұрақтарға жауап.</p>
+<h4>4-тапсырма. Денсаулықты тексеру және кері қайтару (20 мин, 15 ұпай)</h4>
+<p>deploy.py ішінде <code>health_check</code> және <code>rollback</code> заглушкаларын өшіріп, орнына төмендегі кодты толық жазыңыз.</p>
+<p><b>Файл: deploy.py — health_check және rollback орнына</b></p>
+<pre><code>def health_check(tries=5):
+    url = &quot;http://127.0.0.1:%d/health&quot; % PORT
+    for i in range(1, tries + 1):
+        try:
+            r = urllib.request.urlopen(url, timeout=2)
+            log(&quot;HEALTH&quot;, &quot;%d-әрекет: %d %s&quot; % (i, r.status, r.read().decode()))
+            return True
+        except Exception as e:
+            log(&quot;HEALTH&quot;, &quot;%d-әрекет: %s&quot; % (i, e))
+            time.sleep(1)
+    return False
+
+
+def rollback(previous):
+    log(&quot;ROLLBACK&quot;, &quot;алдыңғы нұсқаға қайту: &quot; + previous)
+    stop_app()
+    switch(previous)
+    start_app(previous)
+    return health_check()</code></pre>
+<ol><li>app/VERSION → 1.2.0, <code>python3 build.py &amp;&amp; python3 deploy.py</code> → HEALTH «1-әрекет: 200 ...» → DONE.</li><li>Қате нұсқа: app/VERSION → <code>broken</code> (бұл нұсқада /health 500 қайтарады), <code>python3 build.py &amp;&amp; python3 deploy.py</code>. Шығуы керек: HEALTH 1–5-әрекет: HTTP Error 500 → FAIL → ROLLBACK → START 1.2.0 → DONE «кері қайтарылды». Шығу коды: <code>echo $?</code> → 1.</li><li>Сайт тоқтады ма? <code>curl http://127.0.0.1:8081/health</code> → 1.2.0.</li><li>Қолмен кері қайту: VERSION → 1.3.0, құрастырып орналастырыңыз, содан кейін <code>python3 deploy.py --rollback</code> → алдыңғы нұсқа.</li><li>Түсіндіріңіз: неге денсаулық бірнеше рет (5 әрекет) тексеріледі? Кері қайтару неге алдыңғы нұсқа сақталғандықтан ғана мүмкін?</li></ol>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, сәтті және сәтсіз орналастыру шығысы, --rollback нәтижесі.</p>
+<h4>5-тапсырма. Журнал, тазалау және CI/CD құбыры (20 мин, 15 ұпай)</h4>
+<p>deploy.py ішінде <code>log</code> және <code>cleanup</code> заглушкаларын ауыстырыңыз, pipeline.py файлын жасаңыз.</p>
+<p><b>Файл: deploy.py — log орнына</b></p>
+<pre><code>def log(step, message):
+    line = &quot;[%s] %-8s %s&quot; % (time.strftime(&quot;%H:%M:%S&quot;), step, message)
+    print(line)
+    os.makedirs(SERVER, exist_ok=True)
+    with open(os.path.join(SERVER, &quot;deploy.log&quot;), &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(json.dumps({&quot;time&quot;: time.strftime(&quot;%Y-%m-%d %H:%M:%S&quot;), &quot;step&quot;: step, &quot;message&quot;: message},
+                           ensure_ascii=False) + &quot;\n&quot;)</code></pre>
+<p><b>Файл: deploy.py — cleanup орнына</b></p>
+<pre><code>def cleanup(keep=3):
+    cur = current_release()
+    others = [n for n in releases() if n != cur]
+    old = others[:len(others) - (keep - 1)]        # қазіргі + соңғы (keep-1) нұсқа қалады
+    for n in old:
+        shutil.rmtree(os.path.join(RELEASES, n))
+        log(&quot;CLEANUP&quot;, &quot;ескі нұсқа жойылды: &quot; + n)</code></pre>
+<p><b>Файл: pipeline.py</b></p>
+<pre><code># pipeline.py — CI/CD құбыры: тексеру -&gt; құрастыру -&gt; орналастыру -&gt; smoke-тест
+import subprocess
+import sys
+import urllib.request
+
+STEPS = [
+    (&quot;1. ТЕКСЕРУ&quot;, [sys.executable, &quot;-m&quot;, &quot;py_compile&quot;, &quot;app/app.py&quot;]),
+    (&quot;2. ҚҰРАСТЫРУ&quot;, [sys.executable, &quot;build.py&quot;]),
+    (&quot;3. ОРНАЛАСТЫРУ&quot;, [sys.executable, &quot;deploy.py&quot;]),
+]
+
+for title, cmd in STEPS:
+    print(&quot;=&quot; * 50)
+    print(title, &quot;:&quot;, &quot; &quot;.join(cmd[1:]))
+    if subprocess.run(cmd).returncode != 0:
+        print(&quot;ҚҰБЫР ТОҚТАДЫ:&quot;, title, &quot;сәтсіз аяқталды&quot;)
+        sys.exit(1)
+
+print(&quot;=&quot; * 50)
+print(&quot;4. SMOKE-ТЕСТ: басты бетті ашу&quot;)
+page = urllib.request.urlopen(&quot;http://127.0.0.1:8081/&quot;, timeout=3).read().decode(&quot;utf-8&quot;)
+if &quot;Алматы экономикалық колледжі&quot; not in page:
+    print(&quot;ҚҰБЫР ТОҚТАДЫ: бет дұрыс емес&quot;)
+    sys.exit(1)
+print(&quot;бет ашылды ·&quot;, page.split(&quot;&lt;b&gt;&quot;)[1].split(&quot;&lt;/b&gt;&quot;)[0], &quot;нұсқасы&quot;)
+print(&quot;ҚҰБЫР СӘТТІ АЯҚТАЛДЫ ✔&quot;)</code></pre>
+<ol><li>VERSION → 2.0.0, <code>python3 pipeline.py</code>. Шығуы керек: 1. ТЕКСЕРУ → 2. ҚҰРАСТЫРУ → 3. ОРНАЛАСТЫРУ → 4. SMOKE-ТЕСТ «бет ашылды · 2.0.0 нұсқасы» → «ҚҰБЫР СӘТТІ АЯҚТАЛДЫ ✔».</li><li>app/app.py-ге әдейі синтаксис қатесін енгізіп (мысалы, бір жақшаны өшіріп), <code>python3 pipeline.py</code> → «ҚҰБЫР ТОҚТАДЫ: 1. ТЕКСЕРУ». Сайт ескі нұсқамен жұмыс істеп тұр ма? Қатені түзетіңіз.</li><li>Тағы 2–3 нұсқа орналастырыңыз: CLEANUP жолдары шығады, server/releases/ ішінде 3-тен көп нұсқа қалмайды.</li><li>server/deploy.log файлын ашыңыз: әр жол — бір JSON жазба. Соңғы орналастырудың барлық кезеңін табыңыз.</li><li>Құбырдың сызбасын салыңыз: код → тексеру → құрастыру → жеткізу → ауыстыру → health → (сәтсіз болса) rollback.</li></ol>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, pipeline.py, сәтті және тоқтаған құбыр шығысы, deploy.log үзіндісі, сызба.</p>
+<h4>6-тапсырма. Жеке нұсқа (30 мин, 15 ұпай)</h4>
+<p>Нұсқаңыз бойынша орналастыру сценарийін жетілдіріңіз (бұл бөлім — өз жұмысыңыз, кеңес берілген).</p>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма және кеңес</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>Blue-Green: екі порт (8081 — blue, 8082 — green); жаңа нұсқа бос портта іске қосылып, health-тен өткен соң ғана «белсенді порт» (server/active.txt) ауысады.</td><td>ауысу кезінде сайт бір секунд та тоқтамайды</td></tr><tr><td>2</td><td><code>--dry-run</code> режимі: барлық қадамды экранға шығарады, бірақ ештеңе өзгертпейді.</td><td>server/ өзгермейді</td></tr><tr><td>3</td><td>Хабарландыру: әр орналастырудың нәтижесі (сәтті / кері қайтарылды) server/notifications.txt файлына уақытымен жазылады.</td><td>файлда соңғы 3 оқиға</td></tr><tr><td>4</td><td>Алдын ала тексеру (pre-deploy): дискіде кемінде 50 МБ бос орын бар ма (shutil.disk_usage) және артефакт 5 МБ-тан аспай ма; болмаса — орналастыру басталмайды.</td><td>шекті 1 ТБ етіп қойғанда — тоқтайды</td></tr><tr><td>5</td><td>Техникалық қызмет беті: ауысу кезінде server/maintenance.html көрсететін қарапайым сервер (8081) және ауысудан кейін қайта қосылу.</td><td>ауысу кезінде «Техникалық жұмыстар» беті</td></tr><tr><td>6</td><td><code>--history</code>: deploy.log бойынша кесте — уақыт, нұсқа, нәтиже (DONE / FAIL / ROLLBACK), ұзақтығы (секунд).</td><td>кестеде барлық орналастыру</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> нұсқаңыздың коды (алдында / кейін), нәтиже скриншоты, 2–3 сөйлем түсіндірме.</p>
+<h3>Тапсыру</h3>
+<ul><li>13_deploy қалтасын (app/, build.py, deploy.py, pipeline.py; server/ және dist/ қоспай) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–6-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: автоматты орналастыру қандай қателерден сақтайды.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>Қосымша жасалып, /health және бет жұмыс істейді</td><td>10</td></tr><tr><td>2</td><td>build.py артефакт пен манифест жасайды; sha256 мәні түсіндірілген</td><td>15</td></tr><tr><td>3</td><td>deploy.py: жеткізу, ауыстыру, қайта іске қосу; server/ құрылымы түсіндірілген</td><td>20</td></tr><tr><td>4</td><td>Денсаулықты тексеру және автоматты / қолмен кері қайтару жұмыс істейді</td><td>15</td></tr><tr><td>5</td><td>Журнал, тазалау, CI/CD құбыры (сәтті және тоқтаған) көрсетілген</td><td>15</td></tr><tr><td>6</td><td>Жеке нұсқа</td><td>15</td></tr><tr><td>7</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>Деплоймент дегеніміз не? Оның кезеңдерін ретімен атаңыз.</li><li>Артефакт дегеніміз не және неге серверге жеке файлдар емес, архив жеткізіледі?</li><li>sha256 бақылау қосындысы не үшін тексеріледі?</li><li>Неге әр нұсқа жеке қалтада сақталады және current.txt (немесе current сілтемесі) не үшін керек?</li><li>Health check дегеніміз не? Неге бірнеше рет тексеріледі?</li><li>Rollback қашан және қалай орындалады?</li><li>CI/CD құбыры дегеніміз не? Сіздің pipeline.py-дің қадамдары қандай?</li><li>Ескі нұсқаларды неге тазалайды, бірақ бәрін емес?</li><li>Blue-Green және Rolling орналастырудың айырмашылығы неде?</li><li>Нақты серверде deploy.py-дің әр қадамы қандай құралмен орындалады (scp, ssh, systemctl, GitHub Actions)?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="deploy"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="deploy"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="Веб-қосымшаларды автоматты түрде орналастыру">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form><div class="next"><a class="btn ghost" href="envconfig.html">Келесі тақырып: №14</a></div></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=e7f77d16"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=bb53b5fc"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>

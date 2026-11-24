@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Қосымша конфигурацияларын орталар бойынша басқару | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "ec01", "q": "Dev, Test, Prod орталарының негізгі айырмашылығы неде?", "o": ["Әр ортада бөлек код", "Код бірдей, конфигурация (порт, ДҚ, debug, құпиялар) әртүрлі", "Тек атауы", "Prod-та код жоқ"]}, {"id": "ec02", "q": "Prod ортасында debug неге өшірулі болуы керек?", "o": ["Жылдамдық үшін ғана", "Қатенің ішкі мәліметі (код, жолдар, құпиялар) пайдаланушыға көрінбеуі үшін", "Debug prod-та жұмыс істемейді", "Әдемі болу үшін"]}, {"id": "ec03", "q": "base.json не сақтайды?", "o": ["Тек құпияларды", "Барлық ортаға ортақ мәндерді", "Тек prod мәндерін", "Журналды"]}, {"id": "ec04", "q": "base: db = {host: localhost, port: 5432}, prod: db = {host: db.aec.kz}. Терең біріктіруден кейін db.port:", "o": ["жоғалады", "5432", "null", "80"]}, {"id": "ec05", "q": "Құпиясөз қайда сақталуы керек?", "o": ["Кодта", "config/prod.json-да", "Орта айнымалысында немесе .env файлында (Git-ке салынбайды)", "README-де"]}, {"id": "ec06", "q": ".env.example файлының рөлі:", "o": ["Нақты құпиялар", "Қандай айнымалылар керегін көрсететін мәнсіз үлгі (Git-те сақталады)", "Резервтік көшірме", "Журнал"]}, {"id": "ec07", "q": ".gitignore-ға .env жазылғаны нені білдіреді?", "o": ["Файл өшіріледі", "Git бұл файлды репозиторийге салмайды", "Файл шифрланады", "Файл жасырын болады"]}, {"id": "ec08", "q": "Mac-та бір командаға орта айнымалысын қалай береді?", "o": ["set PORT=9090", "APP_PORT=9090 python3 app.py", "port(9090)", "export.json"]}, {"id": "ec09", "q": "APP_DB__HOST=other айнымалысы конфигурацияда қалай көрінеді?", "o": ["{\"APP_DB__HOST\": \"other\"}", "{\"db\": {\"host\": \"other\"}}", "{\"host\": \"db\"}", "ескерілмейді"]}, {"id": "ec10", "q": "Біздің settings.py-де ең жоғары басымдық:", "o": ["base.json", "prod.json", ".env", "жүйенің орта айнымалылары (APP_...)"]}, {"id": "ec11", "q": "12-Factor App-тың «Config» қағидасы:", "o": ["Конфигурацияны кодқа жазу", "Конфигурацияны ортада (орта айнымалыларында) сақтау", "Бір орта ғана болу", "Конфигурациясыз жұмыс"]}, {"id": "ec12", "q": "Feature flag дегеніміз не?", "o": ["Мемлекеттік ту", "Функцияны кодты өзгертпей, конфигурация арқылы қосу/өшіру", "Қате коды", "Git тармағы"]}, {"id": "ec13", "q": "check_config.py CI/CD-де қашан іске қосылады?", "o": ["Деплойдан кейін", "Деплойдан бұрын — қате конфигурация серверге жетпеуі үшін", "Түнде", "Ешқашан"]}, {"id": "ec14", "q": "Test ортасы неге prod-қа ұқсас болуы керек?", "o": ["Ақша үнемдеу үшін", "Тестте табылмаған қате prod-та шықпауы үшін", "Талап жоқ", "Dev-ке ұқсас болуы керек"]}, {"id": "ec15", "q": "Құпияны кездейсоқ Git-ке салып қойдыңыз. Ең дұрыс әрекет:", "o": ["Файлды өшіріп, қайта commit жасау жеткілікті", "Құпияны (құпиясөзді, кілтті) бірден ауыстыру, содан кейін тарихтан тазалау", "Ештеңе", "Репозиторийді жеке ету жеткілікті"]}, {"id": "ec16", "q": "Нақты жобаларда құпиялар қайда сақталады?", "o": ["Excel файлында", "HashiCorp Vault, GitHub Secrets, Kubernetes Secrets сияқты қоймаларда", "Код түсініктемесінде", "Скриншотта"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>14_envconfig</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html">12</a><a href="deploy.html">13</a><a href="envconfig.html" class="on">14</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №14</p>
+<h1>Қосымша конфигурацияларын орталар бойынша басқару</h1>
+<p class="lead">Dev/Test/Prod орталары, конфигурация файлдары, .env және орта айнымалылары, басымдық тәртібі, конфигурацияны тексеру.</p></div>
+<ul class="meta"><li><span>уақыты</span>2 сағат</li><li><span>бейне</span>1:30</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>Орта айнымалылары мен конфигурация файлдарын сипаттайды</b><b>Dev/Test/Prod орталарын бөлуді түсіндіреді</b><b>Орталарға арналған конфигурация жиынтығын әзірлейді</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Орталар: Dev, Test, Prod</h2>
+<p>Бір код бірнеше жерде жұмыс істейді. Код бірдей, ал <b>конфигурация</b> (порт, дерекқор, журнал деңгейі, құпиялар) әр ортада әртүрлі.</p>
+<table>
+<tr><th>Орта</th><th>Кімге</th><th>Ерекшелігі</th></tr>
+<tr><td><b>Dev</b></td><td>әзірлеуші</td><td>debug қосулы, толық журнал, жергілікті ДҚ, жаңа функциялар қосулы</td></tr>
+<tr><td><b>Test</b></td><td>тестілеуші, CI</td><td>prod-қа ұқсас, тест деректер, жеке ДҚ</td></tr>
+<tr><td><b>Prod</b></td><td>нақты пайдаланушылар</td><td>debug өшірулі, тек қателер журналы, нақты ДҚ, қатаң құпиялар</td></tr>
+</table>
+<div class="callout warn">Ең жиі кездесетін қате: prod-қа dev конфигурациясы кетеді (debug қосулы — қателердің ішкі мәліметі пайдаланушыға көрінеді) немесе құпиясөз Git-ке түседі.</div>
+</section>
+<section>
+<h2>2. Конфигурация файлдары</h2>
+<p><code>base.json</code> — барлық ортаға ортақ мәндер; <code>dev.json</code>, <code>test.json</code>, <code>prod.json</code> — тек айырмашылықтар. Олар <b>терең</b> біріктіріледі: ішкі сөздіктің бір кілті ғана өзгерсе, қалғандары сақталады.</p>
+<pre><code>base.json:  "db": {"host": "localhost", "port": 5432, "name": "college"}
+prod.json:  "db": {"host": "db.aec.kz"}
+нәтиже:     "db": {"host": "db.aec.kz", "port": 5432, "name": "college"}</code></pre>
+</section>
+<section>
+<h2>3. Орта айнымалылары және .env</h2>
+<p><b>Орта айнымалысы</b> — операциялық жүйе бағдарламаға беретін «аты = мәні» жұбы. Құпиялар (құпиясөз, кілт) кодта да, JSON-да да емес, орта айнымалыларында немесе <code>.env</code> файлында сақталады.</p>
+<pre><code><span class="c"># Mac / Linux</span>
+APP_ENV=prod APP_PORT=9090 python3 show_config.py
+<span class="c"># Windows PowerShell</span>
+$env:APP_PORT="9090"; python show_config.py prod
+
+<span class="c"># .env (Git-ке САЛЫНБАЙДЫ — .gitignore)</span>
+APP_DB__PASSWORD=dev-pass-123
+<span class="c"># .env.example (Git-те — қандай айнымалылар керегін көрсетеді, мәнсіз)</span>
+APP_DB__PASSWORD=</code></pre>
+<p><code>APP_DB__PASSWORD</code> → <code>{"db": {"password": ...}}</code>: <code>APP_</code> — біздің қосымшаның белгісі, <code>__</code> — ішкі деңгей.</p>
+</section>
+<section>
+<h2>4. Басымдық тәртібі</h2>
+<div class="flow">
+<div>base.json<small>ортақ</small></div><span>→</span>
+<div>&lt;орта&gt;.json<small>айырмашылықтар</small></div><span>→</span>
+<div>.env<small>құпиялар</small></div><span>→</span>
+<div>APP_... айнымалылар<small>ең жоғары</small></div>
+</div>
+<p>Әр келесі қабат алдыңғысын басады. Сондықтан серверде кодты өзгертпей-ақ кез келген мәнді орта айнымалысымен ауыстыруға болады — бұл <b>12-Factor App</b> әдістемесінің «Config» қағидасы: конфигурация ортада, кодта емес.</p>
+</section>
+<section>
+<h2>5. Конфигурацияны тексеру</h2>
+<p>Қате конфигурация — қате кодтай қауіпті. Сондықтан CI құбырында деплойдан бұрын тексеру іске қосылады: міндетті кілттер, порт, журнал деңгейі, prod-та debug өшірулі ме, JSON-да құпия жоқ па.</p>
+<pre><code>$ python3 check_config.py
+prod ортасы:
+  [ҚАТЕ] prod: prod ортасында debug қосулы болмауы керек
+Қате саны: 1          <span class="c"># шығу коды 1 — деплой тоқтайды</span></code></pre>
+<p>Нақты жобаларда құпиялар арнайы қоймада сақталады: <b>HashiCorp Vault</b>, <b>GitHub Secrets</b>, <b>Kubernetes Secrets</b>, AWS Secrets Manager. <b>Feature flags</b> — функцияны кодты өзгертпей, конфигурация арқылы қосу / өшіру.</p>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="envconfig"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:30).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_14_envconfig.pdf" target="_blank"><b>praktikalyk_14_envconfig.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>14_envconfig</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 14_envconfig</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Қосымшаның конфигурациясын Dev/Test/Prod орталары бойынша бөліп басқаруды үйрену: конфигурация файлдары, орта айнымалылары, құпияларды .env-те сақтау, басымдық тәртібі және конфигурацияны автоматты тексеру.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. Орта айнымалылары мен конфигурация файлдарын сипаттайды.<br>2. Dev/Test/Prod орталарын бөлуді түсіндіреді.<br>3. Орталарға арналған конфигурация жиынтығын әзірлейді.</td></tr>
+<tr><td>Уақыты</td><td>50 минут (2 сағаттық тақырыптың практикалық бөлігі)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген).</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана)</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледж сайтының коды бір, бірақ ол үш жерде жұмыс істейді: әзірлеушінің компьютерінде (dev), тестілеу серверінде (test) және нақты серверде (prod). Бір күні әзірлеуші prod серверіне debug режимі қосулы конфигурацияны жүктеп жіберді, ал дерекқордың құпиясөзі Git-ке түсіп кетті. Сізге тапсырма: конфигурацияны орталар бойынша бөлу, құпияларды кодтан шығару және қатені деплойға дейін ұстайтын тексеру жазу.</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз. Mac-та <code>python3</code>, Windows-та <code>python</code>. Орта айнымалысын беру: Mac — <code>APP_PORT=9090 python3 show_config.py test</code>; Windows PowerShell — <code>$env:APP_PORT="9090"; python show_config.py test</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде <code>14_envconfig</code> қалтасын, оның ішінде <code>config</code> қалтасын жасап, VS Code-та ашыңыз.</li><li>Жұмыс соңындағы құрылым: config/ (base.json, dev.json, test.json, prod.json), .env.example, .env, .gitignore, settings.py, show_config.py, check_config.py.</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Конфигурация файлдары және .env (10 мин, 25 ұпай)</h4>
+<p>base.json — барлық ортаға ортақ мәндер; dev/test/prod.json — тек айырмашылықтар; құпиялар (құпиясөз, кілт) JSON-да емес, .env файлында.</p>
+<p><b>Файл: config/base.json</b></p>
+<pre><code>{
+  &quot;app_name&quot;: &quot;Колледж сайты&quot;,
+  &quot;port&quot;: 8000,
+  &quot;debug&quot;: false,
+  &quot;log_level&quot;: &quot;INFO&quot;,
+  &quot;db&quot;: {&quot;host&quot;: &quot;localhost&quot;, &quot;port&quot;: 5432, &quot;name&quot;: &quot;college&quot;},
+  &quot;features&quot;: {&quot;new_schedule&quot;: false, &quot;chat&quot;: false}
+}</code></pre>
+<p><b>Файл: config/dev.json</b></p>
+<pre><code>{
+  &quot;debug&quot;: true,
+  &quot;log_level&quot;: &quot;DEBUG&quot;,
+  &quot;db&quot;: {&quot;name&quot;: &quot;college_dev&quot;},
+  &quot;features&quot;: {&quot;new_schedule&quot;: true, &quot;chat&quot;: true}
+}</code></pre>
+<p><b>Файл: config/test.json</b></p>
+<pre><code>{
+  &quot;port&quot;: 8100,
+  &quot;log_level&quot;: &quot;WARNING&quot;,
+  &quot;db&quot;: {&quot;host&quot;: &quot;test-db.aec.local&quot;, &quot;name&quot;: &quot;college_test&quot;},
+  &quot;features&quot;: {&quot;new_schedule&quot;: true}
+}</code></pre>
+<p><b>Файл: config/prod.json</b></p>
+<pre><code>{
+  &quot;port&quot;: 80,
+  &quot;log_level&quot;: &quot;ERROR&quot;,
+  &quot;db&quot;: {&quot;host&quot;: &quot;db.aec.kz&quot;, &quot;name&quot;: &quot;college&quot;}
+}</code></pre>
+<p><b>Файл: .env.example</b></p>
+<pre><code># Бұл файлды .env деп көшіріп, мәндерін толтырыңыз. .env файлы Git-ке салынбайды!
+APP_ENV=dev
+APP_DB__PASSWORD=
+APP_SECRET_KEY=</code></pre>
+<p><b>Файл: .env</b></p>
+<pre><code>APP_ENV=dev
+APP_DB__PASSWORD=dev-pass-123
+APP_SECRET_KEY=dev-secret-key-0000</code></pre>
+<p><b>Файл: .gitignore</b></p>
+<pre><code># Құпиялар Git-ке салынбайды
+.env
+__pycache__/</code></pre>
+<ol><li>Жеті файлды жасаңыз (VS Code-та нүктемен басталатын файлдар да көрінеді).</li><li>Кесте толтырыңыз: кілт → base → dev → test → prod (port, debug, log_level, db.host, db.name, features.chat). Бос ұяшық — base мәні қолданылады.</li><li>Түсіндіріңіз: неге .env Git-ке салынбайды, ал .env.example салынады? Неге prod.json-да debug жоқ?</li></ol>
+<p class="report-note"><b>Есепке:</b> файлдар, орталар кестесі, сұрақтарға жауап.</p>
+<h4>2-тапсырма. Конфигурацияны жинау және басымдық (20 мин, 35 ұпай)</h4>
+<p>settings.py конфигурацияны төрт қабаттан жинайды: base.json → &lt;орта&gt;.json → .env → жүйенің орта айнымалылары. Әр келесі қабат алдыңғысын басады.</p>
+<p><b>Файл: settings.py</b></p>
+<pre><code># settings.py — ортаға (dev / test / prod) сай конфигурацияны жинау
+# Басымдық (төменгісі жоғарғысын басады):
+#   1) config/base.json      — барлық ортаға ортақ мәндер
+#   2) config/&lt;орта&gt;.json    — сол ортаның айырмашылықтары
+#   3) .env файлы            — құпиялар (Git-ке салынбайды)
+#   4) жүйенің орта айнымалылары (APP_...) — ең жоғары басымдық
+import json
+import os
+
+PREFIX = &quot;APP_&quot;
+
+
+def read_env_file(path=&quot;.env&quot;):
+    &quot;&quot;&quot;KEY=VALUE жолдарын оқиды (# — түсініктеме).&quot;&quot;&quot;
+    values = {}
+    if os.path.exists(path):
+        for line in open(path, encoding=&quot;utf-8&quot;):
+            line = line.strip()
+            if line and not line.startswith(&quot;#&quot;) and &quot;=&quot; in line:
+                key, value = line.split(&quot;=&quot;, 1)
+                values[key.strip()] = value.strip()
+    return values
+
+
+def merge(base, extra):
+    &quot;&quot;&quot;Сөздіктерді терең біріктіру: ішкі сөздіктер де бірігеді.&quot;&quot;&quot;
+    result = dict(base)
+    for key, value in extra.items():
+        if isinstance(value, dict) and isinstance(result.get(key), dict):
+            result[key] = merge(result[key], value)
+        else:
+            result[key] = value
+    return result
+
+
+def convert(text):
+    &quot;&quot;&quot;Жолды типке айналдыру: &quot;true&quot; -&gt; True, &quot;8080&quot; -&gt; 8080.&quot;&quot;&quot;
+    if text.lower() in (&quot;true&quot;, &quot;false&quot;):
+        return text.lower() == &quot;true&quot;
+    if text.isdigit():
+        return int(text)
+    return text
+
+
+def from_variables(variables):
+    &quot;&quot;&quot;APP_DB__PASSWORD=x  -&gt;  {&quot;db&quot;: {&quot;password&quot;: &quot;x&quot;}}  (__ — ішкі деңгей).&quot;&quot;&quot;
+    result = {}
+    for key, value in variables.items():
+        if not key.startswith(PREFIX) or key == PREFIX + &quot;ENV&quot;:
+            continue
+        parts = key[len(PREFIX):].lower().split(&quot;__&quot;)
+        node = result
+        for part in parts[:-1]:
+            node = node.setdefault(part, {})
+        node[parts[-1]] = convert(value)
+    return result
+
+
+def load(env=None):
+    env_file = read_env_file()
+    env = env or os.environ.get(&quot;APP_ENV&quot;) or env_file.get(&quot;APP_ENV&quot;) or &quot;dev&quot;
+    path = os.path.join(&quot;config&quot;, env + &quot;.json&quot;)
+    if not os.path.exists(path):
+        raise SystemExit(&quot;ҚАТЕ: &#x27;%s&#x27; ортасы жоқ (config/%s.json табылмады)&quot; % (env, env))
+    config = json.load(open(os.path.join(&quot;config&quot;, &quot;base.json&quot;), encoding=&quot;utf-8&quot;))
+    config = merge(config, json.load(open(path, encoding=&quot;utf-8&quot;)))
+    config = merge(config, from_variables(env_file))
+    config = merge(config, from_variables(os.environ))
+    config[&quot;env&quot;] = env
+    return config</code></pre>
+<p><b>Файл: show_config.py</b></p>
+<pre><code># show_config.py — ортаның соңғы конфигурациясын көрсету (құпиялар жасырылады)
+#   python3 show_config.py dev | test | prod
+import json
+import sys
+
+from settings import load
+
+SECRET_WORDS = (&quot;password&quot;, &quot;secret&quot;, &quot;token&quot;, &quot;key&quot;)
+
+
+def mask(data):
+    result = {}
+    for key, value in data.items():
+        if isinstance(value, dict):
+            result[key] = mask(value)
+        elif any(word in key for word in SECRET_WORDS) and value:
+            result[key] = &quot;***&quot;
+        else:
+            result[key] = value
+    return result
+
+
+env = sys.argv[1] if len(sys.argv) &gt; 1 else None
+config = load(env)
+print(&quot;Орта:&quot;, config[&quot;env&quot;])
+print(json.dumps(mask(config), ensure_ascii=False, indent=2))</code></pre>
+<ol><li><code>python3 show_config.py dev</code> → «Орта: dev», debug: true, log_level: DEBUG, db.name: college_dev, password: "***".</li><li><code>python3 show_config.py prod</code> → port: 80, debug: false, db.host: db.aec.kz. <code>python3 show_config.py test</code> → port 8100.</li><li>Басымдық: <code>APP_PORT=9090 APP_DB__HOST=other python3 show_config.py test</code> → port 9090, db.host other (орта айнымалысы JSON-ды басты).</li><li>Жоқ орта: <code>python3 show_config.py stage</code> → «ҚАТЕ: 'stage' ортасы жоқ».</li><li>Түсіндіріңіз: merge() неге «терең» біріктіреді (db.port неге жоғалмады)? APP_DB__PASSWORD қалай {"db": {"password": ...}} болады? Құпиялар неге *** болып шығады?</li></ol>
+<p class="report-note"><b>Есепке:</b> екі файлдың коды, үш ортаның шығысы, басымдық тәжірибесі, сұрақтарға жауап.</p>
+<h4>3-тапсырма. Конфигурацияны тексеру және жеке нұсқа (20 мин, 30 ұпай)</h4>
+<p><b>Файл: check_config.py</b></p>
+<pre><code># check_config.py — барлық орталардың конфигурациясын тексеру (CI-де іске қосылады)
+#   python3 check_config.py   -&gt; қате болса шығу коды 1
+import json
+import os
+import sys
+
+from settings import load
+
+REQUIRED = [&quot;app_name&quot;, &quot;port&quot;, &quot;debug&quot;, &quot;log_level&quot;, &quot;db&quot;]
+LEVELS = [&quot;DEBUG&quot;, &quot;INFO&quot;, &quot;WARNING&quot;, &quot;ERROR&quot;]
+errors = 0
+
+
+def problem(env, text):
+    global errors
+    errors += 1
+    print(&quot;  [ҚАТЕ] %s: %s&quot; % (env, text))
+
+
+# 1) JSON файлдарында құпия болмауы керек
+for name in sorted(os.listdir(&quot;config&quot;)):
+    text = open(os.path.join(&quot;config&quot;, name), encoding=&quot;utf-8&quot;).read().lower()
+    for word in (&quot;password&quot;, &quot;secret&quot;):
+        if word in text:
+            problem(name, &quot;құпия (%s) JSON файлда тұр — оны .env-ке көшіріңіз&quot; % word)
+
+# 2) әр ортаның жиналған конфигурациясы
+for env in [&quot;dev&quot;, &quot;test&quot;, &quot;prod&quot;]:
+    print(&quot;%s ортасы:&quot; % env)
+    c = load(env)
+    for key in REQUIRED:
+        if key not in c:
+            problem(env, &quot;міндетті кілт жоқ: &quot; + key)
+    if not isinstance(c.get(&quot;port&quot;), int) or not 1 &lt;= c[&quot;port&quot;] &lt;= 65535:
+        problem(env, &quot;port 1–65535 аралығындағы сан болуы керек&quot;)
+    if c.get(&quot;log_level&quot;) not in LEVELS:
+        problem(env, &quot;log_level: &quot; + str(c.get(&quot;log_level&quot;)))
+    if env == &quot;prod&quot; and c.get(&quot;debug&quot;):
+        problem(env, &quot;prod ортасында debug қосулы болмауы керек&quot;)
+    if env == &quot;prod&quot; and c[&quot;db&quot;].get(&quot;host&quot;) == &quot;localhost&quot;:
+        problem(env, &quot;prod дерекқоры localhost бола алмайды&quot;)
+    print(&quot;  тексерілді: debug=%s, log_level=%s, db=%s/%s&quot; % (c[&quot;debug&quot;], c[&quot;log_level&quot;], c[&quot;db&quot;][&quot;host&quot;], c[&quot;db&quot;][&quot;name&quot;]))
+
+print(&quot;Қате саны:&quot;, errors)
+sys.exit(1 if errors else 0)</code></pre>
+<ol><li><code>python3 check_config.py; echo $?</code> → үш орта тексерілді, «Қате саны: 0», 0.</li><li>Қатені әдейі енгізіңіз: prod.json-ға <code>"debug": true</code> қосыңыз → «[ҚАТЕ] prod: prod ортасында debug қосулы болмауы керек», шығу коды 1. Содан кейін prod.json-ға <code>"password": "123"</code> жазып көріңіз → тағы бір қате. Екеуін де алып тастаңыз.</li><li>Нұсқаңыз бойынша тапсырманы орындаңыз (өз жұмысыңыз).</li><li>Түсіндіріңіз: бұл тексеру CI/CD-де қай кезеңде іске қосылады және неге?</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>stage ортасын қосу: config/stage.json (prod-қа ұқсас, бірақ db.host — stage-db.aec.local) және check_config.py тізіміне қосу.</td><td>show_config.py stage жұмыс істейді</td></tr><tr><td>2</td><td>diff_config.py: екі ортаны салыстырып, айырмашылығы бар кілттерді шығару (<code>python3 diff_config.py dev prod</code>).</td><td>port, debug, log_level, db.* көрсетіледі</td></tr><tr><td>3</td><td>export_env.py: ортаның конфигурациясын APP_... форматында (APP_DB__HOST=...) шығару — Docker/серверге беру үшін.</td><td>барлық кілт APP_ форматында</td></tr><tr><td>4</td><td>check_config.py-ге ереже: prod ортасында features.chat міндетті түрде false.</td><td>prod.json-да chat: true → қате</td></tr><tr><td>5</td><td>check_config.py-ге ереже: prod ортасында APP_SECRET_KEY кемінде 16 таңба болуы керек.</td><td>қысқа кілт → қате</td></tr><tr><td>6</td><td>app.py: settings.load() арқылы іске қосылатын сервер (порт конфигтан), /config беті құпиясы жасырылған конфигурацияны JSON етіп көрсетеді.</td><td>APP_ENV=test → 8100 порты</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> check_config.py, қате енгізу нәтижелері, нұсқаңыздың коды мен нәтижесі.</p>
+<h3>Тапсыру</h3>
+<ul><li>14_envconfig қалтасын (.env-ті ҚОСПАЙ — оның орнына .env.example) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–3-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: конфигурацияны неге кодтан бөлек сақтайды (12-Factor App).</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>Конфигурация файлдары, .env, .env.example, .gitignore жасалған; орталар кестесі</td><td>25</td></tr><tr><td>2</td><td>settings.py және show_config.py жұмыс істейді; басымдық көрсетілген</td><td>35</td></tr><tr><td>3</td><td>check_config.py және жеке нұсқа</td><td>30</td></tr><tr><td>4</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>Dev, Test, Prod орталары бір-бірінен немен ерекшеленеді?</li><li>Орта айнымалысы дегеніміз не? Оны Mac және Windows-та қалай береді?</li><li>Неге құпиялар кодта және JSON-да емес, .env-те немесе орта айнымалыларында сақталады?</li><li>.env мен .env.example айырмашылығы қандай?</li><li>Сіздің settings.py-дегі басымдық тәртібі қандай және неге дәл осындай?</li><li>Терең біріктіру (deep merge) дегеніміз не?</li><li>12-Factor App-тың «Config» қағидасы не дейді?</li><li>Feature flag дегеніміз не және оны орталар бойынша қалай қолданады?</li><li>check_config.py-ді CI/CD-де қай кезеңде іске қосқан дұрыс?</li><li>Нақты жобаларда құпиялар қайда сақталады (Vault, GitHub Secrets, Kubernetes Secrets)?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="envconfig"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="envconfig"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="Қосымша конфигурацияларын орталар бойынша басқару">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=e7f77d16"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=bb53b5fc"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>
