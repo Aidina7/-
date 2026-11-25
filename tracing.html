@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Микросервистердегі сұраныстарды трассировкалау (Jaeger) | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "tr01", "q": "Distributed Tracing не көрсетеді?", "o": ["Сервердің температурасын", "Бір сұраныстың барлық сервис арқылы өткен жолын және әр кезеңнің уақытын", "Тек қателер санын", "Дерекқор көлемін"]}, {"id": "tr02", "q": "Span дегеніміз не?", "o": ["Бүкіл жүйе", "Трассадағы бір операция: атауы, уақыты, атрибуттары, статусы", "Сервер атауы", "Журнал файлы"]}, {"id": "tr03", "q": "Трассаның барлық span-ын не біріктіреді?", "o": ["span_id", "Бірдей trace_id", "Сервис атауы", "Порт"]}, {"id": "tr04", "q": "Түбір (root) span-ның ерекшелігі?", "o": ["Ең қысқа", "parent_id бос", "Қатесі бар", "Әрқашан ДҚ-ға қатысты"]}, {"id": "tr05", "q": "W3C traceparent: 00-4bf9...4736-00f0...02b7-01. Соңғы 01 нені білдіреді?", "o": ["Нұсқа", "Трасса жазылады (sampled)", "Қате бар", "Бірінші сервис"]}, {"id": "tr06", "q": "Контекст бір сервистен екіншісіне қалай беріледі?", "o": ["Ортақ файл арқылы", "HTTP тақырыбы (traceparent) арқылы: inject және extract", "Электрондық пошта арқылы", "Берілмейді"]}, {"id": "tr07", "q": "Басқа сервисті шақыратын span қай түрге жатады?", "o": ["server", "client", "internal", "root"]}, {"id": "tr08", "q": "Сарқырамада gateway span-ы неге ең ұзын?", "o": ["Ол баяу", "Оның уақыты барлық ішкі шақыруларды қамтиды", "Қате", "Ол соңында басталады"]}, {"id": "tr09", "q": "Баяулаудың нақты себебін қалай табамыз?", "o": ["Ең қысқа span", "Ең ұзақ «жапырақ» span (баласы жоқ)", "Түбір span", "Кездейсоқ span"]}, {"id": "tr10", "q": "Jaeger UI әдепкі бойынша қай портта ашылады?", "o": ["8080", "16686", "4318", "22"]}, {"id": "tr11", "q": "OTLP дегеніміз не?", "o": ["Дерекқор", "OpenTelemetry деректерін (трасса, метрика, журнал) жіберу хаттамасы", "Шифрлау алгоритмі", "Сурет форматы"]}, {"id": "tr12", "q": "Head-based sampling-тің кемшілігі қандай?", "o": ["Тым көп жазады", "Шешім басында қабылданады, сондықтан сирек қатесі бар трасса жазылмай қалуы мүмкін", "Jaeger-мен жұмыс істемейді", "Трасса бөлшектеніп жазылады"]}, {"id": "tr13", "q": "Sampling 0,1, секундына 500 сұрау. Минутына қанша трасса жазылады?", "o": ["50", "3000", "30 000", "500"]}, {"id": "tr14", "q": "Агентті неге орта айнымалыларымен (OTEL_...) баптаған ыңғайлы?", "o": ["Код өзгертілмей, әр ортада бөлек бапталады", "Жылдамырақ", "Міндетті емес", "Python тек солай жұмыс істейді"]}, {"id": "tr15", "q": "Span атрибуттарына не жазуға болмайды?", "o": ["http.status_code", "db.statement (параметрсіз)", "Құпиясөз, токен, жеке деректер", "student.id"]}, {"id": "tr16", "q": "Журнал, метрика және трассаның қайсысы «қай сервисте уақыт жоғалды?» сұрағына жауап береді?", "o": ["Журнал", "Метрика", "Трасса", "Ешқайсысы"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>16_tracing</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html">12</a><a href="deploy.html">13</a><a href="envconfig.html">14</a><a href="mesh.html">15</a><a href="tracing.html" class="on">16</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №16</p>
+<h1>Микросервистердегі сұраныстарды трассировкалау (Jaeger)</h1>
+<p class="lead">Distributed Tracing: trace және span, W3C traceparent, сұраныстың сервистер арасындағы жолы, сарқырама бойынша талдау, sampling және Jaeger агентін баптау.</p></div>
+<ul class="meta"><li><span>уақыты</span>2 сағат</li><li><span>бейне</span>1:10</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>Distributed Tracing ұғымын сипаттайды</b><b>Сұраныстың сервистер арасындағы жолын қадағалауды түсіндіреді</b><b>Трассировка агентін баптайды</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Distributed Tracing дегеніміз не?</h2>
+<p>Бір пайдаланушы сұрауы бірнеше микросервистен өтеді. Әр сервистің журналы бөлек, сондықтан «уақыт қай жерде жоғалды?» деген сұраққа журналдар жауап бере алмайды. <b>Таратылған трассировка</b> бір сұраныстың барлық сервис арқылы өткен жолын бір суретке жинайды.</p>
+<table>
+<tr><th>Бақылау тірегі</th><th>Сұрақ</th><th>Мысал</th></tr>
+<tr><td><b>Журнал (log)</b></td><td>не болды?</td><td>«студент табылмады»</td></tr>
+<tr><td><b>Метрика</b></td><td>қанша / қаншалықты жиі?</td><td>p95 = 1,4 с, қате 2%</td></tr>
+<tr><td><b>Трасса</b></td><td>қай жерде және неге?</td><td>grades → db.query grades_archive 1,4 с</td></tr>
+</table>
+</section>
+<section>
+<h2>2. Trace және span</h2>
+<div class="cards">
+<div class="card"><h4>Trace</h4><p>Бір сұраныстың толық жолы. Барлық бөлігі бір <code>trace_id</code>-ге (32 hex таңба) ие.</p></div>
+<div class="card"><h4>Span</h4><p>Бір операция: атауы, басталуы, ұзақтығы, атрибуттары, статусы (OK / ERROR).</p></div>
+<div class="card"><h4>parent_id</h4><p>Ата-ана span. Түбірдің parent_id-і бос, қалғандары ағаш құрайды.</p></div>
+<div class="card"><h4>Span түрі</h4><p><b>server</b> — сұрау қабылдау, <b>client</b> — басқа сервисті шақыру, <b>internal</b> — ішкі жұмыс (ДҚ, кэш).</p></div>
+</div>
+</section>
+<section>
+<h2>3. Контексті беру: traceparent</h2>
+<p>Келесі сервис сол трассаның жалғасы екенін білуі үшін әр шығатын сұрауға <b>W3C Trace Context</b> тақырыбы қосылады (<i>inject</i>), ал қабылдаушы оны оқиды (<i>extract</i>).</p>
+<pre><code>traceparent: 00-4bf92f3577b34da6a3ce929d0e0e4736-00f067aa0ba902b7-01
+             <span class="c">│  └ trace_id (32)                    └ span_id (16)    └ 01 — жазылады</span>
+             <span class="c">└ нұсқа</span></code></pre>
+<pre><code>with tracer.span("HTTP GET grades", kind="client"):
+    req = urllib.request.Request(url, headers=inject({}))   <span class="c"># traceparent қосылды</span></code></pre>
+</section>
+<section>
+<h2>4. Сарқырама (waterfall)</h2>
+<p>Трасса уақыт осінде «сарқырама» болып көрсетіледі: әр жол — бір span, ені — ұзақтығы, шегініс — кімнің баласы. Ең ұзақ <b>жапырақ</b> span (баласы жоқ) — әдетте баяулаудың нақты себебі.</p>
+<pre><code>gateway: GET /report              |████████████████████████████████████████| 1542 мс
+  report: HTTP GET grades         |  ██████████████████████████████████████| 1497 мс
+    grades: db.query grades       |  █                                     |   34 мс
+    grades: db.query grades_archive| ████████████████████████████████████  | 1456 мс  <span class="c">← себебі</span></code></pre>
+</section>
+<section>
+<h2>5. Jaeger және OpenTelemetry</h2>
+<div class="flow">
+<div>SDK / агент<small>сервис ішінде span жасайды</small></div><span>→</span>
+<div>Collector<small>қабылдайды, OTLP :4318</small></div><span>→</span>
+<div>Storage<small>Cassandra, Elasticsearch, жад</small></div><span>→</span>
+<div>Jaeger UI<small>:16686, іздеу, сарқырама</small></div>
+</div>
+<p><b>OpenTelemetry</b> — трасса, метрика, журнал жинаудың ашық стандарты және SDK-лары. <b>OTLP</b> — оның деректерді жіберу хаттамасы. Jaeger — трассаларды сақтайтын және көрсететін жүйе (CNCF жобасы).</p>
+<pre><code><span class="c"># Jaeger-ді іске қосу (Docker)</span>
+docker run --rm -e COLLECTOR_OTLP_ENABLED=true -p 16686:16686 -p 4318:4318 jaegertracing/all-in-one:latest
+<span class="c"># агентті баптау — код өзгермейді</span>
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 TRACE_SAMPLE_RATE=0.2 python3 services.py</code></pre>
+</section>
+<section>
+<h2>6. Sampling</h2>
+<p>Әр сұрауды жазу қымбат. <b>Head-based</b> sampling шешімді трассаның басында қабылдайды (мысалы, 20%) және ол traceparent флагымен (01 / 00) барлық сервиске беріледі — трасса не толық жазылады, не мүлдем жазылмайды. Кемшілігі: сирек қатені өткізіп алуы мүмкін. <b>Tail-based</b> sampling трасса аяқталғаннан кейін шешеді: қатесі бар немесе баяу трассаларды әрқашан сақтайды.</p>
+<div class="callout warn">Span атрибуттарына құпиясөз, токен, жеке деректер жазылмайды: трассаларды көп адам көреді.</div>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="tracing"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:10).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_16_tracing.pdf" target="_blank"><b>praktikalyk_16_tracing.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>16_tracing</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 16_tracing</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Таратылған трассировканың (Distributed Tracing) жұмысын өз агентіңізді жазу арқылы меңгеру: trace және span, W3C traceparent тақырыбы арқылы контексті беру, сұраныстың сервистер арасындағы жолын «сарқырама» түрінде талдау, агентті баптау (sampling, қызмет атауы, Jaeger-ге OTLP арқылы жіберу).</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. Distributed Tracing ұғымын сипаттайды.<br>2. Сұраныстың сервистер арасындағы жолын қадағалауды түсіндіреді.<br>3. Трассировка агентін баптайды.</td></tr>
+<tr><td>Уақыты</td><td>50 минут (2 сағаттық тақырыптың практикалық бөлігі)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген).</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), curl; қосымша: Docker (Jaeger UI үшін)</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Электронды журналда «Үлгерім есебі» беті кейде 1,5 секундтан аса ашылады, кейде лезде. Сұрау төрт сервис арқылы өтеді: gateway → report → students және grades. Әр сервистің журналы бөлек, сондықтан қай жерде уақыт жоғалатынын ешкім таба алмай жүр. Сізге тапсырма: сервистерге трассировка агентін қосып, сұраныстың толық жолын көру және баяулаудың себебін табу.</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз. Mac-та <code>python3</code>, Windows-та <code>python</code>. Орта айнымалысын беру: Mac — <code>TRACE_SAMPLE_RATE=0.2 python3 services.py</code>; Windows PowerShell — <code>$env:TRACE_SAMPLE_RATE="0.2"; python services.py</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде <code>16_tracing</code> қалтасын жасап, VS Code-та ашыңыз. Екі терминал ашыңыз (⊞ Split Terminal): 1-терминал — сервистер, 2-терминал — тексеру.</li><li>Жұмыс соңындағы құрылым: tracer.py, services.py, view_trace.py және traces/spans.jsonl (оны агент өзі жасайды).</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Трассировка агенті: trace, span, traceparent (10 мин, 25 ұпай)</h4>
+<p>Трасса (trace) — бір сұраныстың толық жолы; span — сол жолдағы бір операция (уақыты, атауы, атрибуттары, қатесі). Барлық span-дар бір trace_id-мен байланысады, ал әр span өзінің ата-анасын (parent_id) біледі. Сервистер арасында контекст W3C <code>traceparent</code> тақырыбымен беріледі.</p>
+<p><b>Файл: tracer.py</b></p>
+<pre><code># tracer.py — оқу трассировка агенті (OpenTelemetry / Jaeger идеясы бойынша)
+# Агентті баптау — орта айнымалылары арқылы:
+#   TRACE_SAMPLE_RATE=1.0                           сұраулардың қанша үлесі жазылады (0..1)
+#   TRACE_FILE=traces/spans.jsonl                   жергілікті жинағыш (collector) файлы
+#   OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318   Jaeger-ге жіберу (міндетті емес)
+import json
+import os
+import random
+import threading
+import time
+import urllib.request
+from contextlib import contextmanager
+
+SAMPLE_RATE = float(os.environ.get(&quot;TRACE_SAMPLE_RATE&quot;, &quot;1.0&quot;))
+TRACE_FILE = os.environ.get(&quot;TRACE_FILE&quot;, &quot;traces/spans.jsonl&quot;)
+OTLP = os.environ.get(&quot;OTEL_EXPORTER_OTLP_ENDPOINT&quot;, &quot;&quot;)
+LOCK = threading.Lock()
+CURRENT = threading.local()                 # әр ағынның (сұраудың) ағымдағы span-ы
+KINDS = {&quot;internal&quot;: 1, &quot;server&quot;: 2, &quot;client&quot;: 3}
+
+
+def new_id(n_bytes):
+    return &quot;%0*x&quot; % (n_bytes * 2, random.getrandbits(n_bytes * 8))
+
+
+class Span:
+    def __init__(self, service, name, kind, trace_id, parent_id, sampled):
+        self.service, self.name, self.kind = service, name, kind
+        self.trace_id, self.parent_id, self.sampled = trace_id, parent_id, sampled
+        self.span_id = new_id(8)
+        self.attrs, self.status = {}, &quot;OK&quot;
+        self.start = time.time_ns()
+
+    def set(self, key, value):
+        self.attrs[key] = value
+
+    def error(self, message):
+        self.status = &quot;ERROR&quot;
+        self.attrs[&quot;error.message&quot;] = message
+
+    def traceparent(self):
+        &quot;&quot;&quot;W3C Trace Context: 00-&lt;trace_id 32&gt;-&lt;span_id 16&gt;-&lt;флаг: 01 жазылады, 00 жоқ&gt;&quot;&quot;&quot;
+        return &quot;00-%s-%s-%s&quot; % (self.trace_id, self.span_id, &quot;01&quot; if self.sampled else &quot;00&quot;)
+
+
+def extract(headers):
+    &quot;&quot;&quot;Келген сұраудың traceparent тақырыбынан контекстті алу.&quot;&quot;&quot;
+    try:
+        version, trace_id, span_id, flags = headers.get(&quot;traceparent&quot;, &quot;&quot;).split(&quot;-&quot;)
+        if len(trace_id) == 32 and len(span_id) == 16:
+            return trace_id, span_id, flags == &quot;01&quot;
+    except ValueError:
+        pass
+    return None
+
+
+def inject(headers):
+    &quot;&quot;&quot;Шығатын сұрауға ағымдағы контекстті қосу.&quot;&quot;&quot;
+    span = getattr(CURRENT, &quot;span&quot;, None)
+    if span:
+        headers[&quot;traceparent&quot;] = span.traceparent()
+    return headers
+
+
+class Tracer:
+    def __init__(self, service):
+        self.service = service
+
+    @contextmanager
+    def span(self, name, kind=&quot;internal&quot;, headers=None):
+        parent = getattr(CURRENT, &quot;span&quot;, None)
+        ctx = extract(headers) if headers is not None else None
+        if parent:                                   # осы сервистің ішіндегі бала span
+            trace_id, parent_id, sampled = parent.trace_id, parent.span_id, parent.sampled
+        elif ctx:                                    # басқа сервистен келген сұрау
+            trace_id, parent_id, sampled = ctx
+        else:                                        # жаңа трасса (түбір span)
+            trace_id, parent_id, sampled = new_id(16), &quot;&quot;, random.random() &lt; SAMPLE_RATE
+        s = Span(self.service, name, kind, trace_id, parent_id, sampled)
+        CURRENT.span = s
+        try:
+            yield s
+        except Exception as e:
+            s.error(repr(e))
+            raise
+        finally:
+            s.end = time.time_ns()
+            CURRENT.span = parent
+            if s.sampled:
+                export(s)
+
+
+def export(s):
+    rec = {&quot;trace_id&quot;: s.trace_id, &quot;span_id&quot;: s.span_id, &quot;parent_id&quot;: s.parent_id, &quot;service&quot;: s.service,
+           &quot;name&quot;: s.name, &quot;kind&quot;: s.kind, &quot;start_us&quot;: s.start // 1000,
+           &quot;duration_ms&quot;: round((s.end - s.start) / 1e6, 1), &quot;status&quot;: s.status, &quot;attrs&quot;: s.attrs}
+    with LOCK:
+        os.makedirs(os.path.dirname(TRACE_FILE) or &quot;.&quot;, exist_ok=True)
+        with open(TRACE_FILE, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+            f.write(json.dumps(rec, ensure_ascii=False) + &quot;\n&quot;)
+    if OTLP:
+        threading.Thread(target=send_otlp, args=(s,), daemon=True).start()
+
+
+def send_otlp(s):
+    &quot;&quot;&quot;Span-ды Jaeger-ге OTLP/HTTP (JSON) форматында жіберу: POST /v1/traces&quot;&quot;&quot;
+    attrs = [{&quot;key&quot;: k, &quot;value&quot;: {&quot;stringValue&quot;: str(v)}} for k, v in s.attrs.items()]
+    span = {&quot;traceId&quot;: s.trace_id, &quot;spanId&quot;: s.span_id, &quot;parentSpanId&quot;: s.parent_id, &quot;name&quot;: s.name,
+            &quot;kind&quot;: KINDS[s.kind], &quot;startTimeUnixNano&quot;: str(s.start), &quot;endTimeUnixNano&quot;: str(s.end),
+            &quot;attributes&quot;: attrs, &quot;status&quot;: {&quot;code&quot;: 2 if s.status == &quot;ERROR&quot; else 1}}
+    body = {&quot;resourceSpans&quot;: [{
+        &quot;resource&quot;: {&quot;attributes&quot;: [{&quot;key&quot;: &quot;service.name&quot;, &quot;value&quot;: {&quot;stringValue&quot;: s.service}}]},
+        &quot;scopeSpans&quot;: [{&quot;scope&quot;: {&quot;name&quot;: &quot;aec-tracer&quot;}, &quot;spans&quot;: [span]}]}]}
+    req = urllib.request.Request(OTLP.rstrip(&quot;/&quot;) + &quot;/v1/traces&quot;, data=json.dumps(body).encode(&quot;utf-8&quot;),
+                                 headers={&quot;Content-Type&quot;: &quot;application/json&quot;})
+    try:
+        urllib.request.urlopen(req, timeout=3).read()
+    except OSError as e:
+        print(&quot;[tracer] Jaeger-ге жіберілмеді:&quot;, e)
+
+
+if __name__ == &quot;__main__&quot;:                       # агентті тексеру
+    t = Tracer(&quot;demo&quot;)
+    with t.span(&quot;сыртқы операция&quot;) as a:
+        with t.span(&quot;ішкі операция 1&quot;):
+            time.sleep(0.05)
+        with t.span(&quot;ішкі операция 2&quot;) as b:
+            b.set(&quot;db.table&quot;, &quot;students&quot;)
+            time.sleep(0.02)
+    print(&quot;trace_id:&quot;, a.trace_id)
+    print(&quot;traceparent:&quot;, a.traceparent())
+    print(&quot;3 span жазылды -&gt;&quot;, TRACE_FILE)</code></pre>
+<ol><li><code>tracer.py</code> файлын жасап, тексеріңіз: <code>python3 tracer.py</code> → trace_id, traceparent және «3 span жазылды -&gt; traces/spans.jsonl».</li><li>traces/spans.jsonl файлын ашыңыз: үш жолдың trace_id-і бірдей ме? Қай span түбір (parent_id бос)? Ішкі span-дардың parent_id-і нені көрсетеді?</li><li>traceparent мәнін бөліктерге бөліп түсіндіріңіз: <code>00</code> — нұсқа, 32 таңба — trace_id, 16 таңба — span_id, <code>01</code> — жазылады (sampled).</li><li>Кодты түсіндіріңіз: CURRENT (threading.local) не сақтайды? span() үш жағдайды (бала span, басқа сервистен келген, жаңа трасса) қалай ажыратады? inject() мен extract() не істейді?</li></ol>
+<p class="report-note"><b>Есепке:</b> tracer.py, spans.jsonl мазмұны, traceparent талдауы, сұрақтарға жауап.</p>
+<h4>2-тапсырма. Сұраныстың сервистер арасындағы жолы (20 мин, 35 ұпай)</h4>
+<p>Төрт сервис бір файлда іске қосылады. Әр сервис келген сұрауға server span, басқа сервиске шақыруға client span, ал дерекқор сұрауына бөлек span ашады. view_trace.py — Jaeger UI-дің мәтіндік нұсқасы: трассаны «сарқырама» (waterfall) түрінде көрсетеді.</p>
+<p><b>Файл: services.py</b></p>
+<pre><code># services.py — трассировкасы бар 4 микросервис: gateway -&gt; report -&gt; students, grades
+import json
+import random
+import threading
+import time
+import urllib.error
+import urllib.request
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlsplit
+
+from tracer import Tracer, inject
+
+PORTS = {&quot;gateway&quot;: 8200, &quot;report&quot;: 8201, &quot;students&quot;: 8202, &quot;grades&quot;: 8203}
+STUDENTS = {1: &quot;Айгерім Сапарова&quot;, 2: &quot;Нұрлан Әлібек&quot;, 3: &quot;Дәулет Қасымов&quot;, 4: &quot;Аружан Сейітова&quot;}
+GRADES = {1: [&quot;A&quot;, &quot;B+&quot;], 2: [&quot;B&quot;, &quot;B&quot;], 3: [&quot;C+&quot;, &quot;A-&quot;], 4: [&quot;A&quot;, &quot;A&quot;]}
+ARCHIVE = {3}                         # бұл студенттің бағалары ескі мұрағатта сақталған
+
+
+def call(tracer, service, path):
+    &quot;&quot;&quot;Басқа сервиске HTTP сұрау: client span + traceparent тақырыбы.&quot;&quot;&quot;
+    with tracer.span(&quot;HTTP GET &quot; + service, kind=&quot;client&quot;) as s:
+        url = &quot;http://127.0.0.1:%d%s&quot; % (PORTS[service], path)
+        req = urllib.request.Request(url, headers=inject({}))
+        s.set(&quot;http.url&quot;, url)
+        try:
+            r = urllib.request.urlopen(req, timeout=5)
+        except urllib.error.HTTPError as e:
+            r = e
+        s.set(&quot;http.status_code&quot;, r.status)
+        data = json.loads(r.read())
+        if r.status &gt;= 400:
+            s.error(&quot;%s жауабы %d&quot; % (service, r.status))
+        return r.status, data
+
+
+def db_query(tracer, table, ms):
+    with tracer.span(&quot;db.query &quot; + table) as s:
+        s.set(&quot;db.statement&quot;, &quot;SELECT * FROM %s WHERE student_id = ?&quot; % table)
+        time.sleep((ms + random.randint(0, ms // 2)) / 1000)
+
+
+def gateway(t, sid):
+    return call(t, &quot;report&quot;, &quot;/report?student=%d&quot; % sid)
+
+
+def report(t, sid):
+    code, student = call(t, &quot;students&quot;, &quot;/students/%d&quot; % sid)
+    if code != 200:
+        return code, student
+    code, grades = call(t, &quot;grades&quot;, &quot;/grades/%d&quot; % sid)
+    with t.span(&quot;build report&quot;):
+        time.sleep(0.01)
+        return code, {&quot;student&quot;: student[&quot;name&quot;], &quot;grades&quot;: grades.get(&quot;grades&quot;, [])}
+
+
+def students(t, sid):
+    db_query(t, &quot;students&quot;, 20)
+    if sid not in STUDENTS:
+        return 404, {&quot;error&quot;: &quot;студент табылмады&quot;}
+    return 200, {&quot;id&quot;: sid, &quot;name&quot;: STUDENTS[sid]}
+
+
+def grades(t, sid):
+    with t.span(&quot;cache.get&quot;) as s:
+        time.sleep(0.003)
+        s.set(&quot;cache.hit&quot;, False)
+    db_query(t, &quot;grades&quot;, 30)
+    if sid in ARCHIVE:
+        db_query(t, &quot;grades_archive&quot;, 1200)               # баяу: индекссіз ескі кесте
+    return 200, {&quot;id&quot;: sid, &quot;grades&quot;: GRADES.get(sid, [])}
+
+
+def make_handler(name, logic):
+    tracer = Tracer(name)
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            u = urlsplit(self.path)
+            with tracer.span(&quot;GET &quot; + u.path.rstrip(&quot;/0123456789&quot;) or &quot;/&quot;, kind=&quot;server&quot;, headers=self.headers) as s:
+                q = parse_qs(u.query)
+                sid = int(q.get(&quot;student&quot;, [u.path.rsplit(&quot;/&quot;, 1)[-1]])[0])
+                s.set(&quot;student.id&quot;, sid)
+                code, data = logic(tracer, sid)
+                s.set(&quot;http.status_code&quot;, code)
+                if code &gt;= 400:
+                    s.error(&quot;HTTP %d&quot; % code)
+            body = json.dumps(data, ensure_ascii=False).encode(&quot;utf-8&quot;)
+            self.send_response(code)
+            self.send_header(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;)
+            self.send_header(&quot;Content-Length&quot;, str(len(body)))
+            self.send_header(&quot;X-Trace-ID&quot;, s.trace_id)
+            self.end_headers()
+            self.wfile.write(body)
+
+        def log_message(self, *args):
+            pass
+
+    return Handler
+
+
+for name, logic in ((&quot;gateway&quot;, gateway), (&quot;report&quot;, report), (&quot;students&quot;, students), (&quot;grades&quot;, grades)):
+    server = ThreadingHTTPServer((&quot;127.0.0.1&quot;, PORTS[name]), make_handler(name, logic))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    print(&quot;іске қосылды: %-9s http://127.0.0.1:%d&quot; % (name, PORTS[name]))
+
+while True:
+    time.sleep(1)</code></pre>
+<p><b>Файл: view_trace.py</b></p>
+<pre><code># view_trace.py — трассаларды талдау (Jaeger UI-дің мәтіндік нұсқасы)
+#   python3 view_trace.py                 — соңғы трассалар тізімі
+#   python3 view_trace.py &lt;trace_id&gt;      — бір трассаның «сарқырамасы» (waterfall)
+#   python3 view_trace.py slowest         — ең баяу трасса
+import collections
+import json
+import sys
+
+FILE = &quot;traces/spans.jsonl&quot;
+spans = [json.loads(line) for line in open(FILE, encoding=&quot;utf-8&quot;) if line.strip()]
+traces = collections.defaultdict(list)
+for s in spans:
+    traces[s[&quot;trace_id&quot;]].append(s)
+
+
+def root(trace):
+    return next((s for s in trace if not s[&quot;parent_id&quot;]), min(trace, key=lambda s: s[&quot;start_us&quot;]))
+
+
+def summary():
+    print(&quot;%-32s  %-14s %9s %5s %6s&quot; % (&quot;trace_id&quot;, &quot;түбір&quot;, &quot;мс&quot;, &quot;span&quot;, &quot;қате&quot;))
+    for tid, tr in list(traces.items())[-15:]:
+        r = root(tr)
+        errors = sum(s[&quot;status&quot;] == &quot;ERROR&quot; for s in tr)
+        print(&quot;%-32s  %-14s %9.1f %5d %6s&quot; % (tid, r[&quot;service&quot;] + &quot; &quot; + r[&quot;name&quot;].split()[-1], r[&quot;duration_ms&quot;], len(tr), errors or &quot;&quot;))
+
+
+def waterfall(tid):
+    tr = traces[tid]
+    r = root(tr)
+    t0, total = r[&quot;start_us&quot;], max(r[&quot;duration_ms&quot;], 0.1)
+    children = collections.defaultdict(list)
+    for s in tr:
+        children[s[&quot;parent_id&quot;]].append(s)
+    print(&quot;Трасса %s: %d span, %.1f мс\n&quot; % (tid, len(tr), total))
+
+    def show(s, depth):
+        left = int((s[&quot;start_us&quot;] - t0) / 1000 / total * 40)
+        width = max(1, int(s[&quot;duration_ms&quot;] / total * 40))
+        bar = &quot; &quot; * left + &quot;█&quot; * width
+        mark = &quot;  ← ҚАТЕ: &quot; + s[&quot;attrs&quot;].get(&quot;error.message&quot;, &quot;&quot;) if s[&quot;status&quot;] == &quot;ERROR&quot; else &quot;&quot;
+        print(&quot;%-44s |%-41s| %8.1f мс%s&quot; % (&quot;  &quot; * depth + s[&quot;service&quot;] + &quot;: &quot; + s[&quot;name&quot;], bar, s[&quot;duration_ms&quot;], mark))
+        for c in sorted(children[s[&quot;span_id&quot;]], key=lambda c: c[&quot;start_us&quot;]):
+            show(c, depth + 1)
+    show(r, 0)
+    own = max((s for s in tr if not children[s[&quot;span_id&quot;]]), key=lambda s: s[&quot;duration_ms&quot;])
+    print(&quot;\nЕң ұзақ «жапырақ» span: %s: %s — %.1f мс (%.0f%%)&quot; % (own[&quot;service&quot;], own[&quot;name&quot;], own[&quot;duration_ms&quot;],
+                                                               own[&quot;duration_ms&quot;] / total * 100))
+
+
+if len(sys.argv) == 1:
+    summary()
+elif sys.argv[1] == &quot;slowest&quot;:
+    waterfall(max(traces, key=lambda t: root(traces[t])[&quot;duration_ms&quot;]))
+else:
+    waterfall(sys.argv[1])</code></pre>
+<ol><li>traces қалтасын өшіріңіз (1-тапсырманың демо span-дары). 1-терминал: <code>python3 services.py</code> → төрт сервис іске қосылды.</li><li>2-терминал: 1, 2, 3, 4 және 99 студенттер үшін сұрау жіберіңіз: <code>curl "http://127.0.0.1:8200/report?student=1"</code> ... Жауаптың <code>X-Trace-ID</code> тақырыбын <code>curl -i</code> арқылы көріңіз.</li><li><code>python3 view_trace.py</code> → трассалар тізімі: әрқайсысында 11–12 span, біреуі баяу (≈ 1500 мс), біреуінде қате бар.</li><li><code>python3 view_trace.py slowest</code> → сарқырама. Баяулаудың себебін табыңыз: қай сервис, қай операция, жалпы уақыттың неше пайызы? (Күтілетін нәтиже: grades: db.query grades_archive, ≈ 94%.)</li><li>Қатесі бар трассаны ашыңыз (<code>python3 view_trace.py &lt;trace_id&gt;</code>): қате қай сервистен басталып, қалай жоғары қарай таралды?</li><li>Түсіндіріңіз: неге gateway-дің уақыты барлық ішкі span-дардың уақытын қамтиды? Журналдармен салыстырғанда трассировканың артықшылығы неде?</li></ol>
+<p class="report-note"><b>Есепке:</b> services.py және view_trace.py, трассалар тізімі, баяу және қатесі бар трассаның сарқырамасы, табылған себеп, сұрақтарға жауап.</p>
+<h4>3-тапсырма. Агентті баптау: sampling, Jaeger, жеке нұсқа (20 мин, 30 ұпай)</h4>
+<p>Нақты жүйеде секундына мыңдаған сұрау болады, сондықтан барлығы емес, бір бөлігі ғана жазылады (sampling). Агент кодты өзгертпей, орта айнымалыларымен бапталады — OpenTelemetry агенттері де дәл солай бапталады (OTEL_SERVICE_NAME, OTEL_TRACES_SAMPLER_ARG, OTEL_EXPORTER_OTLP_ENDPOINT).</p>
+<ol><li>Sampling: сервистерді тоқтатып, traces қалтасын өшіріңіз. <code>TRACE_SAMPLE_RATE=0.2 python3 services.py</code>. 20 сұрау жіберіңіз (Mac: <code>for i in $(seq 1 20); do curl -s "http://127.0.0.1:8200/report?student=1" &gt; /dev/null; done</code>) → <code>python3 view_trace.py</code> ≈ 4 трасса. Неге трассаның барлық span-ы бірге не жазылады, не жазылмайды (traceparent-тегі 01 / 00 флагы)?</li><li>Jaeger (Docker болса): <code>docker run --rm --name jaeger -e COLLECTOR_OTLP_ENABLED=true -p 16686:16686 -p 4318:4318 jaegertracing/all-in-one:latest</code>. Сервистерді <code>OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318 python3 services.py</code> арқылы қайта іске қосып, бірнеше сұрау жіберіңіз. Браузерде http://localhost:16686 → Service: gateway → Find Traces. Сарқырамаңызды Jaeger-дегімен салыстырыңыз. Docker болмаса — оқытушының демонстрациясын қараңыз.</li><li>Нұсқаңыз бойынша тапсырманы орындаңыз (өз жұмысыңыз).</li><li>Түсіндіріңіз: head-based sampling дегеніміз не және оның кемшілігі (сирек қатені өткізіп алу)? Агентті неге кодпен емес, орта айнымалыларымен баптаған ыңғайлы?</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>view_trace.py <code>--stats</code>: әр операция (сервис: атауы) бойынша саны, орташа және ең үлкен ұзақтығы, ұзақтығы бойынша сұрыпталған кесте.</td><td>db.query grades_archive бірінші орында</td></tr><tr><td>2</td><td>gateway-ге <code>auth.check</code> span-ын қосу: <code>X-User</code> тақырыбын атрибут ретінде жазады, тақырып жоқ болса — 401 және ERROR span.</td><td>сарқырамада auth.check бар</td></tr><tr><td>3</td><td>view_trace.py <code>--slow 500</code>: ұзақтығы 500 мс-тан асатын трассалар және әрқайсысының ең ұзақ «жапырақ» span-ы.</td><td>тек баяу трассалар</td></tr><tr><td>4</td><td>view_trace.py <code>--errors</code>: қатесі бар трассалар және қатенің басталған (ең төменгі) span-ы.</td><td>students: GET /students</td></tr><tr><td>5</td><td>trace.html: бір трассаның сарқырамасын HTML бетке (div-тер, ені — ұзақтығы) шығару.</td><td>браузерде сарқырама</td></tr><tr><td>6</td><td>Қатені әрқашан сақтау: sampled = 00 болса да, ERROR span-ы бар трасса traces/errors.jsonl файлына жазылады.</td><td>SAMPLE_RATE=0 кезінде де 99-студент қатесі жазылады</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> sampling нәтижесі, Jaeger скриншоты (немесе мәтіндік сарқырама), нұсқаңыздың коды мен нәтижесі.</p>
+<h3>Тапсыру</h3>
+<ul><li>16_tracing қалтасын (traces/ қоспай) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–3-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: трассировка баяулау мен қателердің себебін табуға қалай көмектеседі.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>tracer.py жасалған; trace, span, traceparent түсіндірілген</td><td>25</td></tr><tr><td>2</td><td>Сервистер трассаланады; сарқырама бойынша баяулау мен қатенің себебі табылған</td><td>35</td></tr><tr><td>3</td><td>Агент бапталған (sampling, Jaeger / OTLP) және жеке нұсқа</td><td>30</td></tr><tr><td>4</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>Distributed Tracing дегеніміз не және ол журналдар мен метрикалардан немен ерекшеленеді?</li><li>Trace және span дегеніміз не? Span-да қандай мәліметтер сақталады?</li><li>trace_id, span_id, parent_id не үшін керек?</li><li>W3C traceparent тақырыбының құрылымы қандай?</li><li>Контекст сервистер арасында қалай беріледі (inject / extract)?</li><li>Server, client және internal span-дардың айырмашылығы неде?</li><li>Sampling дегеніміз не? Head-based және tail-based sampling айырмашылығы?</li><li>Jaeger қандай бөліктерден тұрады (агент/SDK, collector, storage, UI)?</li><li>OpenTelemetry дегеніміз не және OTLP хаттамасы не үшін керек?</li><li>Сарқырама (waterfall) бойынша баяулаудың себебін қалай табасыз?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="tracing"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="tracing"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="Микросервистердегі сұраныстарды трассировкалау (Jaeger)">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=9f180855"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=37b6c75d"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>

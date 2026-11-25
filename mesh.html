@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Микросервистер арасындағы байланысты реттеу (Service Mesh) | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "sm01", "q": "Service Mesh нені басқарады?", "o": ["Тек сырттан келетін трафикті", "Сервистердің өзара (шығыс-батыс) трафигін", "Дерекқор кестелерін", "Docker образдарын"]}, {"id": "sm02", "q": "Sidecar-прокси дегеніміз не?", "o": ["Сервистің кодына жазылған кітапхана", "Әр сервистің жанында тұрып, оның барлық трафигін өткізетін прокси", "Дерекқордың көшірмесі", "Мониторинг беті"]}, {"id": "sm03", "q": "Control plane-нің міндеті қандай?", "o": ["Пайдаланушы сұрауларын тікелей өңдеу", "Ережелерді сақтап, оларды sidecar-ларға тарату", "Логтарды өшіру", "Кодты компиляциялау"]}, {"id": "sm04", "q": "Canary шығарылым дегеніміз не?", "o": ["Жаңа нұсқаны бірден барлығына беру", "Жаңа нұсқаға алдымен трафиктің аз бөлігін беріп, біртіндеп арттыру", "Ескі нұсқаны жою", "Түнде ғана шығару"]}, {"id": "sm05", "q": "split {\"v1\": 80, \"v2\": 20}, 500 сұрау. v2-ге шамамен қанша түседі?", "o": ["20", "100", "400", "250"]}, {"id": "sm06", "q": "Неге match (тақырып) ережесі split-тен бұрын тексеріледі?", "o": ["Жылдамдық үшін", "Тестілеушілер салмаққа қарамастан әрқашан v2-ге түсуі үшін", "split жұмыс істемейді", "Ретінің маңызы жоқ"]}, {"id": "sm07", "q": "timeout 800 мс, retries 1. Сервис мүлдем жауап бермесе, клиент шамамен қанша күтеді?", "o": ["0,8 с", "1,6 с", "2,4 с", "Шексіз"]}, {"id": "sm08", "q": "Circuit breaker не істейді?", "o": ["Сұрауды шифрлайды", "Қатарынан көп қате берген дананы уақытша тізімнен шығарады", "Трафикті екі есе арттырады", "Құпиясөзді тексереді"]}, {"id": "sm09", "q": "Retry storm дегеніміз не?", "o": ["Қайталаулардың жоқтығы", "Құлап жатқан сервиске қайталаулар жүктемені еселеп, оны толық құлатуы", "Желінің жылдамдауы", "Логтардың көптігі"]}, {"id": "sm10", "q": "gRPC қандай хаттама үстінде жұмыс істейді?", "o": ["FTP", "HTTP/2", "SMTP", "UDP ғана"]}, {"id": "sm11", "q": "gRPC хабарламаларының әдепкі форматы қандай?", "o": ["XML", "Protocol Buffers (Protobuf)", "CSV", "YAML"]}, {"id": "sm12", "q": "HTTP 200 жауабында grpc-status: 7. Бұл нені білдіреді?", "o": ["Сәтті", "PERMISSION_DENIED — рұқсат жоқ", "NOT_FOUND", "Сервер баяу"]}, {"id": "sm13", "q": "grpc-status 14 (UNAVAILABLE) HTTP-дегі қай кодқа ұқсас?", "o": ["200", "404", "503", "301"]}, {"id": "sm14", "q": "mTLS-тің Service Mesh-тегі рөлі қандай?", "o": ["Тек сайтты жылдамдату", "Трафикті шифрлау және сервистің кім екенін сертификат арқылы анықтау", "IP мекенжай беру", "Логтарды сақтау"]}, {"id": "sm15", "q": "Трафикті нұсқалар арасында бөлу (weight) Istio-ның қай ресурсында жазылады?", "o": ["AuthorizationPolicy", "VirtualService", "PeerAuthentication", "Secret"]}, {"id": "sm16", "q": "mesh.json-ды неге қолданбас бұрын check_mesh.py-мен тексереміз?", "o": ["Файл кішірейеді", "Қате ереже (мысалы, салмақ қосындысы 110) бүкіл жүйенің трафигін бұзуы мүмкін", "Тексеру міндетті емес", "Python талап етеді"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>15_mesh</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html">12</a><a href="deploy.html">13</a><a href="envconfig.html">14</a><a href="mesh.html" class="on">15</a><a href="tracing.html">16</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №15</p>
+<h1>Микросервистер арасындағы байланысты реттеу (Service Mesh)</h1>
+<p class="lead">Service Mesh: sidecar-прокси, canary және тақырып бойынша маршрут, retry, timeout, circuit breaker, gRPC/HTTP трафигі, mTLS, Istio маршруттарын автоматты жасау.</p></div>
+<ul class="meta"><li><span>уақыты</span>6 сағат</li><li><span>бейне</span>1:51</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>Service Mesh технологиясын сипаттайды</b><b>gRPC/HTTP арқылы трафикацияны түсіндіреді</b><b>Желілік маршруттарды баптайтын конфигурация әзірлейді</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Мәселе: сервистер бір-біріне тікелей қосылады</h2>
+<p>Микросервистер көп болған сайын олардың өзара трафигі (шығыс-батыс трафигі) күрделенеді. Әр сервистің кодында retry, timeout, шифрлау, «кімге рұқсат» және журнал жазу логикасы қайталанады. Бір сервер құласа, қате бірден пайдаланушыға жетеді, ал жаңа нұсқа барлығына бірден түседі.</p>
+<p><b>Service Mesh</b> — сервистер арасындағы байланысты кодтан бөліп, бір жерден реттейтін инфрақұрылым қабаты. API шлюзі <i>сырттан келген</i> трафикті басқарса, Service Mesh сервистердің <i>өзара</i> трафигін басқарады.</p>
+</section>
+<section>
+<h2>2. Құрылымы: data plane және control plane</h2>
+<div class="cards">
+<div class="card"><h4>Sidecar-прокси</h4><p>Әр сервистің жанында тұратын прокси (Istio-да — <b>Envoy</b>). Сервис тек өз sidecar-ына сұрау жібереді.</p></div>
+<div class="card"><h4>Data plane</h4><p>Барлық sidecar-лар жиыны: нақты трафик солар арқылы өтеді.</p></div>
+<div class="card"><h4>Control plane</h4><p>Ережелерді сақтап, sidecar-ларға таратады (Istio: <b>istiod</b>). Біздің жұмыста — <code>mesh.json</code> және hot reload.</p></div>
+<div class="card"><h4>Мысалдар</h4><p>Istio, Linkerd, Consul Connect, Cilium Service Mesh.</p></div>
+</div>
+<div class="flow">
+<div>frontend<small>сервис</small></div><span>→</span>
+<div>sidecar<small>маршрут, retry, mTLS</small></div><span>→</span>
+<div>sidecar<small>рұқсатты тексеру</small></div><span>→</span>
+<div>students v1 / v2<small>сервис</small></div>
+</div>
+</section>
+<section>
+<h2>3. Трафикті басқару</h2>
+<p><b>Service discovery</b>: sidecar қызмет атауы бойынша оның барлық данасын табады. <b>Canary</b> шығарылым: жаңа нұсқаға алдымен аз трафик беріледі, қате болмаса — үлес біртіндеп өседі. Тестілеушілерді тақырып бойынша бірден жаңа нұсқаға жіберуге болады.</p>
+<pre><code>"routing": {
+  "match": [{"header": "X-User-Group", "equals": "tester", "subset": "v2"}],
+  "split": {"v1": 90, "v2": 10}        <span class="c"># 90% — ескі, 10% — жаңа</span>
+}</code></pre>
+<table>
+<tr><th>Тәсіл</th><th>Қалай</th><th>Тәуекел</th></tr>
+<tr><td><b>Canary</b></td><td>10% → 25% → 50% → 100%</td><td>қате аз пайдаланушыға тиеді</td></tr>
+<tr><td><b>Blue-Green</b></td><td>екі толық орта, бірден ауысу</td><td>ресурс екі есе</td></tr>
+<tr><td><b>Mirroring</b></td><td>трафиктің көшірмесі жаңа нұсқаға, жауабы ескерілмейді</td><td>пайдаланушыға мүлдем тимейді</td></tr>
+</table>
+</section>
+<section>
+<h2>4. Тұрақтылық: timeout, retry, circuit breaker</h2>
+<div class="cards">
+<div class="card"><h4>Timeout</h4><p>Баяу сервисті шексіз күтпейміз: уақыт өтсе — <b>504</b>.</p></div>
+<div class="card"><h4>Retry</h4><p>Сәтсіз сұрауды басқа данаға қайталау. Тым көп болса — <b>retry storm</b>: құлап жатқан сервиске жүктеме еселенеді.</p></div>
+<div class="card"><h4>Circuit breaker</h4><p>Қатарынан N қате берген дананы уақытша «ажыратып», оған сұрау жібермейміз (Istio: <code>outlierDetection</code>).</p></div>
+<div class="card"><h4>Ең нашар күту</h4><p>timeout × (retries + 1): 800 мс × 2 = 1,6 с.</p></div>
+</div>
+</section>
+<section>
+<h2>5. gRPC және HTTP трафигі</h2>
+<p><b>gRPC</b> — Google жасаған RPC жүйесі: <b>HTTP/2</b> үстінде жұмыс істейді, хабарламалар <b>Protobuf</b> (бинарлы) форматында, бір қосылымда көп ағын (multiplexing) жүреді. Шақыру — әрқашан <code>POST /пакет.Сервис/Әдіс</code>.</p>
+<pre><code>POST /aec.grades.Grades/GetGrade HTTP/2
+content-type: application/grpc
+
+HTTP/2 200
+grpc-status: 7        <span class="c"># HTTP 200 болса да — gRPC қатесі</span></code></pre>
+<table>
+<tr><th>grpc-status</th><th>Атауы</th><th>Қашан</th></tr>
+<tr><td>0</td><td>OK</td><td>сәтті</td></tr>
+<tr><td>4</td><td>DEADLINE_EXCEEDED</td><td>timeout (HTTP 504-ке ұқсас)</td></tr>
+<tr><td>5</td><td>NOT_FOUND</td><td>жазба жоқ</td></tr>
+<tr><td>7</td><td>PERMISSION_DENIED</td><td>рұқсат жоқ (403)</td></tr>
+<tr><td>14</td><td>UNAVAILABLE</td><td>сервис қолжетімсіз (503)</td></tr>
+</table>
+<p>Sidecar gRPC-ді жол бойынша таниды: <code>/aec.grades.Grades/...</code> → grades қызметі. HTTP/1.1-де әр сұрауға жеке қосылым немесе кезек керек, ал HTTP/2-де бір TCP қосылымда жүздеген параллель ағын.</p>
+</section>
+<section>
+<h2>6. Қауіпсіздік: mTLS және рұқсат саясаты</h2>
+<p><b>mTLS</b> (mutual TLS) — екі жақ та сертификат көрсетеді. Sidecar-лар трафикті автоматты шифрлайды, ал сервистің «кім екені» IP-мен емес, сертификаттағы атаумен анықталады (<code>cluster.local/ns/college/sa/frontend</code>). <b>AuthorizationPolicy</b> кімге қай сервиске рұқсат барын жазады.</p>
+<div class="callout warn">IP мекенжайы контейнер қайта іске қосылғанда өзгереді және оны жалған көрсетуге болады. Сондықтан Zero Trust желісінде сенім сертификатқа негізделеді.</div>
+</section>
+<section>
+<h2>7. Istio ресурстары</h2>
+<table>
+<tr><th>mesh.json</th><th>Istio ресурсы</th><th>Өріс</th></tr>
+<tr><td>routing.match, split</td><td>VirtualService</td><td>http.match, route.weight</td></tr>
+<tr><td>timeout_ms, retries</td><td>VirtualService</td><td>timeout, retries.attempts</td></tr>
+<tr><td>instances.version</td><td>DestinationRule</td><td>subsets.labels.version</td></tr>
+<tr><td>circuit_breaker</td><td>DestinationRule</td><td>outlierDetection</td></tr>
+<tr><td>allow</td><td>AuthorizationPolicy</td><td>rules.from.source.principals</td></tr>
+<tr><td>—</td><td>PeerAuthentication</td><td>mtls.mode: STRICT</td></tr>
+</table>
+<pre><code>$ python3 check_mesh.py && python3 gen_istio.py && kubectl apply -f istio/mesh.yaml</code></pre>
+<p>Маршруттар конфигурациясы — код сияқты: Git-те сақталады, CI-де тексеріледі, содан кейін ғана кластерге қолданылады.</p>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="mesh"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:51).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_15_mesh.pdf" target="_blank"><b>praktikalyk_15_mesh.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>15_service_mesh</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 15_service_mesh</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Service Mesh-тің жұмыс принципін өз қолыңызбен жасалған sidecar-прокси арқылы меңгеру: қызметтерді табу, трафикті нұсқалар арасында бөлу (canary), тақырып бойынша маршрут, retry, timeout, circuit breaker, gRPC/HTTP трафигі, қолжетімділік саясаты және желілік маршруттар конфигурациясын (Istio) автоматты түрде жасау.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. Service Mesh технологиясын сипаттайды.<br>2. gRPC/HTTP арқылы трафикацияны түсіндіреді.<br>3. Желілік маршруттарды баптайтын конфигурация әзірлейді.</td></tr>
+<tr><td>Уақыты</td><td>135 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген), іске қосып, тексересіз.</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), curl, браузер</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледждің электронды журналы бірнеше микросервистен тұрады: students (студенттер тізімі, v1 нұсқасының екі данасы және жаңа v2 нұсқасы) және grades (бағалар, gRPC арқылы шақырылады). Қазір әр қызмет бір-біріне тікелей қосылады: жаңа нұсқаны шығарғанда барлық пайдаланушы бірден соған түседі, бір сервер құласа — қате пайдаланушыға жетеді, ал Telegram-бот бағаларды рұқсатсыз оқи алады. IT бөлімі қызметтер арасындағы байланысты бір жерден реттейтін Service Mesh енгізуді шешті. Сіз оның оқу нұсқасын жасайсыз: әр қызметтің жанында тұратын sidecar-прокси және оның ережелері жазылған mesh.json.</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз. Әр тапсырмада: 1) қандай файл жасау керек; 2) оның толық коды; 3) қалай іске қосу; 4) қандай нәтиже шығуы керек. Кодты көшірмей, түсініп жазыңыз — қорғауда әр жолды түсіндіресіз. Mac-та <code>python3</code>, Windows-та <code>python</code> деп жазыңыз; Windows PowerShell-де <code>curl</code> орнына <code>curl.exe</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде жаңа қалта жасаңыз: <code>15_service_mesh</code>.</li><li>VS Code → File → Open Folder → <code>15_service_mesh</code>. Файлдарды сол жақтағы Explorer-дегі «New File» батырмасымен жасайсыз.</li><li>Үш терминал ашыңыз: Terminal → New Terminal, содан кейін ⊞ (Split Terminal) батырмасын екі рет басыңыз. 1-терминал — қызметтер, 2-терминал — sidecar, 3-терминал — тексеру.</li><li>Python-ды тексеріңіз: <code>python3 --version</code> → 3.10 немесе жоғары.</li><li>Жұмыс соңында қалтада 6 файл және бір қалта болады: services.py, sidecar.py, mesh.json, client.py, check_mesh.py, gen_istio.py және istio/mesh.yaml.</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Микросервистерді жасау (15 мин, 10 ұпай)</h4>
+<p>Бір файлда төрт «микросервис» данасы іске қосылады: students-тің v1 нұсқасы (екі дана), v2 нұсқасы (бір дана) және grades. grades қызметі gRPC стилінде шақырылады: <code>POST /aec.grades.Grades/GetGrade</code> — нақты gRPC-де де жол «/пакет.Сервис/Әдіс» түрінде болады.</p>
+<p><b>Файл: services.py</b></p>
+<pre><code># services.py — Service Mesh ішіндегі 4 оқу микросервисі
+import json
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+INSTANCES = [
+    (&quot;students&quot;, &quot;v1&quot;, &quot;students-v1-a&quot;, 9101),
+    (&quot;students&quot;, &quot;v1&quot;, &quot;students-v1-b&quot;, 9102),
+    (&quot;students&quot;, &quot;v2&quot;, &quot;students-v2-a&quot;, 9103),
+    (&quot;grades&quot;, &quot;v1&quot;, &quot;grades-v1-a&quot;, 9104),
+]
+GRADES = {1: &quot;A&quot;, 2: &quot;B+&quot;, 3: &quot;C&quot;, 4: &quot;A-&quot;}
+
+
+def make_handler(service, version, name):
+    state = {&quot;mode&quot;: &quot;ok&quot;}                      # ok | break | slow
+
+    class Handler(BaseHTTPRequestHandler):
+        def send(self, code, data, extra=None):
+            body = json.dumps(data, ensure_ascii=False).encode(&quot;utf-8&quot;)
+            self.send_response(code)
+            self.send_header(&quot;Content-Type&quot;, (extra or {}).pop(&quot;ctype&quot;, &quot;application/json; charset=utf-8&quot;))
+            self.send_header(&quot;Content-Length&quot;, str(len(body)))
+            self.send_header(&quot;X-Served-By&quot;, name)
+            self.send_header(&quot;X-Version&quot;, version)
+            for k, v in (extra or {}).items():
+                self.send_header(k, str(v))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def handle_any(self):
+            print(name, self.command, self.path, &quot;from:&quot;, self.headers.get(&quot;X-Mesh-Source&quot;),
+                  &quot;rid:&quot;, self.headers.get(&quot;X-Request-ID&quot;))
+            if self.path.startswith(&quot;/admin/&quot;):
+                cmd = self.path.split(&quot;/&quot;)[2]
+                state[&quot;mode&quot;] = &quot;ok&quot; if cmd == &quot;fix&quot; else cmd
+                return self.send(200, {&quot;instance&quot;: name, &quot;mode&quot;: state[&quot;mode&quot;]})
+            if state[&quot;mode&quot;] == &quot;slow&quot;:
+                time.sleep(2.5)
+            if state[&quot;mode&quot;] == &quot;break&quot;:
+                return self.send(503, {&quot;instance&quot;: name, &quot;error&quot;: &quot;service unavailable&quot;})
+            # gRPC стиліндегі шақыру: POST /aec.grades.Grades/GetGrade
+            if self.path == &quot;/aec.grades.Grades/GetGrade&quot; and self.command == &quot;POST&quot;:
+                size = int(self.headers.get(&quot;Content-Length&quot;) or 0)
+                req = json.loads(self.rfile.read(size) or b&quot;{}&quot;)
+                sid = req.get(&quot;student_id&quot;)
+                if sid not in GRADES:
+                    return self.send(200, {&quot;message&quot;: &quot;студент табылмады&quot;},
+                                     {&quot;ctype&quot;: &quot;application/grpc+json&quot;, &quot;grpc-status&quot;: 5})
+                return self.send(200, {&quot;student_id&quot;: sid, &quot;grade&quot;: GRADES[sid], &quot;instance&quot;: name},
+                                 {&quot;ctype&quot;: &quot;application/grpc+json&quot;, &quot;grpc-status&quot;: 0})
+            data = {&quot;service&quot;: service, &quot;version&quot;: version, &quot;instance&quot;: name, &quot;path&quot;: self.path}
+            if service == &quot;students&quot; and version == &quot;v2&quot;:
+                data[&quot;new_field&quot;] = &quot;фото және топ&quot;       # v2-нің жаңа мүмкіндігі
+            self.send(200, data)
+
+        do_GET = do_POST = handle_any
+
+        def log_message(self, *args):
+            pass
+
+    return Handler
+
+
+for service, version, name, port in INSTANCES:
+    server = ThreadingHTTPServer((&quot;127.0.0.1&quot;, port), make_handler(service, version, name))
+    threading.Thread(target=server.serve_forever, daemon=True).start()
+    print(&quot;іске қосылды: %-14s %s  http://127.0.0.1:%d&quot; % (name, version, port))
+
+while True:
+    time.sleep(1)</code></pre>
+<ol><li><code>services.py</code> файлын жасап, кодты жазыңыз, сақтаңыз (Cmd+S / Ctrl+S).</li><li>1-терминалда іске қосыңыз: <code>python3 services.py</code>. Төрт жол шығады: «іске қосылды: students-v1-a v1 http://127.0.0.1:9101» ... Терминалды жаппаңыз.</li><li>3-терминалда тексеріңіз: <code>curl -i http://127.0.0.1:9101/students/list</code> → 200, <code>X-Version: v1</code>. <code>curl http://127.0.0.1:9103/students/list</code> → денесінде <code>new_field</code> бар (v2).</li><li>gRPC стиліндегі шақыру: <code>curl -i -X POST -H "Content-Type: application/grpc+json" -d '{"student_id": 2}' http://127.0.0.1:9104/aec.grades.Grades/GetGrade</code> → 200, <code>grpc-status: 0</code>, баға B+. student_id 99 болса → HTTP 200, бірақ <code>grpc-status: 5</code> (NOT_FOUND).</li><li>Түсіндіріңіз: неге gRPC-де қате HTTP коды емес, grpc-status арқылы беріледі? v1 мен v2 жауабының айырмашылығы қандай?</li></ol>
+<p class="report-note"><b>Есепке:</b> services.py коды, v1 / v2 / gRPC жауаптарының скриншоттары, сұрақтарға жауап.</p>
+<h4>2-тапсырма. Sidecar-прокси және қызметтерді табу (25 мин, 15 ұпай)</h4>
+<p>Service Mesh-те қызмет басқа қызметке тікелей емес, өз жанындағы sidecar арқылы қосылады. Sidecar mesh.json-нан қызметтің қай мекенжайларда тұрғанын біледі (service discovery) және сұрауды солардың біріне жібереді. Бұл тапсырмада бес функция әзірге «бос» (заглушка) — оларды 3–6-тапсырмаларда толық кодпен ауыстырасыз.</p>
+<p><b>Файл: mesh.json</b></p>
+<pre><code>{
+  &quot;services&quot;: {
+    &quot;students&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9101&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9102&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9103&quot;, &quot;version&quot;: &quot;v2&quot;}
+      ],
+      &quot;timeout_ms&quot;: 1000
+    },
+    &quot;grades&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9104&quot;, &quot;version&quot;: &quot;v1&quot;}
+      ],
+      &quot;timeout_ms&quot;: 800
+    }
+  }
+}</code></pre>
+<p><b>Файл: sidecar.py</b></p>
+<pre><code># sidecar.py — Service Mesh-тегі sidecar-прокси (оқу нұсқасы)
+# іске қосу: python3 sidecar.py &lt;қызмет-атауы&gt; &lt;порт&gt;, мысалы: python3 sidecar.py frontend 15001
+import http.client
+import itertools
+import json
+import os
+import random
+import socket
+import sys
+import time
+import uuid
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+SOURCE = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;frontend&quot;     # бұл sidecar кімге тиесілі
+PORT = int(sys.argv[2]) if len(sys.argv) &gt; 2 else 15001
+MESH_FILE = &quot;mesh.json&quot;
+MESH = {}
+STATE = {&quot;mtime&quot;: 0}
+GRPC_CODES = {403: 7, 404: 12, 502: 14, 503: 14, 504: 4}      # HTTP -&gt; grpc-status
+
+
+def load_mesh():
+    global MESH
+    with open(MESH_FILE, encoding=&quot;utf-8&quot;) as f:
+        MESH = json.load(f)
+    STATE[&quot;mtime&quot;] = os.path.getmtime(MESH_FILE)
+    print(&quot;[%s] mesh.json жүктелді, қызметтер: %s&quot; % (SOURCE, &quot;, &quot;.join(MESH[&quot;services&quot;])))
+
+
+def find_service(path):
+    &quot;&quot;&quot;URL-дан қызметті табу: /students/... (HTTP) немесе /aec.grades.Grades/... (gRPC).&quot;&quot;&quot;
+    first = path.strip(&quot;/&quot;).split(&quot;/&quot;)[0]
+    if first in MESH[&quot;services&quot;]:
+        return first
+    for name, svc in MESH[&quot;services&quot;].items():
+        if svc.get(&quot;grpc&quot;) == first:
+            return name
+    return None
+
+
+RR = {}
+
+
+def pick(service, svc, subset):
+    &quot;&quot;&quot;Таңдалған нұсқаның (subset) тірі инстанстарынан кезекпен біреуін алу.&quot;&quot;&quot;
+    pool = [i for i in svc[&quot;instances&quot;] if subset is None or i[&quot;version&quot;] == subset]
+    alive = [i for i in pool if is_alive(i[&quot;addr&quot;])]
+    pool = alive or pool
+    n = next(RR.setdefault((service, subset), itertools.count()))
+    return pool[n % len(pool)]
+
+
+# ===== Төмендегі 5 функция әзірге «бос» (заглушка). Келесі тапсырмаларда оларды толық кодпен АУЫСТЫРАСЫЗ =====
+def choose_subset(svc, headers):    # 3-тапсырмада ауыстырасыз
+    return None
+
+
+def is_alive(addr):                 # 4-тапсырмада ауыстырасыз
+    return True
+
+
+def report(addr, ok):               # 4-тапсырмада ауыстырасыз
+    pass
+
+
+def authorize(svc):                 # 5-тапсырмада ауыстырасыз
+    return True
+
+
+def maybe_reload():                 # 6-тапсырмада ауыстырасыз
+    pass
+
+
+class Sidecar(BaseHTTPRequestHandler):
+    def reply(self, code, data, headers=None):
+        body = data if isinstance(data, bytes) else json.dumps(data, ensure_ascii=False).encode(&quot;utf-8&quot;)
+        headers = dict(headers or {})
+        if self.grpc and code &gt;= 400:                 # gRPC клиентке қате коды grpc-status-пен
+            headers[&quot;grpc-status&quot;] = GRPC_CODES.get(code, 2)
+        self.send_response(code)
+        self.send_header(&quot;Content-Type&quot;, headers.pop(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;))
+        self.send_header(&quot;Content-Length&quot;, str(len(body)))
+        self.send_header(&quot;X-Request-ID&quot;, self.rid)
+        for k, v in headers.items():
+            self.send_header(k, str(v))
+        self.end_headers()
+        self.wfile.write(body)
+        self.code = code
+
+    def handle_any(self):
+        maybe_reload()
+        t0, self.code, target, tries = time.time(), 0, &quot;-&quot;, 0
+        self.rid = self.headers.get(&quot;X-Request-ID&quot;) or uuid.uuid4().hex[:12]
+        self.grpc = self.headers.get(&quot;Content-Type&quot;, &quot;&quot;).startswith(&quot;application/grpc&quot;)
+        service = find_service(self.path.split(&quot;?&quot;)[0])
+        try:
+            if service is None:
+                return self.reply(404, {&quot;error&quot;: &quot;mesh-те мұндай қызмет жоқ&quot;, &quot;path&quot;: self.path})
+            svc = MESH[&quot;services&quot;][service]
+            if not authorize(svc):
+                return self.reply(403, {&quot;error&quot;: &quot;%s қызметіне %s үшін рұқсат жоқ&quot; % (service, SOURCE)})
+            subset = choose_subset(svc, self.headers)
+            body = self.rfile.read(int(self.headers.get(&quot;Content-Length&quot;) or 0)) or None
+            fwd = {&quot;X-Request-ID&quot;: self.rid, &quot;X-Mesh-Source&quot;: SOURCE}
+            for h in (&quot;Content-Type&quot;, &quot;X-User-Group&quot;):
+                if self.headers.get(h):
+                    fwd[h] = self.headers[h]
+            error = 503
+            for tries in range(1, svc.get(&quot;retries&quot;, 0) + 2):         # 1 әрекет + retries
+                inst = pick(service, svc, subset)
+                target = &quot;%s %s&quot; % (inst[&quot;version&quot;], inst[&quot;addr&quot;])
+                host, port = inst[&quot;addr&quot;].rsplit(&quot;:&quot;, 1)
+                conn = http.client.HTTPConnection(host, int(port), timeout=svc[&quot;timeout_ms&quot;] / 1000)
+                try:
+                    conn.request(self.command, self.path, body=body, headers=fwd)
+                    resp = conn.getresponse()
+                    data = resp.read()
+                except (socket.timeout, TimeoutError):
+                    report(inst[&quot;addr&quot;], False)
+                    error = 504
+                    continue
+                except OSError:
+                    report(inst[&quot;addr&quot;], False)
+                    error = 503
+                    continue
+                finally:
+                    conn.close()
+                report(inst[&quot;addr&quot;], resp.status &lt; 500)
+                if resp.status &gt;= 500:
+                    error = resp.status
+                    continue
+                out = {&quot;Content-Type&quot;: resp.getheader(&quot;Content-Type&quot;), &quot;X-Served-By&quot;: resp.getheader(&quot;X-Served-By&quot;),
+                       &quot;X-Version&quot;: resp.getheader(&quot;X-Version&quot;), &quot;X-Attempts&quot;: tries}
+                if resp.getheader(&quot;grpc-status&quot;) is not None:
+                    out[&quot;grpc-status&quot;] = resp.getheader(&quot;grpc-status&quot;)
+                return self.reply(resp.status, data, out)
+            return self.reply(error, {&quot;error&quot;: &quot;қызмет жауап бермеді&quot;, &quot;service&quot;: service}, {&quot;X-Attempts&quot;: tries})
+        finally:
+            print(&quot;[%s] %d %s %s -&gt; %s %s (%d әрекет) %d мс&quot; % (SOURCE, self.code, self.command, self.path, service,
+                                                              target, tries, (time.time() - t0) * 1000))
+
+    do_GET = do_POST = handle_any
+
+    def log_message(self, *args):
+        pass
+
+
+load_mesh()
+print(&quot;[%s] sidecar: http://127.0.0.1:%d&quot; % (SOURCE, PORT))
+ThreadingHTTPServer((&quot;127.0.0.1&quot;, PORT), Sidecar).serve_forever()</code></pre>
+<p><b>Файл: client.py</b></p>
+<pre><code># client.py — sidecar арқылы сұраулар жіберу және нәтижені санау
+# мысалдар:
+#   python3 client.py /students/list --n 100
+#   python3 client.py /students/list --n 20 -H X-User-Group=tester
+#   python3 client.py /aec.grades.Grades/GetGrade --grpc &#x27;{&quot;student_id&quot;: 2}&#x27;
+import argparse
+import collections
+import time
+import urllib.error
+import urllib.request
+
+p = argparse.ArgumentParser()
+p.add_argument(&quot;path&quot;)
+p.add_argument(&quot;--n&quot;, type=int, default=1)
+p.add_argument(&quot;--port&quot;, type=int, default=15001)
+p.add_argument(&quot;-H&quot;, &quot;--header&quot;, action=&quot;append&quot;, default=[])
+p.add_argument(&quot;--grpc&quot;, help=&quot;gRPC стиліндегі шақыру: JSON хабарлама&quot;)
+a = p.parse_args()
+
+codes, versions, grpc = collections.Counter(), collections.Counter(), collections.Counter()
+start = time.perf_counter()
+for i in range(a.n):
+    data = a.grpc.encode(&quot;utf-8&quot;) if a.grpc else None
+    req = urllib.request.Request(&quot;http://127.0.0.1:%d%s&quot; % (a.port, a.path), data=data)
+    if a.grpc:
+        req.add_header(&quot;Content-Type&quot;, &quot;application/grpc+json&quot;)
+    for h in a.header:
+        k, v = h.split(&quot;=&quot;, 1)
+        req.add_header(k, v)
+    try:
+        r = urllib.request.urlopen(req, timeout=15)
+    except urllib.error.HTTPError as e:
+        r = e
+    body = r.read().decode(&quot;utf-8&quot;)
+    codes[r.status] += 1
+    if r.headers.get(&quot;X-Version&quot;):
+        versions[r.headers.get(&quot;X-Version&quot;)] += 1
+    if r.headers.get(&quot;grpc-status&quot;) is not None:
+        grpc[r.headers.get(&quot;grpc-status&quot;)] += 1
+    if a.n == 1:
+        print(&quot;HTTP&quot;, r.status, &quot;| нұсқа:&quot;, r.headers.get(&quot;X-Version&quot;), &quot;| сервер:&quot;, r.headers.get(&quot;X-Served-By&quot;),
+              &quot;| әрекет:&quot;, r.headers.get(&quot;X-Attempts&quot;), &quot;| grpc-status:&quot;, r.headers.get(&quot;grpc-status&quot;))
+        print(body)
+
+if a.n &gt; 1:
+    print(&quot;Уақыт: %.1f с&quot; % (time.perf_counter() - start))
+    print(&quot;Статус кодтары:&quot;, dict(codes))
+    print(&quot;Нұсқалар:&quot;, dict(versions))
+    if grpc:
+        print(&quot;grpc-status:&quot;, dict(grpc))</code></pre>
+<ol><li>Үш файлды жасаңыз. 2-терминалда sidecar-ды іске қосыңыз: <code>python3 sidecar.py frontend 15001</code> → «mesh.json жүктелді, қызметтер: students, grades».</li><li>3-терминал: <code>python3 client.py /students/list</code> → HTTP 200, нұсқа, сервер, «әрекет: 1». 2-терминалда әр сұрау бір жол болып шығады.</li><li><code>python3 client.py /students/list --n 30</code> → Нұсқалар: v1 ≈ 20, v2 ≈ 10. Жаңа v2 нұсқасына пайдаланушылардың үштен бірі түсіп кетті — бұл мәселе 3-тапсырмада шешіледі.</li><li><code>python3 client.py /teachers/list</code> → 404 «mesh-те мұндай қызмет жоқ». 1-терминалдағы журналдан X-Mesh-Source және X-Request-ID мәндерін табыңыз.</li><li>Кодты түсіндіріңіз: find_service() қызметті қалай табады? pick() неге кезекпен (round robin) таңдайды? Неге X-Request-ID барлық қызметке беріледі?</li></ol>
+<p class="report-note"><b>Есепке:</b> mesh.json, sidecar.py, client.py, сұраулар нәтижесі, сұрақтарға жауап.</p>
+<h4>3-тапсырма. Трафикті бөлу: canary және тақырып бойынша маршрут (20 мин, 15 ұпай)</h4>
+<p>Жаңа нұсқа бірден барлығына емес, алдымен аз бөлікке (canary — «шахтадағы канарейка») беріледі: 90% — v1, 10% — v2. Ал тестілеушілер (<code>X-User-Group: tester</code> тақырыбы) әрқашан v2-ге түседі. mesh.json мазмұнын төмендегімен толық ауыстырыңыз, sidecar.py ішінде <code>choose_subset</code> заглушкасын өшіріп, орнына төмендегі кодты жазыңыз. Sidecar-ды қайта іске қосыңыз (Ctrl+C, содан кейін <code>python3 sidecar.py frontend 15001</code>).</p>
+<p><b>Файл: mesh.json (жаңа нұсқа)</b></p>
+<pre><code>{
+  &quot;services&quot;: {
+    &quot;students&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9101&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9102&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9103&quot;, &quot;version&quot;: &quot;v2&quot;}
+      ],
+      &quot;routing&quot;: {
+        &quot;match&quot;: [
+          {&quot;header&quot;: &quot;X-User-Group&quot;, &quot;equals&quot;: &quot;tester&quot;, &quot;subset&quot;: &quot;v2&quot;}
+        ],
+        &quot;split&quot;: {&quot;v1&quot;: 90, &quot;v2&quot;: 10}
+      },
+      &quot;timeout_ms&quot;: 1000
+    },
+    &quot;grades&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9104&quot;, &quot;version&quot;: &quot;v1&quot;}
+      ],
+      &quot;routing&quot;: {
+        &quot;split&quot;: {&quot;v1&quot;: 100}
+      },
+      &quot;timeout_ms&quot;: 800
+    }
+  }
+}</code></pre>
+<p><b>Файл: sidecar.py — choose_subset орнына</b></p>
+<pre><code>def choose_subset(svc, headers):
+    &quot;&quot;&quot;Қай нұсқаға (v1 / v2) жіберу керегін шешу.&quot;&quot;&quot;
+    rule = svc.get(&quot;routing&quot;)
+    if not rule:
+        return None
+    for m in rule.get(&quot;match&quot;, []):                  # 1) тақырып бойынша маршрут
+        if headers.get(m[&quot;header&quot;]) == m[&quot;equals&quot;]:
+            return m[&quot;subset&quot;]
+    x = random.uniform(0, 100)                         # 2) салмақ бойынша (canary)
+    for subset, weight in rule[&quot;split&quot;].items():
+        if x &lt; weight:
+            return subset
+        x -= weight
+    return list(rule[&quot;split&quot;])[-1]</code></pre>
+<ol><li><code>python3 client.py /students/list --n 100</code> → Нұсқалар: v1 ≈ 90, v2 ≈ 10. Тағы екі рет қайталап, нәтижелерді кестеге жазыңыз. Неге дәл 90 / 10 емес?</li><li><code>python3 client.py /students/list --n 10 -H X-User-Group=tester</code> → барлығы v2.</li><li>split-ті 50 / 50 етіп өзгертіп, sidecar-ды қайта іске қосыңыз, 100 сұрау жіберіңіз. Сосын 90 / 10-ға қайтарыңыз.</li><li>v1-дің бір данасын «бұзыңыз»: <code>curl http://127.0.0.1:9101/admin/break</code> және <code>python3 client.py /students/list --n 10</code> → бірнеше 503 шығады. Бұл мәселе 4-тапсырмада шешіледі. Содан кейін <code>/admin/fix</code>.</li><li>Кодты түсіндіріңіз: салмақ бойынша таңдау қалай жұмыс істейді (x кездейсоқ сан 0..100)? Неге match ережесі split-тен бұрын тексеріледі?</li></ol>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, 90/10 және 50/50 нәтижелерінің кестесі, tester нәтижесі, сұрақтарға жауап.</p>
+<h4>4-тапсырма. Тұрақтылық: retry, timeout, circuit breaker (20 мин, 15 ұпай)</h4>
+<p>Sidecar қатені пайдаланушыға бірден бермеуі керек: басқа данаға қайта жіберу (retry), ұзақ күтпеу (timeout) және қайта-қайта құлайтын серверді уақытша тізімнен шығару (circuit breaker). mesh.json мазмұнын ауыстырыңыз (retries және circuit_breaker қосылды), sidecar.py ішінде <code>is_alive</code> және <code>report</code> заглушкаларын өшіріп, орнына төмендегі кодты жазыңыз. Retry мен timeout циклі handle_any() ішінде 2-тапсырмадан бері бар — қараңыз.</p>
+<p><b>Файл: mesh.json (жаңа нұсқа)</b></p>
+<pre><code>{
+  &quot;services&quot;: {
+    &quot;students&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9101&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9102&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9103&quot;, &quot;version&quot;: &quot;v2&quot;}
+      ],
+      &quot;routing&quot;: {
+        &quot;match&quot;: [
+          {&quot;header&quot;: &quot;X-User-Group&quot;, &quot;equals&quot;: &quot;tester&quot;, &quot;subset&quot;: &quot;v2&quot;}
+        ],
+        &quot;split&quot;: {&quot;v1&quot;: 90, &quot;v2&quot;: 10}
+      },
+      &quot;timeout_ms&quot;: 1000,
+      &quot;retries&quot;: 2
+    },
+    &quot;grades&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9104&quot;, &quot;version&quot;: &quot;v1&quot;}
+      ],
+      &quot;routing&quot;: {
+        &quot;split&quot;: {&quot;v1&quot;: 100}
+      },
+      &quot;timeout_ms&quot;: 800,
+      &quot;retries&quot;: 1
+    }
+  },
+  &quot;circuit_breaker&quot;: {&quot;consecutive_errors&quot;: 3, &quot;eject_seconds&quot;: 15}
+}</code></pre>
+<p><b>Файл: sidecar.py — is_alive және report орнына</b></p>
+<pre><code>HEALTH = {}
+
+
+def is_alive(addr):
+    return HEALTH.get(addr, {}).get(&quot;open_until&quot;, 0) &lt;= time.time()
+
+
+def report(addr, ok):
+    cb = MESH.get(&quot;circuit_breaker&quot;, {&quot;consecutive_errors&quot;: 3, &quot;eject_seconds&quot;: 15})
+    h = HEALTH.setdefault(addr, {&quot;errors&quot;: 0, &quot;open_until&quot;: 0})
+    if ok:
+        h[&quot;errors&quot;] = 0
+        return
+    h[&quot;errors&quot;] += 1
+    if h[&quot;errors&quot;] &gt;= cb[&quot;consecutive_errors&quot;]:
+        h[&quot;errors&quot;] = 0
+        h[&quot;open_until&quot;] = time.time() + cb[&quot;eject_seconds&quot;]
+        print(&quot;[CIRCUIT] %s қатарынан %d қате -&gt; %d секундқа ажыратылды&quot; % (addr, cb[&quot;consecutive_errors&quot;], cb[&quot;eject_seconds&quot;]))</code></pre>
+<ol><li>Sidecar-ды қайта іске қосып, <code>curl http://127.0.0.1:9101/admin/break</code>, содан кейін <code>python3 client.py /students/list --n 10</code> → барлығы 200. 2-терминалда «(2 әрекет)» жолдары және <code>[CIRCUIT] 127.0.0.1:9101 қатарынан 3 қате -&gt; 15 секундқа ажыратылды</code>. <code>/admin/fix</code>.</li><li>Баяу қызмет: <code>curl http://127.0.0.1:9104/admin/slow</code>, содан кейін <code>python3 client.py /grades/list</code> → 504, «әрекет: 2», шамамен 1,6 секунд (800 мс × 2). <code>/admin/fix</code>.</li><li>1-терминалда Ctrl+C (барлық қызмет тоқтайды), <code>python3 client.py /students/list</code> → 503. Қызметтерді қайта іске қосыңыз.</li><li>Кодты түсіндіріңіз: circuit breaker-дің «жабық», «ашық» күйлері нені білдіреді? Неге retry санын тым көп қоюға болмайды (retry storm)? 503 мен 504 айырмашылығы?</li></ol>
+<p class="report-note"><b>Есепке:</b> өзгертілген код, retry және [CIRCUIT] хабары, 504 және 503 скриншоттары, сұрақтарға жауап.</p>
+<h4>5-тапсырма. gRPC/HTTP трафигі және қолжетімділік саясаты (20 мин, 15 ұпай)</h4>
+<p>grades қызметі gRPC арқылы шақырылады: sidecar оны <code>/aec.grades.Grades/...</code> жолынан таниды (mesh.json-дағы <code>grpc</code> кілті). Қолжетімділік саясаты (<code>allow</code>): бағаларды тек frontend оқи алады, ал students-ке telegram-bot та рұқсат етілген. Нақты Istio-да бұл AuthorizationPolicy, ал қызметтің кім екені mTLS сертификатынан анықталады. mesh.json мазмұнын ауыстырыңыз, sidecar.py ішінде <code>authorize</code> заглушкасын төмендегі кодпен ауыстырыңыз.</p>
+<p><b>Файл: mesh.json (соңғы нұсқа)</b></p>
+<pre><code>{
+  &quot;services&quot;: {
+    &quot;students&quot;: {
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9101&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9102&quot;, &quot;version&quot;: &quot;v1&quot;},
+        {&quot;addr&quot;: &quot;127.0.0.1:9103&quot;, &quot;version&quot;: &quot;v2&quot;}
+      ],
+      &quot;routing&quot;: {
+        &quot;match&quot;: [{&quot;header&quot;: &quot;X-User-Group&quot;, &quot;equals&quot;: &quot;tester&quot;, &quot;subset&quot;: &quot;v2&quot;}],
+        &quot;split&quot;: {&quot;v1&quot;: 90, &quot;v2&quot;: 10}
+      },
+      &quot;timeout_ms&quot;: 1000,
+      &quot;retries&quot;: 2,
+      &quot;allow&quot;: [&quot;frontend&quot;, &quot;telegram-bot&quot;]
+    },
+    &quot;grades&quot;: {
+      &quot;grpc&quot;: &quot;aec.grades.Grades&quot;,
+      &quot;instances&quot;: [
+        {&quot;addr&quot;: &quot;127.0.0.1:9104&quot;, &quot;version&quot;: &quot;v1&quot;}
+      ],
+      &quot;routing&quot;: {&quot;split&quot;: {&quot;v1&quot;: 100}},
+      &quot;timeout_ms&quot;: 800,
+      &quot;retries&quot;: 1,
+      &quot;allow&quot;: [&quot;frontend&quot;]
+    }
+  },
+  &quot;circuit_breaker&quot;: {&quot;consecutive_errors&quot;: 3, &quot;eject_seconds&quot;: 15}
+}</code></pre>
+<p><b>Файл: sidecar.py — authorize орнына</b></p>
+<pre><code>def authorize(svc):
+    allow = svc.get(&quot;allow&quot;)
+    return allow is None or SOURCE in allow</code></pre>
+<ol><li>Sidecar-ды қайта іске қосыңыз. 3-терминал: <code>python3 client.py /aec.grades.Grades/GetGrade --grpc '{"student_id": 2}'</code> → HTTP 200, grpc-status: 0. Windows PowerShell-де: <code>python client.py /aec.grades.Grades/GetGrade --grpc '{\"student_id\": 2}'</code>.</li><li>student_id 99 → HTTP 200, grpc-status: 5 (NOT_FOUND). <code>--n 20</code> арқылы 20 gRPC шақыру жіберіңіз → grpc-status: {'0': 20}.</li><li>Тағы бір терминал ашып, Telegram-боттың sidecar-ын іске қосыңыз: <code>python3 sidecar.py telegram-bot 15002</code>. <code>python3 client.py /students/list --port 15002</code> → 200; <code>python3 client.py /aec.grades.Grades/GetGrade --grpc '{"student_id": 2}' --port 15002</code> → HTTP 403, grpc-status: 7 (PERMISSION_DENIED).</li><li>grades-ті «баяулатып» gRPC шақыру жіберіңіз → grpc-status: 4 (DEADLINE_EXCEEDED). Кестені толтырыңыз: жағдай → HTTP коды → grpc-status → атауы.</li><li>Түсіндіріңіз: HTTP/1.1 мен HTTP/2 (gRPC негізі) айырмашылығы неде? Protobuf пен JSON-ның айырмашылығы? Неге Service Mesh-те қызметтің «кім екені» IP-мен емес, сертификатпен анықталады?</li></ol>
+<div class="table-wrap"><table><tr><th>№</th><th>Жағдай</th><th>Күтілетін нәтиже</th></tr><tr><td>1</td><td>frontend → GetGrade (student_id 2)</td><td>HTTP 200, grpc-status 0 (OK)</td></tr><tr><td>2</td><td>frontend → GetGrade (student_id 99)</td><td>HTTP 200, grpc-status 5 (NOT_FOUND)</td></tr><tr><td>3</td><td>telegram-bot → GetGrade</td><td>HTTP 403, grpc-status 7 (PERMISSION_DENIED)</td></tr><tr><td>4</td><td>grades баяу (slow)</td><td>HTTP 504, grpc-status 4 (DEADLINE_EXCEEDED)</td></tr><tr><td>5</td><td>grades тоқтаған</td><td>HTTP 503, grpc-status 14 (UNAVAILABLE)</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> mesh.json, authorize коды, кесте скриншоттарымен, сұрақтарға жауап.</p>
+<h4>6-тапсырма. Маршруттар конфигурациясы: тексеру, Istio, жеке нұсқа (35 мин, 20 ұпай)</h4>
+<p>Нақты кластерде маршруттар Istio ресурстарымен (VirtualService, DestinationRule, AuthorizationPolicy, PeerAuthentication) сипатталады. Біз оларды mesh.json-нан автоматты түрде жасаймыз, қолданбас бұрын тексереміз, ал sidecar өзгерісті тоқтамай-ақ қабылдайды (control plane рөлі). sidecar.py ішінде <code>maybe_reload</code> заглушкасын ауыстырыңыз, екі файл жасаңыз.</p>
+<p><b>Файл: sidecar.py — maybe_reload орнына</b></p>
+<pre><code>def maybe_reload():
+    m = os.path.getmtime(MESH_FILE)
+    if m == STATE[&quot;mtime&quot;]:
+        return
+    old = MESH
+    try:
+        load_mesh()
+        print(&quot;[RELOAD] жаңа маршруттар қолданылды&quot;)
+    except (ValueError, KeyError) as e:
+        globals()[&quot;MESH&quot;] = old
+        STATE[&quot;mtime&quot;] = m
+        print(&quot;[RELOAD] mesh.json қате, ескі конфигурация қалды:&quot;, e)</code></pre>
+<p><b>Файл: check_mesh.py</b></p>
+<pre><code># check_mesh.py — mesh.json-ды қолданбас бұрын тексеру (CI-де іске қосылады)
+import json
+import re
+import sys
+
+FILE = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;mesh.json&quot;
+
+
+def check(mesh):
+    errors, warnings, addrs = [], [], set()
+    for name, svc in mesh[&quot;services&quot;].items():
+        versions = set()
+        for inst in svc.get(&quot;instances&quot;, []):
+            if not re.fullmatch(r&quot;[\w.-]+:\d{2,5}&quot;, inst.get(&quot;addr&quot;, &quot;&quot;)):
+                errors.append(&quot;%s: addr қате: %r&quot; % (name, inst.get(&quot;addr&quot;)))
+            if inst.get(&quot;addr&quot;) in addrs:
+                errors.append(&quot;%s: %s мекенжайы қайталанады&quot; % (name, inst[&quot;addr&quot;]))
+            addrs.add(inst.get(&quot;addr&quot;))
+            versions.add(inst.get(&quot;version&quot;))
+        if not svc.get(&quot;instances&quot;):
+            errors.append(&quot;%s: бірде-бір инстанс жоқ&quot; % name)
+        rule = svc.get(&quot;routing&quot;, {})
+        split = rule.get(&quot;split&quot;, {})
+        if split and sum(split.values()) != 100:
+            errors.append(&quot;%s: салмақтар қосындысы %d, 100 болуы керек&quot; % (name, sum(split.values())))
+        for subset in list(split) + [m[&quot;subset&quot;] for m in rule.get(&quot;match&quot;, [])]:
+            if subset not in versions:
+                errors.append(&quot;%s: &#x27;%s&#x27; нұсқасының инстансы жоқ&quot; % (name, subset))
+        t = svc.get(&quot;timeout_ms&quot;, 0)
+        if not 50 &lt;= t &lt;= 30000:
+            errors.append(&quot;%s: timeout_ms %s (50–30000 аралығында болуы керек)&quot; % (name, t))
+        if not 0 &lt;= svc.get(&quot;retries&quot;, 0) &lt;= 5:
+            errors.append(&quot;%s: retries 0–5 аралығында болуы керек&quot; % name)
+        if &quot;grpc&quot; in svc and not re.fullmatch(r&quot;[a-z]\w*(\.\w+)+&quot;, svc[&quot;grpc&quot;]):
+            errors.append(&quot;%s: gRPC атауы &#x27;пакет.Сервис&#x27; түрінде болуы керек&quot; % name)
+        if &quot;allow&quot; not in svc:
+            warnings.append(&quot;%s: allow жоқ — қызметке кез келген адам қосыла алады&quot; % name)
+        elif not svc[&quot;allow&quot;]:
+            warnings.append(&quot;%s: allow бос — қызметке ешкім қосыла алмайды&quot; % name)
+        if t * (svc.get(&quot;retries&quot;, 0) + 1) &gt; 5000:
+            warnings.append(&quot;%s: ең нашар жағдайда күту %d мс&quot; % (name, t * (svc.get(&quot;retries&quot;, 0) + 1)))
+    return errors, warnings
+
+
+try:
+    mesh = json.load(open(FILE, encoding=&quot;utf-8&quot;))
+    errors, warnings = check(mesh)
+except (ValueError, KeyError) as e:
+    errors, warnings = [&quot;%s оқылмады: %s&quot; % (FILE, e)], []
+for w in warnings:
+    print(&quot;  [ЕСКЕРТУ]&quot;, w)
+for e in errors:
+    print(&quot;  [ҚАТЕ]&quot;, e)
+print(&quot;Қате саны: %d, ескерту саны: %d&quot; % (len(errors), len(warnings)))
+sys.exit(1 if errors else 0)</code></pre>
+<p><b>Файл: gen_istio.py</b></p>
+<pre><code># gen_istio.py — mesh.json -&gt; Istio манифестері (istio/mesh.yaml)
+# Kubernetes-те қолдану: kubectl apply -f istio/mesh.yaml
+import json
+import os
+
+NS = &quot;college&quot;
+mesh = json.load(open(&quot;mesh.json&quot;, encoding=&quot;utf-8&quot;))
+docs = []
+
+docs.append(&quot;&quot;&quot;apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: %s
+spec:
+  mtls:
+    mode: STRICT&quot;&quot;&quot; % NS)
+
+for name, svc in mesh[&quot;services&quot;].items():
+    rule = svc.get(&quot;routing&quot;, {})
+    t = svc[&quot;timeout_ms&quot;] / 1000
+    tries = svc.get(&quot;retries&quot;, 0)
+    http = []
+    for m in rule.get(&quot;match&quot;, []):
+        http.append(&quot;&quot;&quot;  - match:
+    - headers:
+        %s:
+          exact: %s
+    route:
+    - destination:
+        host: %s
+        subset: %s&quot;&quot;&quot; % (m[&quot;header&quot;].lower(), m[&quot;equals&quot;], name, m[&quot;subset&quot;]))
+    routes = &quot;&quot;.join(&quot;&quot;&quot;
+    - destination:
+        host: %s
+        subset: %s
+      weight: %d&quot;&quot;&quot; % (name, s, w) for s, w in rule.get(&quot;split&quot;, {}).items())
+    http.append(&quot;&quot;&quot;  - route:%s
+    timeout: %.1fs
+    retries:
+      attempts: %d
+      perTryTimeout: %.1fs
+      retryOn: 5xx,connect-failure,reset&quot;&quot;&quot; % (routes, t * (tries + 1), tries, t))
+    docs.append(&quot;&quot;&quot;apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: %s
+  namespace: %s
+spec:
+  hosts:
+  - %s
+  http:
+%s&quot;&quot;&quot; % (name, NS, name, &quot;\n&quot;.join(http)))
+
+    cb = mesh.get(&quot;circuit_breaker&quot;, {&quot;consecutive_errors&quot;: 3, &quot;eject_seconds&quot;: 15})
+    versions = sorted({i[&quot;version&quot;] for i in svc[&quot;instances&quot;]})
+    subsets = &quot;&quot;.join(&quot;&quot;&quot;
+  - name: %s
+    labels:
+      version: %s&quot;&quot;&quot; % (v, v) for v in versions)
+    docs.append(&quot;&quot;&quot;apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: %s
+  namespace: %s
+spec:
+  host: %s
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: %d
+      interval: 10s
+      baseEjectionTime: %ds
+  subsets:%s&quot;&quot;&quot; % (name, NS, name, cb[&quot;consecutive_errors&quot;], cb[&quot;eject_seconds&quot;], subsets))
+
+    if &quot;allow&quot; in svc:
+        who = &quot;&quot;.join(&quot;\n        - cluster.local/ns/%s/sa/%s&quot; % (NS, s) for s in svc[&quot;allow&quot;])
+        docs.append(&quot;&quot;&quot;apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: %s-allow
+  namespace: %s
+spec:
+  selector:
+    matchLabels:
+      app: %s
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals:%s&quot;&quot;&quot; % (name, NS, name, who))
+
+os.makedirs(&quot;istio&quot;, exist_ok=True)
+with open(&quot;istio/mesh.yaml&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+    f.write(&quot;\n---\n&quot;.join(docs) + &quot;\n&quot;)
+print(&quot;istio/mesh.yaml жасалды: %d ресурс&quot; % len(docs))</code></pre>
+<ol><li>Sidecar-ды қайта іске қосыңыз. <code>python3 check_mesh.py; echo $?</code> → «Қате саны: 0», 0 (Windows: <code>python check_mesh.py; echo $LASTEXITCODE</code>).</li><li>Hot reload: sidecar-ды тоқтатпай, mesh.json-да split-ті 50 / 50 етіп сақтаңыз. Келесі сұрауда 2-терминалда <code>[RELOAD] жаңа маршруттар қолданылды</code>; <code>python3 client.py /students/list --n 100</code> → ≈ 50 / 50.</li><li>Қате енгізіңіз: split 50 / 60 → <code>check_mesh.py</code> → «салмақтар қосындысы 110», шығу коды 1. mesh.json-ға әдейі синтаксис қатесін енгізіп сақтаңыз → sidecar «ескі конфигурация қалды» деп жұмысын жалғастырады. Файлды 90 / 10 күйіне қайтарыңыз.</li><li><code>python3 gen_istio.py</code> → «istio/mesh.yaml жасалды: 7 ресурс». Файлды ашып, mesh.json-дағы әр кілттің YAML-дағы орнын табыңыз (кесте: mesh.json → Istio ресурсы → өріс).</li><li>Нұсқаңыз бойынша тапсырманы орындаңыз (төмендегі кесте, өз жұмысыңыз).</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма және кеңес</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>promote.py: canary қадамы — <code>python3 promote.py students 25</code> mesh.json-да v2 салмағын 25-ке, v1-ді 75-ке қояды, check_mesh-тің check() функциясымен тексеріп барып сақтайды.</td><td>sidecar тоқтамай 75 / 25</td></tr><tr><td>2</td><td>Ақау енгізу (fault injection): <code>"fault": {"delay_ms": 500, "percent": 20}</code> — sidecar сұраулардың 20%-ын 500 мс кешіктіреді; gen_istio.py VirtualService-ке <code>fault: delay:</code> блогын қосады.</td><td>--n 20 уақыты ≈ 2 с артады</td></tr><tr><td>3</td><td>Трафикті айналы көшіру (mirroring): <code>"mirror": "v2"</code> — әр сұраудың көшірмесі v2-ге де жіберіледі (жеке ағында), жауабы ескерілмейді; gen_istio.py-ге <code>mirror:</code> қосу.</td><td>клиент тек v1-ді көреді, v2 журналында сұраулар бар</td></tr><tr><td>4</td><td>Sidecar статистикасы: <code>GET /mesh/stats</code> → қызмет, нұсқа және статус коды бойынша санауыштар (JSON).</td><td>client.py --n 50-ден кейін сандар сәйкес</td></tr><tr><td>5</td><td>Жіберушіге лимит: <code>"rate_limit": {"per_minute": 60, "burst": 5}</code> — token bucket (№11 жұмысы), асса 429 және grpc-status 8 (RESOURCE_EXHAUSTED).</td><td>--n 20 лезде: ≈ 5 өтеді</td></tr><tr><td>6</td><td>gen_istio.py <code>--k8s</code>: әр қызмет нұсқасына Kubernetes Deployment (labels: app, version) және әр қызметке Service манифесін жасайды (istio/k8s.yaml).</td><td>students: 2 Deployment, 1 Service</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> maybe_reload, check_mesh.py, gen_istio.py, hot reload және қателер нәтижесі, mesh.json → Istio кестесі, нұсқаңыздың коды мен нәтижесі.</p>
+<h3>Тапсыру</h3>
+<ul><li>15_service_mesh қалтасын (services.py, sidecar.py, mesh.json, client.py, check_mesh.py, gen_istio.py, istio/) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–6-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: Service Mesh қандай мәселелерді кодты өзгертпей шешеді.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>Микросервистер жасалған; v1, v2 және gRPC жауаптары көрсетілген</td><td>10</td></tr><tr><td>2</td><td>Sidecar және mesh.json: қызметтерді табу, маршруттау, X-Request-ID</td><td>15</td></tr><tr><td>3</td><td>Canary (салмақ) және тақырып бойынша маршрут жұмыс істейді</td><td>15</td></tr><tr><td>4</td><td>Retry, timeout, circuit breaker көрсетілген</td><td>15</td></tr><tr><td>5</td><td>gRPC трафигі, grpc-status кестесі, қолжетімділік саясаты</td><td>15</td></tr><tr><td>6</td><td>Hot reload, check_mesh.py, gen_istio.py және жеке нұсқа</td><td>20</td></tr><tr><td>7</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>Service Mesh дегеніміз не және ол қандай мәселелерді шешеді?</li><li>Data plane және control plane дегеніміз не? Сіздің жұмысыңызда олардың рөлін не атқарды?</li><li>Sidecar-прокси дегеніміз не? Istio-да оның рөлін қай бағдарлама атқарады (Envoy)?</li><li>Canary шығарылым дегеніміз не? Трафикті салмақ бойынша бөлу қалай жұмыс істейді?</li><li>Retry, timeout және circuit breaker не үшін керек? Retry storm дегеніміз не?</li><li>gRPC-дің HTTP/REST-тен айырмашылығы неде (HTTP/2, Protobuf, ағындар)?</li><li>grpc-status кодтары: 0, 4, 5, 7, 14 нені білдіреді?</li><li>mTLS дегеніміз не және Service Mesh-те қызметтің «кім екені» қалай анықталады?</li><li>VirtualService, DestinationRule, AuthorizationPolicy ресурстарының әрқайсысы не үшін керек?</li><li>Неге маршруттар конфигурациясын қолданбас бұрын автоматты түрде тексерген дұрыс?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="mesh"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="mesh"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="Микросервистер арасындағы байланысты реттеу (Service Mesh)">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form><div class="next"><a class="btn ghost" href="tracing.html">Келесі тақырып: №16</a></div></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=9f180855"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=37b6c75d"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>
