@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<title>Лог файлдарды орталықтан жинау жүйесі | ИС 3-1 оқу практикасы</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css?v=f8629583">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230d1520'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='monospace' font-weight='700' font-size='16' fill='%2339e58c'%3E&gt;_%3C/text%3E%3C/svg%3E">
+<script>window.QUIZ = [{"id": "lg01", "q": "Орталықтандырылған лог жинаудың басты пайдасы?", "o": ["Логтар азаяды", "Барлық сервердің логын бір жерден іздеу, салыстыру және сақтау", "Серверлер жылдамдайды", "Логтар қажет болмай қалады"]}, {"id": "lg02", "q": "Лог жинайтын агентке мысал?", "o": ["Kibana", "Fluent Bit / Filebeat / Promtail", "Elasticsearch", "Grafana"]}, {"id": "lg03", "q": "ELK стегіндегі «L» не?", "o": ["Loki", "Logstash", "Linux", "Logrotate"]}, {"id": "lg04", "q": "Loki-дің Elasticsearch-тен басты айырмашылығы?", "o": ["Лог сақтамайды", "Тек белгілерді (labels) индекстейді, мәтінді толық индекстемейді — жеңіл әрі арзан", "Тек Windows-та жұмыс істейді", "SQL қолданады"]}, {"id": "lg05", "q": "Парсинг дегеніміз не?", "o": ["Логты өшіру", "Лог жолын өрістерге (уақыт, IP, статус, деңгей) бөлу", "Логты шифрлау", "Логты сығу"]}, {"id": "lg06", "q": "Regex-тегі (?P<status>\\d{3}) нені білдіреді?", "o": ["Кез келген 3 әріп", "status деп аталатын топ: дәл 3 цифр", "3 рет қайталау", "Жолдың соңы"]}, {"id": "lg07", "q": "Нормализация не үшін керек?", "o": ["Логты азайту", "Әртүрлі форматтарды (уақыт, деңгей) бірыңғай түрге келтіріп, бірге іздеу үшін", "Шифрлау үшін", "Ротация үшін"]}, {"id": "lg08", "q": "Агент offset-ті (registry) не үшін сақтайды?", "o": ["Жылдамдық үшін", "Қайта іске қосылғанда логтарды қайталамай, тоқтаған жерінен жалғастыру үшін", "Логты шифрлау үшін", "Жинағыштың мекенжайын білу үшін"]}, {"id": "lg09", "q": "Агент лог ротациясын қалай таниды?", "o": ["Файлдың атауы бойынша", "inode өзгергенінен немесе файл offset-тен қысқа болғанынан", "Уақыт бойынша", "Танымайды"]}, {"id": "lg10", "q": "Python Traceback-ті неге бір оқиғаға біріктіру керек?", "o": ["Орын үнемдеу", "Әйтпесе бір қате бірнеше байланыссыз оқиғаға бөлініп, себебі жоғалады", "Міндетті емес", "Шифрлау үшін"]}, {"id": "lg11", "q": "Жинағыш 2 минут тоқтады. Дұрыс бапталған агент не істейді?", "o": ["Логтарды өшіреді", "Буферде сақтап, жинағыш қосылғанда жібереді", "Серверді тоқтатады", "Логтарды екі есе жібереді"]}, {"id": "lg12", "q": "At-least-once жеткізу нені білдіреді?", "o": ["Әр оқиға дәл бір рет", "Оқиға жоғалмайды, бірақ сирек қайталануы мүмкін", "Оқиға жоғалуы мүмкін", "Тек бір рет жіберу"]}, {"id": "lg13", "q": "Агрегацияға мысал?", "o": ["Бір жолды оқу", "Сәтсіз SSH кірулерін IP бойынша санау", "Файлды көшіру", "Логты өшіру"]}, {"id": "lg14", "q": "Fluent Bit конфигурациясында файлды оқитын бөлім?", "o": ["[OUTPUT] http", "[INPUT] Name tail", "[FILTER] record_modifier", "[SERVICE] Flush"]}, {"id": "lg15", "q": "Логқа нені жазуға болмайды?", "o": ["HTTP статус", "Құпиясөз, токен, ЖСН", "Уақыт", "Сервис атауы"]}, {"id": "lg16", "q": "Retention (сақтау мерзімі) не үшін керек?", "o": ["Логты жылдамдату", "Ескі логтарды өшіріп, дискіні толтырмау және заң талаптарын орындау", "Парсинг үшін", "Ротация үшін"]}];</script>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+<a class="brand" href="index.html"><span class="u">student</span><span class="at">@</span><span class="h">is31</span><span class="p">:~$</span><i class="cur"></i></a>
+<nav class="nav"><a href="index.html">тақырыптар</a><a href="games.html">ойындар</a><a href="cabinet.html">кабинет</a></nav>
+<div class="user" id="user"></div>
+</div></header>
+<main class="wrap">
+<div class="path"><a href="index.html">~/practicum</a>/<b>17_logs</b><span class="jump"><a href="inventory.html">07</a><a href="licenses.html">08</a><a href="anomaly.html">09</a><a href="sla.html">10</a><a href="gateway.html">11</a><a href="openapi.html">12</a><a href="deploy.html">13</a><a href="envconfig.html">14</a><a href="mesh.html">15</a><a href="tracing.html">16</a><a href="logs.html" class="on">17</a></span></div>
+<div class="thead">
+<div><p class="tag-n">ПРАКТИКАЛЫҚ ЖҰМЫС №17</p>
+<h1>Лог файлдарды орталықтан жинау жүйесі</h1>
+<p class="lead">Логтарды орталықтан жинау: агент, орталық жинағыш, nginx / қосымша / syslog парсингі, offset, ротация, multiline, буфер, агрегация және Fluent Bit конфигурациясын құрастыру.</p></div>
+<ul class="meta"><li><span>уақыты</span>6 сағат</li><li><span>бейне</span>1:27</li><li><span>тест</span>10 сұрақ, 3 әрекет</li><li><span>тіл</span>Python 3.10+</li></ul>
+</div>
+<div class="goals"><span>Сабақтан кейін сен:</span><b>Орталықтандырылған лог жинауды сипаттайды</b><b>Логтарды агрегациялау мен парсингті түсіндіреді</b><b>Лог жинайтын агенттер конфигурациясын құрастырады</b></div>
+<nav class="tabs-t" id="tabs"><a href="#theory" data-tab="theory"><span>1</span>Теория</a><a href="#video" data-tab="video"><span>2</span>Бейне</a><a href="#files" data-tab="files"><span>3</span>Файлдар</a><a href="#tasks" data-tab="tasks"><span>4</span>Тапсырмалар</a><a href="#test" data-tab="test"><span>5</span>Тест</a><a href="#ctf" data-tab="ctf"><span>6</span>CTF</a><a href="#submit" data-tab="submit"><span>7</span>Тапсыру</a></nav>
+<section class="pane" id="theory"><div class="theory"><section>
+<h2>1. Неге логтарды орталыққа жинайды?</h2>
+<p>Әр сервер логын өз дискісіне жазады: <code>/var/log/nginx/access.log</code>, қосымшаның логы, <code>/var/log/auth.log</code>. Серверлер көп болғанда қатенің себебін табу үшін әр серверге кіріп, grep жасау керек. Сервер құласа немесе шабуылдаушы логты өшірсе, дерек жоғалады.</p>
+<p><b>Орталықтандырылған лог жинау</b> — барлық сервердің логтарын бір жерге жинап, бірыңғай түрге келтіріп, бір жерден іздеу және талдау.</p>
+<div class="cards">
+<div class="card"><h4>Бір жерден іздеу</h4><p>«Соңғы сағаттағы барлық ERROR» — бір сұраумен, барлық серверден.</p></div>
+<div class="card"><h4>Корреляция</h4><p>web-тегі 502 мен app-тегі «database timeout» бір уақытта болғанын көру.</p></div>
+<div class="card"><h4>Қауіпсіздік</h4><p>Логтың көшірмесі серверден тыс сақталады — шабуылдаушы оны өшіре алмайды.</p></div>
+<div class="card"><h4>Ескерту</h4><p>Брутфорс, қателердің күрт өсуі туралы автоматты хабар.</p></div>
+</div>
+</section>
+<section>
+<h2>2. Жүйенің құрылымы</h2>
+<div class="flow">
+<div>Агент<small>Filebeat, Fluent Bit, Promtail</small></div><span>→</span>
+<div>Өңдеу<small>Logstash, Fluentd: парсинг</small></div><span>→</span>
+<div>Сақтау<small>Elasticsearch, Loki</small></div><span>→</span>
+<div>Визуализация<small>Kibana, Grafana</small></div>
+</div>
+<table>
+<tr><th>Стек</th><th>Құрамы</th><th>Ерекшелігі</th></tr>
+<tr><td><b>ELK</b></td><td>Elasticsearch + Logstash + Kibana</td><td>толық мәтіндік индекс, қуатты іздеу, ресурсты көп талап етеді</td></tr>
+<tr><td><b>EFK</b></td><td>Elasticsearch + Fluentd / Fluent Bit + Kibana</td><td>Kubernetes-те кең тараған</td></tr>
+<tr><td><b>PLG</b></td><td>Promtail + Loki + Grafana</td><td>тек белгілер (labels) индекстеледі — арзан және жеңіл</td></tr>
+</table>
+</section>
+<section>
+<h2>3. Парсинг және нормализация</h2>
+<p>Құрылымсыз лог — жай мәтін жолы. <b>Парсинг</b> оны өрістерге бөледі, сонда «статусы 500 жолдар» немесе «IP бойынша санау» мүмкін болады. Әдетте тұрақты өрнектердің (regex) атаулы топтары қолданылады (Logstash-та — grok үлгілері).</p>
+<pre><code>10.0.0.7 - - [26/Nov/2026:14:20:01 +0500] "GET /journal HTTP/1.1" 502 157
+
+NGINX = re.compile(r'(?P&lt;ip&gt;\S+) \S+ \S+ \[(?P&lt;time&gt;[^\]]+)\] "(?P&lt;method&gt;\S+) '
+                   r'(?P&lt;path&gt;\S+) [^"]*" (?P&lt;status&gt;\d{3}) (?P&lt;bytes&gt;\d+)')
+<span class="c"># → {"ip": "10.0.0.7", "status": 502, "path": "/journal", "level": "ERROR", ...}</span></code></pre>
+<p><b>Нормализация</b> — әртүрлі форматтарды бірыңғай түрге келтіру. Үш сервердің уақыты: <code>26/Nov/2026:14:20:01</code>, <code>2026-11-26 14:20:01</code>, <code>Nov 26 14:20:01</code> → бәрі ISO 8601. Деңгейлер: WARNING → WARN, HTTP 5xx → ERROR.</p>
+<div class="callout">Ең жақсы шешім — қосымша логты бірден JSON түрінде жазса (құрылымды логтар): парсинг қажет емес.</div>
+</section>
+<section>
+<h2>4. Агенттің сенімділігі</h2>
+<div class="cards">
+<div class="card"><h4>Offset (registry)</h4><p>Әр файлдың қай байтқа дейін оқылғаны дискіде сақталады. Агент қайта қосылса — логтар қайталанбайды.</p></div>
+<div class="card"><h4>Ротация</h4><p>logrotate <code>access.log</code>-ты <code>access.log.1</code> етіп ауыстырады. Агент оны <b>inode</b> өзгергенінен немесе файл қысқарғанынан таниды.</p></div>
+<div class="card"><h4>Multiline</h4><p>Traceback бірнеше жолдан тұрады. Жаңа жазба күнмен басталады, қалған жолдар алдыңғысына жалғанады.</p></div>
+<div class="card"><h4>Буфер</h4><p>Жинағыш қолжетімсіз болса — логтар буферде күтеді. Offset тек жеткізілгеннен кейін сақталады: <b>at-least-once</b>.</p></div>
+</div>
+<pre><code>{"servers/web/access.log": {"offset": 9154, "inode": 811474}}   <span class="c"># registry.json</span></code></pre>
+</section>
+<section>
+<h2>5. Іздеу және агрегация</h2>
+<p><b>Іздеу</b> нақты оқиғаларды табады, <b>агрегация</b> оларды санап, топтайды: статус кодтары, деңгейлер, ең көп қате берген IP. Kibana мен Grafana графиктері агрегацияға негізделген.</p>
+<pre><code>$ python3 logq.py --count ip --where auth=fail
+  185.220.101.7     14  ████████████████████████████
+  45.13.9.88        11  ██████████████████████
+
+<span class="c"># Loki (LogQL)</span>
+sum by (ip) (count_over_time({service="auth"} |= "Failed password" [1h]))</code></pre>
+</section>
+<section>
+<h2>6. Агент конфигурациясы</h2>
+<p>Әр серверге агент конфигурациясын қолмен жазбай, серверлер тізімінен (CSV, Ansible inventory) генерациялайды және іске қоспас бұрын тексереді.</p>
+<pre><code>[INPUT]
+    Name              tail
+    Path              /var/log/app/app.log
+    DB                /var/lib/fluent-bit/app.db      <span class="c"># offset сақталатын жер</span>
+    multiline.parser  python
+[FILTER]
+    Name    parser
+    Key_Name log
+    Parser  app
+[OUTPUT]
+    Name    http
+    Host    logs.college.local
+    Port    9200</code></pre>
+<div class="callout warn">Логқа құпиясөз, токен, ЖСН, карта нөмірін жазбаңыз; қажет болса агент оларды жасырады (маскалау). Логтың сақталу мерзімін (retention) белгілеңіз: диск шексіз емес.</div>
+</section>
+</div><div class="next"><a class="btn ghost" href="#video">Келесі қадам: Бейне</a></div></section>
+<section class="pane" id="video"><div class="video" id="video-box" data-topic="logs"></div>
+<p class="note">Бейне дыбыссыз, субтитрлері бар (1:27).</p><div class="next"><a class="btn ghost" href="#files">Келесі қадам: Файлдар</a></div></section>
+<section class="pane" id="files">
+<div class="files">
+<a class="file" href="files/praktikalyk_17_logs.pdf" target="_blank"><b>praktikalyk_17_logs.pdf</b><span>тапсырмалар PDF</span><em>ашу</em></a>
+</div>
+<div class="howto"><p>Бастапқы код (<b>17_logs</b> қалтасы) сабақта оқытушыдан беріледі. Қалай іске қосу керек:</p>
+<pre><code><span class="c"># 1. VS Code-та File → Open Folder → 17_logs</span>
+<span class="c"># 2. VS Code ішінде терминал ашыңыз: Terminal → New Terminal</span>
+<span class="c"># 3. README.txt ішіндегі командаларды орындаңыз, мысалы:</span>
+python main.py        <span class="c"># Mac-та: python3 main.py</span></code></pre></div>
+<div class="next"><a class="btn ghost" href="#tasks">Келесі қадам: Тапсырмалар</a></div></section>
+<section class="pane" id="tasks"><div class="tasks"><table class="task-info">
+<tr><td>Мақсаты</td><td>Орталықтандырылған лог жинау жүйесін (ELK / Loki / Fluent Bit идеясы бойынша) өз қолыңызбен жасау: лог жинайтын агент, орталық жинағыш, үш форматты парсинг, сенімді жеткізу (offset, ротация, көпжолды жазбалар, буфер), іздеу және агрегация, агенттер конфигурациясын автоматты құрастыру.</td></tr>
+<tr><td>Оқыту нәтижелері</td><td>1. Орталықтандырылған лог жинауды сипаттайды.<br>2. Логтарды агрегациялау мен парсингті түсіндіреді.<br>3. Лог жинайтын агенттер конфигурациясын құрастырады.</td></tr>
+<tr><td>Уақыты</td><td>135 минут (6 сағаттық тақырыптың практикалық бөлігі, 3 сабақ)</td></tr>
+<tr><td>Жұмыс түрі</td><td>Жеке немесе жұппен. Дайын файл берілмейді: әр файлды өзіңіз жасап, кодын жазасыз (код осы парақта толық берілген), іске қосып, тексересіз.</td></tr>
+<tr><td>Қажетті құралдар</td><td>Компьютер, VS Code, Python 3.10+ (тек стандартты кітапхана), curl, браузер</td></tr>
+</table>
+<h3>Жағдаят</h3>
+<p>Колледжде үш сервер бар: web-01 (nginx, электронды журнал), app-01 (Python қосымшасы) және auth-01 (SSH кіру). Әрқайсысы логтарын өз форматында, өз дискісіне жазады. Түнде журнал 502 қатесін берді: себебін табу үшін әкімші үш серверге кезекпен кіріп, мыңдаған жолды қарауға мәжбүр болды. Сонымен қатар SSH-қа бөтен IP-лерден құпиясөз таңдау болғаны кеш байқалды. IT бөлімі барлық логты бір орталыққа жинап, бір жерден іздеуді шешті. Сіз осы жүйенің оқу нұсқасын жасайсыз: әр серверде агент, ортада жинағыш (collector).</p>
+<div class="callout"><b>Жұмыс тәртібі.</b> Барлық файлды нөлден жасайсыз. Әр тапсырмада: 1) қандай файл жасау керек; 2) оның толық коды; 3) қалай іске қосу; 4) қандай нәтиже шығуы керек. Кодты түсініп жазыңыз — қорғауда әр жолды түсіндіресіз. Mac-та <code>python3</code>, Windows-та <code>python</code>; Windows PowerShell-де <code>curl</code> орнына <code>curl.exe</code>.</div>
+<h3>Жұмысқа дайындық</h3>
+<ol><li>Жұмыс үстелінде <code>17_logs</code> қалтасын жасап, VS Code-та ашыңыз (File → Open Folder).</li><li>Үш терминал ашыңыз (⊞ Split Terminal): 1-терминал — жинағыш, 2-терминал — агент, 3-терминал — лог генераторы және тексеру.</li><li>Жұмыс соңында қалтада: gen_logs.py, collector.py, agent.py, agent.json, logq.py, servers.csv, build_agents.py, check_agent.py; бағдарламалар өздері жасайтын servers/, storage/, configs/ қалталары және registry.json.</li></ol>
+<h3>Тапсырмалар</h3>
+<h4>1-тапсырма. Үш сервердің логтары (15 мин, 10 ұпай)</h4>
+<p>Нақты серверлердің орнына генератор үш форматта лог жазады: nginx access log, Python қосымшасының логы (қате болғанда бірнеше жолдан тұратын Traceback) және sshd-дің syslog жазбалары.</p>
+<p><b>Файл: gen_logs.py</b></p>
+<pre><code># gen_logs.py — үш сервердің логтарын жасайды: web (nginx), app (Python), auth (sshd, syslog)
+#   python3 gen_logs.py              — секундына 3 жол, тоқтағанша (Ctrl+C)
+#   python3 gen_logs.py --once 300   — 300 жол жазып, тоқтайды
+#   python3 gen_logs.py --rotate     — логтарды ротациялау: access.log -&gt; access.log.1
+import datetime
+import os
+import random
+import sys
+import time
+
+FILES = {&quot;web&quot;: &quot;servers/web/access.log&quot;, &quot;app&quot;: &quot;servers/app/app.log&quot;, &quot;auth&quot;: &quot;servers/auth/auth.log&quot;}
+IPS = [&quot;10.0.0.%d&quot; % i for i in range(2, 12)] + [&quot;185.220.101.7&quot;, &quot;45.13.9.88&quot;]
+PATHS = [&quot;/&quot;, &quot;/login&quot;, &quot;/journal&quot;, &quot;/api/grades&quot;, &quot;/api/students&quot;, &quot;/static/app.js&quot;]
+USERS = [&quot;aigerim&quot;, &quot;nurlan&quot;, &quot;daulet&quot;, &quot;teacher&quot;, &quot;admin&quot;, &quot;root&quot;]
+MODULES = [&quot;grades&quot;, &quot;students&quot;, &quot;auth&quot;, &quot;schedule&quot;]
+
+
+def web(now):
+    status = random.choice([200, 200, 200, 200, 200, 301, 304, 404, 404, 500, 502])
+    return &#x27;%s - - [%s] &quot;%s %s HTTP/1.1&quot; %d %d &quot;-&quot; &quot;Mozilla/5.0&quot;&#x27; % (
+        random.choice(IPS), now.strftime(&quot;%d/%b/%Y:%H:%M:%S +0500&quot;), random.choice([&quot;GET&quot;, &quot;GET&quot;, &quot;POST&quot;]),
+        random.choice(PATHS), status, random.randint(120, 9000))
+
+
+def app(now):
+    t = now.strftime(&quot;%Y-%m-%d %H:%M:%S,&quot;) + &quot;%03d&quot; % random.randint(0, 999)
+    module = random.choice(MODULES)
+    r = random.random()
+    if r &lt; 0.12:
+        return (&quot;%s ERROR [%s] Деректер базасына қосылу мүмкін болмады\n&quot;
+                &quot;Traceback (most recent call last):\n&quot;
+                &#x27;  File &quot;app.py&quot;, line 42, in get_%s\n&#x27;
+                &quot;    conn = db.connect(timeout=3)\n&quot;
+                &quot;ConnectionError: database timeout after 3s&quot; % (t, module, module))
+    if r &lt; 0.3:
+        return &quot;%s WARNING [%s] Сұрау баяу орындалды: %d мс&quot; % (t, module, random.randint(800, 2500))
+    return &quot;%s INFO [%s] Сұрау өңделді: user=%s %d мс&quot; % (t, module, random.choice(USERS[:4]), random.randint(5, 120))
+
+
+def auth(now):
+    t = &quot;%s %2d %s&quot; % (now.strftime(&quot;%b&quot;), now.day, now.strftime(&quot;%H:%M:%S&quot;))     # Nov 26 14:20:01
+    ip, user = random.choice(IPS), random.choice(USERS)
+    if ip.startswith(&quot;10.&quot;) and user not in (&quot;admin&quot;, &quot;root&quot;):
+        msg = &quot;Accepted password for %s from %s port %d ssh2&quot; % (user, ip, random.randint(40000, 60000))
+    else:
+        msg = &quot;Failed password for %s from %s port %d ssh2&quot; % (user, ip, random.randint(40000, 60000))
+    return &quot;%s auth-01 sshd[%d]: %s&quot; % (t, random.randint(1000, 9999), msg)
+
+
+def write(n):
+    for _ in range(n):
+        service = random.choice([&quot;web&quot;, &quot;web&quot;, &quot;app&quot;, &quot;auth&quot;])
+        line = {&quot;web&quot;: web, &quot;app&quot;: app, &quot;auth&quot;: auth}[service](datetime.datetime.now())
+        os.makedirs(os.path.dirname(FILES[service]), exist_ok=True)
+        with open(FILES[service], &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+            f.write(line + &quot;\n&quot;)
+
+
+if &quot;--rotate&quot; in sys.argv:
+    for path in FILES.values():
+        if os.path.exists(path):
+            os.replace(path, path + &quot;.1&quot;)
+            print(&quot;ротация:&quot;, path, &quot;-&gt;&quot;, path + &quot;.1&quot;)
+elif &quot;--once&quot; in sys.argv:
+    n = int(sys.argv[sys.argv.index(&quot;--once&quot;) + 1])
+    write(n)
+    print(n, &quot;жол жазылды&quot;)
+else:
+    print(&quot;Логтар жазылып жатыр (Ctrl+C — тоқтату)...&quot;)
+    while True:
+        write(3)
+        time.sleep(1)</code></pre>
+<ol><li>3-терминалда: <code>python3 gen_logs.py --once 200</code> → «200 жол жазылды». servers/ қалтасында үш файл пайда болады.</li><li>Әр файлды VS Code-та ашып, бір жолын бөліктерге бөліп жазыңыз: nginx — IP, уақыт, әдіс, жол, статус, байт; app — уақыт, деңгей, модуль, хабарлама; auth — уақыт, хост, бағдарлама, хабарлама.</li><li>app.log-тан Traceback-ті табыңыз: бір қате неше жолдан тұрады? Неге бұл жолдарды бөлек-бөлек жіберу қате болады?</li><li>Неге үш сервердің логын бірден салыстыру қиын (уақыт форматтары әртүрлі: 26/Nov/2026:14:20:01, 2026-11-26 14:20:01, Nov 26 14:20:01)?</li></ol>
+<p class="report-note"><b>Есепке:</b> gen_logs.py, үш форматтың талдауы, сұрақтарға жауап.</p>
+<h4>2-тапсырма. Орталық жинағыш және агент (25 мин, 15 ұпай)</h4>
+<p>Агент әр серверде тұрады: файлдарға жаңа жол қосылғанын бақылайды да, оларды топтамамен (batch) жинағышқа HTTP арқылы жібереді. Жинағыш оқиғаларды күн бойынша файлдарға (storage/2026-11-26.jsonl) сақтайды және іздеуге мүмкіндік береді. Бұл тапсырмада бірнеше функция «бос» (заглушка) — оларды 3–5-тапсырмаларда ауыстырасыз.</p>
+<p><b>Файл: collector.py</b></p>
+<pre><code># collector.py — орталық лог жинағыш (Logstash / Loki-дің оқу нұсқасы)
+#   python3 collector.py          — http://127.0.0.1:9200
+#   POST /ingest   — агенттерден логтар топтамасын қабылдау
+#   GET  /search   — іздеу: ?service=app&amp;level=ERROR&amp;q=timeout&amp;limit=20
+#   GET  /stats    — агрегация: ?field=status&amp;service=web
+import collections
+import datetime
+import json
+import os
+import re
+import threading
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from urllib.parse import parse_qs, urlsplit
+
+PORT = 9200
+STORE = &quot;storage&quot;
+LOCK = threading.Lock()
+SPECIAL = (&quot;q&quot;, &quot;limit&quot;, &quot;field&quot;)
+
+# ===== Төмендегі 2 функция әзірге «бос» (заглушка). 3 және 5-тапсырмаларда толық кодпен АУЫСТЫРАСЫЗ =====
+def parse(parser, line):            # 3-тапсырмада ауыстырасыз
+    return None
+
+
+def aggregate(events, field):       # 5-тапсырмада ауыстырасыз
+    return {}
+
+
+def store(events):
+    os.makedirs(STORE, exist_ok=True)
+    path = os.path.join(STORE, datetime.date.today().isoformat() + &quot;.jsonl&quot;)   # күн сайын жаңа файл
+    with LOCK, open(path, &quot;a&quot;, encoding=&quot;utf-8&quot;) as f:
+        for e in events:
+            f.write(json.dumps(e, ensure_ascii=False) + &quot;\n&quot;)
+
+
+def load():
+    if not os.path.isdir(STORE):
+        return
+    for name in sorted(os.listdir(STORE)):
+        with open(os.path.join(STORE, name), encoding=&quot;utf-8&quot;) as f:
+            for line in f:
+                yield json.loads(line)
+
+
+def match(e, query):
+    for k, v in query.items():
+        if k == &quot;q&quot;:
+            if v.lower() not in e.get(&quot;message&quot;, &quot;&quot;).lower():
+                return False
+        elif k not in SPECIAL and str(e.get(k, &quot;&quot;)) != v:
+            return False
+    return True
+
+
+class Collector(BaseHTTPRequestHandler):
+    def reply(self, code, data):
+        body = json.dumps(data, ensure_ascii=False, indent=1).encode(&quot;utf-8&quot;)
+        self.send_response(code)
+        self.send_header(&quot;Content-Type&quot;, &quot;application/json; charset=utf-8&quot;)
+        self.send_header(&quot;Content-Length&quot;, str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_POST(self):
+        if self.path != &quot;/ingest&quot;:
+            return self.reply(404, {&quot;error&quot;: &quot;тек /ingest&quot;})
+        try:
+            batch = json.loads(self.rfile.read(int(self.headers.get(&quot;Content-Length&quot;) or 0)))
+        except ValueError:
+            return self.reply(400, {&quot;error&quot;: &quot;JSON қате&quot;})
+        now, events, bad = datetime.datetime.now().isoformat(timespec=&quot;seconds&quot;), [], 0
+        for item in batch[&quot;events&quot;]:
+            ev = parse(item[&quot;parser&quot;], item[&quot;line&quot;])
+            if ev is None:
+                ev, bad = {&quot;message&quot;: item[&quot;line&quot;], &quot;parse_error&quot;: True}, bad + 1
+            ev.setdefault(&quot;@timestamp&quot;, now)
+            ev.update(service=item[&quot;service&quot;], host=item[&quot;host&quot;], file=item[&quot;file&quot;], received=now)
+            ev.update(batch.get(&quot;labels&quot;, {}))
+            events.append(ev)
+        store(events)
+        print(&quot;[ingest] %s: %d оқиға, парсинг қатесі: %d&quot; % (batch.get(&quot;agent&quot;), len(events), bad))
+        self.reply(200, {&quot;accepted&quot;: len(events), &quot;parse_errors&quot;: bad})
+
+    def do_GET(self):
+        u = urlsplit(self.path)
+        query = {k: v[0] for k, v in parse_qs(u.query).items()}
+        found = [e for e in load() if match(e, query)]
+        if u.path == &quot;/search&quot;:
+            limit = int(query.get(&quot;limit&quot;, 20))
+            return self.reply(200, {&quot;total&quot;: len(found), &quot;events&quot;: found[-limit:]})
+        if u.path == &quot;/stats&quot;:
+            return self.reply(200, {&quot;field&quot;: query.get(&quot;field&quot;), &quot;total&quot;: len(found),
+                                    &quot;counts&quot;: aggregate(found, query.get(&quot;field&quot;, &quot;service&quot;))})
+        if u.path == &quot;/health&quot;:
+            return self.reply(200, {&quot;status&quot;: &quot;ok&quot;})
+        self.reply(404, {&quot;error&quot;: &quot;белгісіз жол&quot;})
+
+    def log_message(self, *args):
+        pass
+
+
+print(&quot;Орталық лог жинағыш: http://127.0.0.1:%d (сақтау орны: %s/)&quot; % (PORT, STORE))
+ThreadingHTTPServer((&quot;127.0.0.1&quot;, PORT), Collector).serve_forever()</code></pre>
+<p><b>Файл: agent.json</b></p>
+<pre><code>{
+  &quot;name&quot;: &quot;college-agent&quot;,
+  &quot;output&quot;: &quot;http://127.0.0.1:9200&quot;,
+  &quot;labels&quot;: {&quot;env&quot;: &quot;prod&quot;, &quot;college&quot;: &quot;aec&quot;},
+  &quot;batch_size&quot;: 100,
+  &quot;interval&quot;: 2,
+  &quot;buffer_max&quot;: 5000,
+  &quot;registry&quot;: &quot;registry.json&quot;,
+  &quot;inputs&quot;: [
+    {&quot;path&quot;: &quot;servers/web/access.log&quot;, &quot;parser&quot;: &quot;nginx&quot;, &quot;service&quot;: &quot;web&quot;, &quot;host&quot;: &quot;web-01&quot;},
+    {&quot;path&quot;: &quot;servers/app/app.log&quot;, &quot;parser&quot;: &quot;app&quot;, &quot;service&quot;: &quot;app&quot;, &quot;host&quot;: &quot;app-01&quot;,
+     &quot;multiline&quot;: &quot;^\\d{4}-\\d{2}-\\d{2} &quot;},
+    {&quot;path&quot;: &quot;servers/auth/auth.log&quot;, &quot;parser&quot;: &quot;syslog&quot;, &quot;service&quot;: &quot;auth&quot;, &quot;host&quot;: &quot;auth-01&quot;}
+  ]
+}</code></pre>
+<p><b>Файл: agent.py</b></p>
+<pre><code># agent.py — лог жинайтын агент (Filebeat / Fluent Bit / Promtail-дің оқу нұсқасы)
+#   python3 agent.py                       — agent.json конфигурациясымен
+#   python3 agent.py configs/web-01/agent.json
+import json
+import os
+import re
+import sys
+import time
+import urllib.request
+
+CONF_FILE = sys.argv[1] if len(sys.argv) &gt; 1 else &quot;agent.json&quot;
+CONF = json.load(open(CONF_FILE, encoding=&quot;utf-8&quot;))
+REGISTRY = CONF.get(&quot;registry&quot;, &quot;registry.json&quot;)
+BUFFER = []
+
+
+# ===== Төмендегі 4 функция әзірге «бос» (заглушка). 4-тапсырмада толық кодпен АУЫСТЫРАСЫЗ =====
+def load_registry():
+    return {}
+
+
+def save_registry(reg):
+    pass
+
+
+def rotated(path, info):
+    return False
+
+
+def join_multiline(lines, pattern):
+    return lines
+
+
+def read_new(inp, reg):
+    &quot;&quot;&quot;Файлдың соңғы оқылған жерінен бастап жаңа толық жолдарды оқу.&quot;&quot;&quot;
+    path = inp[&quot;path&quot;]
+    if not os.path.exists(path):
+        return []
+    info = reg.get(path)
+    pos = 0 if rotated(path, info) else (info or {}).get(&quot;offset&quot;, 0)
+    if info and pos == 0:
+        print(&quot;[agent] %s ротацияланды — басынан оқимыз&quot; % path)
+    with open(path, &quot;rb&quot;) as f:
+        f.seek(pos)
+        raw = f.read()
+    end = raw.rfind(b&quot;\n&quot;) + 1                       # тек толық жазылған жолдар
+    reg[path] = {&quot;offset&quot;: pos + end, &quot;inode&quot;: os.stat(path).st_ino}
+    return raw[:end].decode(&quot;utf-8&quot;, errors=&quot;replace&quot;).splitlines()
+
+
+def send(batch):
+    body = {&quot;agent&quot;: CONF[&quot;name&quot;], &quot;labels&quot;: CONF[&quot;labels&quot;], &quot;events&quot;: batch}
+    req = urllib.request.Request(CONF[&quot;output&quot;] + &quot;/ingest&quot;, data=json.dumps(body, ensure_ascii=False).encode(&quot;utf-8&quot;),
+                                 headers={&quot;Content-Type&quot;: &quot;application/json&quot;})
+    urllib.request.urlopen(req, timeout=3).read()
+
+
+def ship(events):
+    &quot;&quot;&quot;Топтамалармен (batch) жіберу; жинағыш қолжетімсіз болса — буферде сақтау.&quot;&quot;&quot;
+    global BUFFER
+    BUFFER += events
+    while BUFFER:
+        batch = BUFFER[:CONF[&quot;batch_size&quot;]]
+        try:
+            send(batch)
+        except OSError as e:
+            BUFFER = BUFFER[-CONF.get(&quot;buffer_max&quot;, 5000):]
+            print(&quot;[agent] жинағыш қолжетімсіз (%s), буферде %d оқиға&quot; % (type(e).__name__, len(BUFFER)))
+            return
+        BUFFER = BUFFER[len(batch):]
+        print(&quot;[agent] жіберілді: %d оқиға&quot; % len(batch))
+
+
+reg = load_registry()
+print(&quot;[agent] %s іске қосылды: %d файл -&gt; %s&quot; % (CONF[&quot;name&quot;], len(CONF[&quot;inputs&quot;]), CONF[&quot;output&quot;]))
+while True:
+    events = []
+    for inp in CONF[&quot;inputs&quot;]:
+        lines = read_new(inp, reg)
+        if inp.get(&quot;multiline&quot;):
+            lines = join_multiline(lines, inp[&quot;multiline&quot;])
+        events += [{&quot;file&quot;: inp[&quot;path&quot;], &quot;parser&quot;: inp[&quot;parser&quot;], &quot;service&quot;: inp[&quot;service&quot;], &quot;host&quot;: inp[&quot;host&quot;],
+                    &quot;line&quot;: line} for line in lines if line.strip()]
+    ship(events)
+    if not BUFFER:                       # бәрі жеткенде ғана орынды сақтаймыз (at-least-once)
+        save_registry(reg)
+    time.sleep(CONF.get(&quot;interval&quot;, 2))</code></pre>
+<ol><li>1-терминал: <code>python3 collector.py</code>. 2-терминал: <code>python3 agent.py</code> → «жіберілді: N оқиға». 1-терминалда: «[ingest] college-agent: N оқиға, парсинг қатесі: N» — парсинг әзірге жоқ.</li><li>3-терминал: <code>python3 gen_logs.py</code> (үздіксіз). Агент әр 2 секунд сайын жаңа жолдарды жібереді. 10 секундтан кейін Ctrl+C.</li><li>Іздеу: <code>curl "http://127.0.0.1:9200/search?service=auth&amp;limit=2"</code> — оқиғада service, host, env белгілері (labels) бар, бірақ IP, user жоқ, бәрі message-те.</li><li>Мәселелерді табыңыз: 1) агентті тоқтатып қайта іске қосыңыз — жинағышқа барлық лог ҚАЙТА келеді (қайталанулар); 2) оқиғалар саны жол санынан көп — Traceback жолдары бөлек оқиға болып кетті. Бұлар 4-тапсырмада шешіледі.</li><li>Түсіндіріңіз: неге агент логтарды бір-бірлеп емес, топтамамен жібереді? Неге тек толық жолдарды (\n-мен аяқталған) оқиды?</li></ol>
+<p class="report-note"><b>Есепке:</b> collector.py, agent.json, agent.py, ingest және search нәтижелері, табылған екі мәселе, сұрақтарға жауап.</p>
+<h4>3-тапсырма. Парсинг: мәтіннен құрылымды оқиғаға (20 мин, 15 ұпай)</h4>
+<p>Парсинг — лог жолын өрістерге бөлу: уақыт, деңгей, IP, статус, пайдаланушы. Үш формат үшін үш тұрақты өрнек (regex) жазамыз және бәрін бірыңғай түрге келтіреміз (нормализация): уақыт — ISO форматы, деңгей — INFO / WARN / ERROR. collector.py ішінде <code>parse</code> заглушкасын өшіріп, орнына төмендегі кодты жазыңыз. storage/ қалтасын өшіріп, жинағышты қайта іске қосыңыз.</p>
+<p><b>Файл: collector.py — parse орнына</b></p>
+<pre><code>NGINX = re.compile(r&#x27;(?P&lt;ip&gt;\S+) \S+ \S+ \[(?P&lt;time&gt;[^\]]+)\] &quot;(?P&lt;method&gt;\S+) (?P&lt;path&gt;\S+) [^&quot;]*&quot; &#x27;
+                   r&#x27;(?P&lt;status&gt;\d{3}) (?P&lt;bytes&gt;\d+)&#x27;)
+APP = re.compile(r&quot;(?P&lt;time&gt;\d{4}-\d\d-\d\d \d\d:\d\d:\d\d),\d+ (?P&lt;level&gt;[A-Z]+) \[(?P&lt;module&gt;\w+)\] (?P&lt;msg&gt;.*)&quot;, re.S)
+SYSLOG = re.compile(r&quot;(?P&lt;time&gt;\w{3} +\d+ [\d:]+) (?P&lt;host&gt;\S+) (?P&lt;prog&gt;\w+)\[\d+\]: (?P&lt;msg&gt;.*)&quot;)
+SSH = re.compile(r&quot;(?P&lt;result&gt;Failed|Accepted) password for (?P&lt;user&gt;\S+) from (?P&lt;ip&gt;\S+)&quot;)
+
+
+def parse(parser, line):
+    &quot;&quot;&quot;parser: nginx | app | syslog. Танылмаса — None.&quot;&quot;&quot;
+    if parser == &quot;nginx&quot;:
+        m = NGINX.match(line)
+        if not m:
+            return None
+        d = m.groupdict()
+        status = int(d[&quot;status&quot;])
+        ts = datetime.datetime.strptime(d[&quot;time&quot;], &quot;%d/%b/%Y:%H:%M:%S %z&quot;).replace(tzinfo=None)
+        return {&quot;@timestamp&quot;: ts.isoformat(), &quot;level&quot;: &quot;ERROR&quot; if status &gt;= 500 else &quot;WARN&quot; if status &gt;= 400 else &quot;INFO&quot;,
+                &quot;ip&quot;: d[&quot;ip&quot;], &quot;method&quot;: d[&quot;method&quot;], &quot;path&quot;: d[&quot;path&quot;], &quot;status&quot;: status, &quot;bytes&quot;: int(d[&quot;bytes&quot;]),
+                &quot;message&quot;: line}
+    if parser == &quot;app&quot;:
+        m = APP.match(line)
+        if not m:
+            return None
+        d = m.groupdict()
+        ev = {&quot;@timestamp&quot;: datetime.datetime.strptime(d[&quot;time&quot;], &quot;%Y-%m-%d %H:%M:%S&quot;).isoformat(),
+              &quot;level&quot;: &quot;WARN&quot; if d[&quot;level&quot;] == &quot;WARNING&quot; else d[&quot;level&quot;], &quot;module&quot;: d[&quot;module&quot;],
+              &quot;message&quot;: d[&quot;msg&quot;].split(&quot;\n&quot;)[0]}
+        if &quot;Traceback&quot; in d[&quot;msg&quot;]:
+            ev[&quot;exception&quot;] = d[&quot;msg&quot;].strip().split(&quot;\n&quot;)[-1]          # соңғы жол: қатенің түрі
+            ev[&quot;stacktrace&quot;] = d[&quot;msg&quot;]
+        return ev
+    if parser == &quot;syslog&quot;:
+        m = SYSLOG.match(line)
+        if not m:
+            return None
+        d = m.groupdict()
+        ts = datetime.datetime.strptime(&quot;%d %s&quot; % (datetime.date.today().year, d[&quot;time&quot;]), &quot;%Y %b %d %H:%M:%S&quot;)
+        ev = {&quot;@timestamp&quot;: ts.isoformat(), &quot;level&quot;: &quot;INFO&quot;, &quot;program&quot;: d[&quot;prog&quot;], &quot;message&quot;: d[&quot;msg&quot;]}
+        s = SSH.search(d[&quot;msg&quot;])
+        if s:
+            ev.update(user=s[&quot;user&quot;], ip=s[&quot;ip&quot;], auth=&quot;fail&quot; if s[&quot;result&quot;] == &quot;Failed&quot; else &quot;ok&quot;)
+            if s[&quot;result&quot;] == &quot;Failed&quot;:
+                ev[&quot;level&quot;] = &quot;WARN&quot;
+        return ev
+    return None</code></pre>
+<ol><li><code>python3 gen_logs.py --once 100</code>, агентті іске қосыңыз → «парсинг қатесі: 0».</li><li><code>curl "http://127.0.0.1:9200/search?service=web&amp;status=500&amp;limit=2"</code> → status, ip, path өрістері бар. <code>curl "http://127.0.0.1:9200/search?auth=fail&amp;limit=2"</code> → user, ip.</li><li>Бір nginx жолын қолмен бұзып (статусты өшіріп) жазыңыз → ол parse_error: true болып сақталады, бірақ жоғалмайды.</li><li>Түсіндіріңіз: <code>(?P&lt;status&gt;\d{3})</code> нені білдіреді? Неге 5xx — ERROR, 4xx — WARN? Неге syslog уақытына жылды өзіміз қосамыз? Нормализация не үшін керек?</li></ol>
+<p class="report-note"><b>Есепке:</b> parse коды, парсинг нәтижелерінің скриншоттары, бұзылған жолдың нәтижесі, сұрақтарға жауап.</p>
+<h4>4-тапсырма. Сенімді жеткізу: offset, ротация, көпжолды жазбалар, буфер (25 мин, 15 ұпай)</h4>
+<p>Нақты агенттер (Filebeat, Fluent Bit) әр файлдың қай жерге дейін оқылғанын (offset) дискіде сақтайды, лог ротациясын таниды, Traceback сияқты көпжолды жазбаларды біріктіреді, ал жинағыш қолжетімсіз болса — логтарды буферде ұстап, кейін жібереді. agent.py ішінде төрт заглушканы (<code>load_registry</code>, <code>save_registry</code>, <code>rotated</code>, <code>join_multiline</code>) өшіріп, орнына төмендегі кодты жазыңыз. Буфер <code>ship()</code> ішінде 2-тапсырмадан бері бар.</p>
+<p><b>Файл: agent.py — төрт функцияның орнына</b></p>
+<pre><code>def load_registry():
+    &quot;&quot;&quot;Әр файлдың қай жерге дейін оқылғанын (offset) дискіден оқу.&quot;&quot;&quot;
+    if os.path.exists(REGISTRY):
+        with open(REGISTRY, encoding=&quot;utf-8&quot;) as f:
+            return json.load(f)
+    return {}
+
+
+def save_registry(reg):
+    tmp = REGISTRY + &quot;.tmp&quot;
+    with open(tmp, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        json.dump(reg, f, indent=1)
+    os.replace(tmp, REGISTRY)                    # атомарлы жазу: файл жартылай қалмайды
+
+
+def rotated(path, info):
+    &quot;&quot;&quot;Файл ауыстырылды ма (басқа inode) немесе қысқарды ма?&quot;&quot;&quot;
+    if not info:
+        return False
+    st = os.stat(path)
+    return st.st_ino != info[&quot;inode&quot;] or st.st_size &lt; info[&quot;offset&quot;]
+
+
+def join_multiline(lines, pattern):
+    &quot;&quot;&quot;Жаңа жазба pattern-мен басталады; қалған жолдар (Traceback) алдыңғысына жалғанады.&quot;&quot;&quot;
+    start, out = re.compile(pattern), []
+    for line in lines:
+        if out and not start.match(line):
+            out[-1] += &quot;\n&quot; + line
+        else:
+            out.append(line)
+    return out</code></pre>
+<ol><li>storage/ қалтасын өшіріп, жинағыш пен агентті қайта іске қосыңыз. registry.json файлы пайда болады — ішінде әр файлдың offset және inode мәні.</li><li>Қайталану жоқ: агентті Ctrl+C-мен тоқтатып, қайта іске қосыңыз → ештеңе қайта жіберілмейді. <code>curl "http://127.0.0.1:9200/stats?field=service"</code> — сан өзгермеді.</li><li>Көпжолды жазба: <code>curl "http://127.0.0.1:9200/search?level=ERROR&amp;limit=1"</code> → бір оқиғада exception: «ConnectionError: database timeout after 3s» және толық stacktrace.</li><li>Ротация: <code>python3 gen_logs.py --rotate</code>, сосын <code>python3 gen_logs.py --once 20</code> → агент «ротацияланды — басынан оқимыз».</li><li>Буфер: жинағышты тоқтатыңыз (Ctrl+C), <code>python3 gen_logs.py --once 40</code> → агент «жинағыш қолжетімсіз, буферде 40 оқиға». Жинағышты қайта қосыңыз → «жіберілді: 40 оқиға», ештеңе жоғалмады.</li><li>Түсіндіріңіз: inode дегеніміз не? Неге registry тек бәрі жіберілгенде сақталады (at-least-once)? Ротация кезінде ескі файлдың оқылмай қалған соңғы жолдары не болады және нақты агенттер мұны қалай шешеді?</li></ol>
+<p class="report-note"><b>Есепке:</b> төрт функцияның коды, registry.json мазмұны, қайталанусыз қайта іске қосу, Traceback, ротация және буфер нәтижелері, сұрақтарға жауап.</p>
+<h4>5-тапсырма. Агрегация және іздеу (20 мин, 15 ұпай)</h4>
+<p>Агрегация — логтарды бір өріс бойынша санау: статус кодтары, қате деңгейлері, сәтсіз кірген IP-лер. Kibana мен Grafana дәл осындай кестелер мен диаграммалар салады. collector.py ішінде <code>aggregate</code> заглушкасын ауыстырыңыз, logq.py файлын жасаңыз.</p>
+<p><b>Файл: collector.py — aggregate орнына</b></p>
+<pre><code>def aggregate(events, field):
+    &quot;&quot;&quot;field мәндері бойынша санау, көбінен азына қарай.&quot;&quot;&quot;
+    counts = collections.Counter(str(e.get(field, &quot;—&quot;)) for e in events)
+    return dict(counts.most_common(20))</code></pre>
+<p><b>Файл: logq.py</b></p>
+<pre><code># logq.py — орталық логтарды іздеу және агрегациялау (Kibana / Grafana-ның мәтіндік нұсқасы)
+#   python3 logq.py --service app --level ERROR             — іздеу
+#   python3 logq.py --q timeout --limit 5                   — мәтін бойынша
+#   python3 logq.py --count status --service web            — агрегация (санау)
+#   python3 logq.py --count ip --where auth=fail            — сәтсіз SSH кірулер IP бойынша
+import argparse
+import json
+import urllib.parse
+import urllib.request
+
+p = argparse.ArgumentParser()
+p.add_argument(&quot;--service&quot;)
+p.add_argument(&quot;--host&quot;)
+p.add_argument(&quot;--level&quot;)
+p.add_argument(&quot;--q&quot;, help=&quot;хабарламадан мәтін іздеу&quot;)
+p.add_argument(&quot;--where&quot;, action=&quot;append&quot;, default=[], help=&quot;өріс=мән, мысалы status=500&quot;)
+p.add_argument(&quot;--count&quot;, help=&quot;осы өріс бойынша санау&quot;)
+p.add_argument(&quot;--limit&quot;, type=int, default=15)
+a = p.parse_args()
+
+query = {k: v for k, v in ((&quot;service&quot;, a.service), (&quot;host&quot;, a.host), (&quot;level&quot;, a.level), (&quot;q&quot;, a.q)) if v}
+query.update(w.split(&quot;=&quot;, 1) for w in a.where)
+if a.count:
+    query[&quot;field&quot;] = a.count
+else:
+    query[&quot;limit&quot;] = a.limit
+url = &quot;http://127.0.0.1:9200/%s?%s&quot; % (&quot;stats&quot; if a.count else &quot;search&quot;, urllib.parse.urlencode(query))
+data = json.load(urllib.request.urlopen(url, timeout=5))
+
+if a.count:
+    print(&quot;%s бойынша, барлығы %d оқиға:&quot; % (a.count, data[&quot;total&quot;]))
+    top = max(data[&quot;counts&quot;].values(), default=1)
+    for value, n in data[&quot;counts&quot;].items():
+        print(&quot;  %-18s %6d  %s&quot; % (value, n, &quot;█&quot; * max(1, n * 40 // top)))
+else:
+    print(&quot;Табылды: %d (соңғы %d)&quot; % (data[&quot;total&quot;], len(data[&quot;events&quot;])))
+    for e in data[&quot;events&quot;]:
+        print(&quot;%s %-8s %-5s %-5s %s&quot; % (e[&quot;@timestamp&quot;][:19], e[&quot;host&quot;], e[&quot;service&quot;], e.get(&quot;level&quot;, &quot;-&quot;),
+                                        e[&quot;message&quot;][:90]))
+        if e.get(&quot;exception&quot;):
+            print(&quot;%38s↳ %s&quot; % (&quot;&quot;, e[&quot;exception&quot;]))</code></pre>
+<ol><li>Жинағышты қайта іске қосып, <code>python3 gen_logs.py --once 300</code>, агентті жіберіңіз.</li><li><code>python3 logq.py --count level</code> → INFO, WARN, ERROR саны. <code>python3 logq.py --count status --service web</code> → статус кодтары диаграммасы.</li><li>Қауіпсіздік: <code>python3 logq.py --count ip --where auth=fail</code> → сәтсіз SSH кірулер саны IP бойынша. Ең күдікті IP қайсы? Ол сәтті кірді ме: <code>python3 logq.py --where ip=&lt;IP&gt; --where auth=ok</code>.</li><li>Қателер: <code>python3 logq.py --service app --level ERROR --limit 5</code> және <code>python3 logq.py --q timeout</code>. Қате қай модульде жиі: <code>python3 logq.py --count module --level ERROR</code>.</li><li>Кестені толтырыңыз: сұрақ → logq командасы → нәтиже (кемінде 5 жол). Түсіндіріңіз: іздеу мен агрегацияның айырмашылығы неде? Неге құрылымды өрістер (парсинг) болмаса агрегация жасау мүмкін емес?</li></ol>
+<p class="report-note"><b>Есепке:</b> aggregate және logq.py, кемінде 5 сұраудың кестесі скриншоттарымен, күдікті IP туралы қорытынды.</p>
+<h4>6-тапсырма. Агенттер конфигурациясын құрастыру, жеке нұсқа (30 мин, 20 ұпай)</h4>
+<p>Нақты инфрақұрылымда ондаған сервер бар, әрқайсысына агент конфигурациясын қолмен жазу қателікке әкеледі. servers.csv-тен әр серверге конфигурацияны автоматты түрде жасаймыз: біздің агентке agent.json және нақты Fluent Bit агентіне fluent-bit.conf. Іске қоспас бұрын барлығын тексереміз.</p>
+<p><b>Файл: servers.csv</b></p>
+<pre><code>host,service,path,parser,env,multiline
+web-01,web,servers/web/access.log,nginx,prod,
+app-01,app,servers/app/app.log,app,prod,^\d{4}-\d{2}-\d{2} 
+auth-01,auth,servers/auth/auth.log,syslog,prod,</code></pre>
+<p><b>Файл: build_agents.py</b></p>
+<pre><code># build_agents.py — servers.csv-тен әр серверге агент конфигурациясын жасау
+#   configs/&lt;host&gt;/agent.json      — біздің agent.py үшін
+#   configs/&lt;host&gt;/fluent-bit.conf — нақты Fluent Bit агенті үшін
+import csv
+import json
+import os
+
+COLLECTOR = (&quot;127.0.0.1&quot;, 9200)
+FB_PARSER = {&quot;nginx&quot;: &quot;nginx&quot;, &quot;app&quot;: &quot;app&quot;, &quot;syslog&quot;: &quot;syslog-rfc3164&quot;}
+
+hosts = {}
+with open(&quot;servers.csv&quot;, encoding=&quot;utf-8&quot;) as f:
+    for row in csv.DictReader(f):
+        hosts.setdefault(row[&quot;host&quot;], []).append(row)
+
+for host, rows in hosts.items():
+    os.makedirs(&quot;configs/&quot; + host, exist_ok=True)
+    agent = {
+        &quot;name&quot;: host,
+        &quot;output&quot;: &quot;http://%s:%d&quot; % COLLECTOR,
+        &quot;labels&quot;: {&quot;env&quot;: rows[0][&quot;env&quot;], &quot;college&quot;: &quot;aec&quot;},
+        &quot;batch_size&quot;: 100, &quot;interval&quot;: 2, &quot;buffer_max&quot;: 5000,
+        &quot;registry&quot;: &quot;configs/%s/registry.json&quot; % host,
+        &quot;inputs&quot;: [],
+    }
+    fb = [&quot;[SERVICE]&quot;, &quot;    Flush         2&quot;, &quot;    Log_Level     info&quot;, &quot;    Parsers_File  parsers.conf&quot;, &quot;&quot;]
+    for r in rows:
+        inp = {&quot;path&quot;: r[&quot;path&quot;], &quot;parser&quot;: r[&quot;parser&quot;], &quot;service&quot;: r[&quot;service&quot;], &quot;host&quot;: host}
+        if r[&quot;multiline&quot;]:
+            inp[&quot;multiline&quot;] = r[&quot;multiline&quot;]
+        agent[&quot;inputs&quot;].append(inp)
+        fb += [&quot;[INPUT]&quot;, &quot;    Name              tail&quot;, &quot;    Path              &quot; + r[&quot;path&quot;],
+               &quot;    Tag               &quot; + r[&quot;service&quot;], &quot;    DB                /var/lib/fluent-bit/%s.db&quot; % r[&quot;service&quot;]]
+        if r[&quot;multiline&quot;]:
+            fb.append(&quot;    multiline.parser  python&quot;)
+        fb += [&quot;&quot;, &quot;[FILTER]&quot;, &quot;    Name      parser&quot;, &quot;    Match     &quot; + r[&quot;service&quot;], &quot;    Key_Name  log&quot;,
+               &quot;    Parser    &quot; + FB_PARSER[r[&quot;parser&quot;]], &quot;&quot;]
+    fb += [&quot;[FILTER]&quot;, &quot;    Name    record_modifier&quot;, &quot;    Match   *&quot;, &quot;    Record  host &quot; + host,
+           &quot;    Record  env &quot; + rows[0][&quot;env&quot;], &quot;&quot;,
+           &quot;[OUTPUT]&quot;, &quot;    Name    http&quot;, &quot;    Match   *&quot;, &quot;    Host    %s&quot; % COLLECTOR[0], &quot;    Port    %d&quot; % COLLECTOR[1],
+           &quot;    URI     /ingest&quot;, &quot;    Format  json&quot;, &quot;&quot;]
+    with open(&quot;configs/%s/agent.json&quot; % host, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        json.dump(agent, f, ensure_ascii=False, indent=2)
+    with open(&quot;configs/%s/fluent-bit.conf&quot; % host, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:
+        f.write(&quot;\n&quot;.join(fb))
+    print(&quot;configs/%s/: agent.json, fluent-bit.conf (%d файл)&quot; % (host, len(rows)))</code></pre>
+<p><b>Файл: check_agent.py</b></p>
+<pre><code># check_agent.py — агент конфигурацияларын іске қоспас бұрын тексеру
+#   python3 check_agent.py                         — configs/*/agent.json барлығы
+#   python3 check_agent.py agent.json              — бір файл
+import glob
+import json
+import os
+import re
+import sys
+
+PARSERS = {&quot;nginx&quot;, &quot;app&quot;, &quot;syslog&quot;}
+ENVS = {&quot;dev&quot;, &quot;test&quot;, &quot;prod&quot;}
+files = sys.argv[1:] or sorted(glob.glob(&quot;configs/*/agent.json&quot;))
+errors, warnings, registries, paths = [], [], {}, {}
+
+for fn in files:
+    try:
+        c = json.load(open(fn, encoding=&quot;utf-8&quot;))
+    except (OSError, ValueError) as e:
+        errors.append(&quot;%s: оқылмады: %s&quot; % (fn, e))
+        continue
+    if not re.fullmatch(r&quot;https?://[\w.-]+:\d+&quot;, c.get(&quot;output&quot;, &quot;&quot;)):
+        errors.append(&quot;%s: output &#x27;http://хост:порт&#x27; түрінде болуы керек&quot; % fn)
+    if c.get(&quot;labels&quot;, {}).get(&quot;env&quot;) not in ENVS:
+        errors.append(&quot;%s: labels.env — dev, test немесе prod&quot; % fn)
+    if not 1 &lt;= c.get(&quot;batch_size&quot;, 0) &lt;= 1000:
+        errors.append(&quot;%s: batch_size 1–1000 аралығында болуы керек&quot; % fn)
+    if not 1 &lt;= c.get(&quot;interval&quot;, 0) &lt;= 60:
+        errors.append(&quot;%s: interval 1–60 секунд&quot; % fn)
+    reg = c.get(&quot;registry&quot;, &quot;registry.json&quot;)
+    if reg in registries:
+        errors.append(&quot;%s: registry &#x27;%s&#x27; %s-пен ортақ — офсеттер бір-бірін бұзады&quot; % (fn, reg, registries[reg]))
+    registries[reg] = fn
+    if not c.get(&quot;inputs&quot;):
+        errors.append(&quot;%s: inputs бос&quot; % fn)
+    for inp in c.get(&quot;inputs&quot;, []):
+        if inp.get(&quot;parser&quot;) not in PARSERS:
+            errors.append(&quot;%s: %s — белгісіз парсер &#x27;%s&#x27;&quot; % (fn, inp.get(&quot;path&quot;), inp.get(&quot;parser&quot;)))
+        if &quot;multiline&quot; in inp:
+            try:
+                re.compile(inp[&quot;multiline&quot;])
+            except re.error as e:
+                errors.append(&quot;%s: multiline үлгісі қате: %s&quot; % (fn, e))
+        if inp.get(&quot;path&quot;) in paths:
+            warnings.append(&quot;%s: %s файлын %s та оқиды — логтар екі рет келеді&quot; % (fn, inp[&quot;path&quot;], paths[inp[&quot;path&quot;]]))
+        paths[inp.get(&quot;path&quot;)] = fn
+        if not os.path.exists(inp.get(&quot;path&quot;, &quot;&quot;)):
+            warnings.append(&quot;%s: %s әзірге жоқ&quot; % (fn, inp.get(&quot;path&quot;)))
+
+for w in warnings:
+    print(&quot;  [ЕСКЕРТУ]&quot;, w)
+for e in errors:
+    print(&quot;  [ҚАТЕ]&quot;, e)
+print(&quot;Тексерілді: %d файл. Қате: %d, ескерту: %d&quot; % (len(files), len(errors), len(warnings)))
+sys.exit(1 if errors else 0)</code></pre>
+<ol><li><code>python3 build_agents.py</code> → configs/web-01, app-01, auth-01 қалталары. <code>python3 check_agent.py; echo $?</code> → «Қате: 0», 0 (Windows: <code>echo $LASTEXITCODE</code>).</li><li>Бұрынғы агентті тоқтатып, үш агентті үш терминалда іске қосыңыз: <code>python3 agent.py configs/web-01/agent.json</code> т.с.с. Әрқайсысы тек өз файлын жібереді: <code>python3 logq.py --count host</code>.</li><li>Қате енгізіңіз: web-01/agent.json-да парсерді <code>apache</code>, registry-ді app-01-дікімен бірдей етіңіз → check_agent.py екі қатені табады, шығу коды 1. <code>python3 build_agents.py</code> арқылы қайта жасаңыз.</li><li>configs/app-01/fluent-bit.conf файлын ашып, agent.json-мен салыстырыңыз (кесте: agent.json өрісі → Fluent Bit бөлімі мен параметрі).</li><li>Нұсқаңыз бойынша тапсырманы орындаңыз (өз жұмысыңыз).</li></ol>
+<div class="table-wrap"><table><tr><th>Нұсқа</th><th>Тапсырма және кеңес</th><th>Нәтижені тексеру</th></tr><tr><td>1</td><td>alert.py: соңғы 1 минутта бір IP-ден 5-тен көп сәтсіз SSH кіру болса — «[ALERT] брутфорс: IP, саны» (/search?auth=fail арқылы, 10 секунд сайын).</td><td>gen_logs.py жұмыс істегенде ALERT шығады</td></tr><tr><td>2</td><td>Жаңа JSON форматы: gen_logs.py-ге api сервисін қосу (әр жол — JSON), collector.py-ге <code>json</code> парсері, servers.csv-ге api-01 жолы, check_agent.py-де json рұқсат.</td><td>api оқиғалары өрістерімен сақталады</td></tr><tr><td>3</td><td>Сақтау мерзімі (retention): <code>python3 collector.py --retention 7</code> — 7 күннен ескі storage файлдарын өшіреді, кешегі файлды gzip-пен сығады.</td><td>ескі файлдар өшті, .gz пайда болды</td></tr><tr><td>4</td><td>Құпия деректерді жасыру: агент жібермес бұрын <code>password=...</code>, <code>token=...</code> және 12 таңбалы ЖСН-ді <code>***</code>-пен ауыстырады (конфигурацияда mask ережелері).</td><td>storage-да құпия мәтін жоқ</td></tr><tr><td>5</td><td>Сүзгі: agent.json-да <code>"exclude": "GET /static/"</code> — сәйкес жолдар жіберілмейді; агент неше жол сүзілгенін көрсетеді.</td><td>static сұраулары жоқ</td></tr><tr><td>6</td><td>Дашборд: collector-да <code>GET /dashboard</code> — HTML бет: сервис және деңгей бойынша сандар, соңғы 10 ERROR, 10 секунд сайын жаңарады.</td><td>браузерде кесте</td></tr></table></div>
+<p class="report-note"><b>Есепке:</b> servers.csv, build_agents.py, check_agent.py, configs/ құрылымы, қате конфигурацияның нәтижесі, agent.json → Fluent Bit кестесі, нұсқаңыздың коды мен нәтижесі.</p>
+<h3>Тапсыру</h3>
+<ul><li>17_logs қалтасын (servers/, storage/ қоспай) zip етіп және есепті тапсырыңыз.</li><li>Есеп: титул, 1–6-тапсырмалардың нәтижелері, қорытынды — 3–5 сөйлем: орталықтандырылған лог жинау қандай мәселелерді шешеді.</li></ul>
+<h3>Бағалау парағы</h3>
+<div class="table-wrap"><table><tr><th>№</th><th>Критерий</th><th>Ұпай</th></tr><tr><td>1</td><td>Үш форматтағы логтар жасалған және талданған</td><td>10</td></tr><tr><td>2</td><td>Жинағыш пен агент жұмыс істейді; екі мәселе табылған</td><td>15</td></tr><tr><td>3</td><td>Үш форматтың парсингі және нормализация</td><td>15</td></tr><tr><td>4</td><td>Offset, ротация, көпжолды жазбалар және буфер көрсетілген</td><td>15</td></tr><tr><td>5</td><td>Агрегация, logq.py және 5 сұрау кестесі</td><td>15</td></tr><tr><td>6</td><td>Агенттер конфигурациясы, тексеру және жеке нұсқа</td><td>20</td></tr><tr><td>7</td><td>Кодты түсіндіріп қорғау, бақылау сұрақтары</td><td>10</td></tr><tr><td></td><td><b>Барлығы</b></td><td><b>100</b></td></tr></table></div>
+<p>Бағалау шкаласы: 90–100 ұпай — «5» (өте жақсы); 70–89 — «4» (жақсы); 50–69 — «3» (қанағаттанарлық); 0–49 — «2» (қанағаттанарлықсыз).</p>
+<h3>Бақылау сұрақтары</h3>
+<ol><li>Орталықтандырылған лог жинау дегеніміз не және ол қандай мәселелерді шешеді?</li><li>Лог жинау жүйесі қандай бөліктерден тұрады (агент, жинағыш/өңдеуші, сақтау орны, визуализация)?</li><li>ELK / EFK стегі және Loki нені білдіреді? Агент ретінде қандай бағдарламалар қолданылады?</li><li>Парсинг дегеніміз не? Құрылымсыз және құрылымды логтың айырмашылығы?</li><li>Нормализация не үшін керек (уақыт, деңгей)?</li><li>Агрегация дегеніміз не? Мысал келтіріңіз.</li><li>Агент offset-ті не үшін сақтайды? Ротация дегеніміз не және агент оны қалай таниды?</li><li>Көпжолды (multiline) жазбалар қалай біріктіріледі?</li><li>Жинағыш қолжетімсіз болса не болады? At-least-once жеткізу дегеніміз не?</li><li>Логтарда қандай деректерді сақтауға болмайды және сақтау мерзімі (retention) не үшін керек?</li></ol></div><div class="next"><a class="btn ghost" href="#test">Келесі қадам: Тест</a></div></section>
+<section class="pane" id="test"><div id="quiz-head"></div><div id="quiz" data-topic="logs"></div><div class="msg" id="quiz-msg"></div><div class="next"><a class="btn ghost" href="#ctf">Келесі қадам: CTF</a></div></section>
+<section class="pane" id="ctf"><p>Журнал файлдары берілген. <code>ls</code>, <code>cat</code>, <code>grep</code>, <code>sort</code>, <code>uniq</code>, <code>cut</code> командаларымен тергеу жүргізіп, жауапты <code>submit flag{...}</code> түрінде жіберіңіз. Командалар тізімі: <code>help</code>.</p><div data-ctf="logs"></div><div class="next"><a class="btn ghost" href="#submit">Келесі қадам: Тапсыру</a></div></section>
+<section class="pane" id="submit">
+<p>Есепті (docx, pdf немесе zip) жүктеңіз немесе GitHub / Google Drive сілтемесін қалдырыңыз. Баға мен оқытушының пікірі <a href="cabinet.html">кабинетте</a> шығады.</p>
+<form id="submit-form" class="form" data-topic="Лог файлдарды орталықтан жинау жүйесі">
+<div class="row"><label class="f">Нұсқа нөмірі<input name="variant" inputmode="numeric" placeholder="1–6"></label><label class="f">Есеп файлы (10 МБ-қа дейін)<input type="file" name="file" accept=".pdf,.docx,.doc,.zip,.png,.jpg,.jpeg,.pptx,.txt,.md,.py"></label></div>
+<label class="f">немесе сілтеме<input name="link" type="url" placeholder="https://github.com/..."></label>
+<label class="f">Пікір (міндетті емес)<textarea name="comment"></textarea></label>
+<div><button class="btn" type="submit">Жұмысты жіберу</button></div><div class="msg" id="submit-msg"></div>
+</form></section>
+</main>
+<footer class="foot"><div class="wrap"><span># КМ 06 «Ақпараттық жүйелерді автоматтандыру», Алматы экономикалық колледжі</span><span>оқытушы: Каким А.Д. &nbsp;|&nbsp; <a href="admin.html">admin</a></span></div></footer>
+<script src="assets/guard.js?v=2bec5877"></script><script src="assets/config.js?v=c3aff99f"></script><script src="assets/games.js?v=4f2bd503"></script><script src="assets/ctf-data.js?v=a9f70b94"></script><script src="assets/terminal.js?v=d87fe8bc"></script><script src="assets/app.js?v=fb4dcf45"></script>
+</body>
+</html>
